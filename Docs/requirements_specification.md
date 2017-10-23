@@ -211,13 +211,13 @@
 
   用户输入邮箱/用户名、密码登录系统。
 
-   ![1](https://striker.teambition.net/storage/110yf2931023fe41768a8c4ab8a27887cb32?download=%E7%99%BB%E5%BD%95.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHlmMjkzMTAyM2ZlNDE3NjhhOGM0YWI4YTI3ODg3Y2IzMiIsImV4cCI6MTUwODY3MzYwMH0.avfRitfuY6OnbAn_-wDElgSEJHkdGFU3nUGhTmW3fjg)
+  ![1](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/1.jpg)
 
 * **注册界面**
 
   用户输入邮箱/用户名、密码、确认密码注册。
 
-  ![2](https://striker.teambition.net/storage/110ya260f3d5f96ce8619e2bc2ecdf7bbbce?download=%E6%B3%A8%E5%86%8C.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHlhMjYwZjNkNWY5NmNlODYxOWUyYmMyZWNkZjdiYmJjZSIsImV4cCI6MTUwODY3MzYwMH0.VIh9L6ImjLy_F7Xij8v7Z2M1xvP1Lrp_SJ8A2NMhSjc)
+  ![2](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/2.jpg)
 
 ##### **首页**
 
@@ -227,21 +227,21 @@
 
   最下方的五个选项按钮分别是：”首页“、”文章“、”发记录“、”流星“、”个人信息“。
 
-  ![3](https://striker.teambition.net/storage/110ye7bd0335db4fb0e9f6e15aaa00c85fba?download=%E4%B8%BB%E7%95%8C%E9%9D%A2.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHllN2JkMDMzNWRiNGZiMGU5ZjZlMTVhYWEwMGM4NWZiYSIsImV4cCI6MTUwODY3MzYwMH0.QFDFToa9bBvi58_eEj5MhAQdWQN5cChE0C_r1kBaXzI)
+  ![3](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/3.jpg)
 
 ##### 记录
 
-* **查看记录**
-
-  ![4](https://striker.teambition.net/storage/110yb7a9e35109e7aa90bbb4461b27935f36?download=%E5%85%89%E7%90%83%E6%88%B3%E8%BF%9B%E5%8E%BB.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHliN2E5ZTM1MTA5ZTdhYTkwYmJiNDQ2MWIyNzkzNWYzNiIsImV4cCI6MTUwODY3MzYwMH0.nHbyubQ2smKSIa7OB-oh4J0cXo9qvPdr9rHnBuvs7Q4)
-
 * **编辑记录**
 
-  ![5](https://striker.teambition.net/storage/110yb086ba858497347da1fedef45e0364c1?download=%E5%86%99%E8%AE%B0%E5%BD%95.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHliMDg2YmE4NTg0OTczNDdkYTFmZWRlZjQ1ZTAzNjRjMSIsImV4cCI6MTUwODY3MzYwMH0.W3kjlzjbxOkFkAMgPaiGlxtT0Piw86dkrHjXdvgtpME)
+  ![5](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/4.jpg)
+
+* **查看记录**
+
+  ![4](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/5.jpg)
 
 * **分享记录**
 
-  ![6](https://striker.teambition.net/storage/110y80dd5abbdb2fddf49a982ee32b48c1e1?download=%E5%88%86%E4%BA%AB.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHk4MGRkNWFiYmRiMmZkZGY0OWE5ODJlZTMyYjQ4YzFlMSIsImV4cCI6MTUwODY3MzYwMH0.EbUdVycYPdSdtMVr5m21-D1LM3Z6-_wP0KgzBtUfKhE)
+  ![6](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/6.jpg)
 
 ##### **文章**
 
@@ -249,13 +249,13 @@
 
   点击列表中任意一条进入”文章详情界面“。
 
-  ![7](https://striker.teambition.net/storage/110y795f0e7bf914fb67d175b9b94acea3cc?download=%E6%96%87%E7%AB%A0.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHk3OTVmMGU3YmY5MTRmYjY3ZDE3NWI5Yjk0YWNlYTNjYyIsImV4cCI6MTUwODY3MzYwMH0.hozVJJz1slWkYJP4b646FmplG0vSxsAA3LHxYT0OWAM)
+  ![7](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/7.jpg)
 
 * **文章详情界面**
 
   左右滑动或点击下方的左右箭头切换文章。
 
-  ![8](https://striker.teambition.net/storage/110yc1d68f41ee7c5fe89eca40129e80757c?download=%E6%96%87%E7%AB%A0%E8%AF%A6%E6%83%85.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHljMWQ2OGY0MWVlN2M1ZmU4OWVjYTQwMTI5ZTgwNzU3YyIsImV4cCI6MTUwODY3MzYwMH0.xrLjnRpn2zlv2X-woLVrYAcJIJXXgDrMf0QhsycaQDw)
+  ![8](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/8.jpg)
 
 ##### **流星**
 
@@ -263,11 +263,11 @@
 
   点击列表中任意一条进入”流星详情界面“。
 
-  ![9](https://striker.teambition.net/storage/110y0a14403b98fdbdcb9384e3dbbf4efca5?download=%E6%B5%81%E6%98%9F.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHkwYTE0NDAzYjk4ZmRiZGNiOTM4NGUzZGJiZjRlZmNhNSIsImV4cCI6MTUwODY3MzYwMH0._1V02dz6bZT9fARavvr_VPgKsLAn1MegW4nuIOY9Rp8)
+  ![9](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/9.jpg)
 
 * **流星详情界面**
 
-  ![10](https://striker.teambition.net/storage/110y40eec70de6119a6f24267915f3b27278?download=%E6%B5%81%E6%98%9F%E8%AF%A6%E6%83%85.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHk0MGVlYzcwZGU2MTE5YTZmMjQyNjc5MTVmM2IyNzI3OCIsImV4cCI6MTUwODY3MzYwMH0._7PoP_-ZVr6YcXSOvLziuQeI_NYo-dYGSU7auk2XSUA)
+  ![10](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/10.jpg)
 
 ##### **用户信息**
 
@@ -275,46 +275,46 @@
 
   点击右上角齿轮图标进入“设置个人信息界面“。
 
-  ![11](https://striker.teambition.net/storage/110y60713832bc76c7bae973f761531b92e2?download=%E6%88%91%E7%9A%84.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHk2MDcxMzgzMmJjNzZjN2JhZTk3M2Y3NjE1MzFiOTJlMiIsImV4cCI6MTUwODY3MzYwMH0._lT1D7v4Rf-IcH_1TKO2TH3CCso3shdYagVIQME6gDQ)
+  ![11](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/11.jpg)
 
 * **编辑个人信息界面**
 
   当“开启密码锁”为 ON 状态时，“设置密码锁”将被激活。
 
-  ![12](https://striker.teambition.net/storage/110ye7171b113b0f3121252714ccb156d93e?download=%E4%B8%AA%E4%BA%BA%E8%AE%BE%E7%BD%AE.jpg&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHllNzE3MWIxMTNiMGYzMTIxMjUyNzE0Y2NiMTU2ZDkzZSIsImV4cCI6MTUwODY3MzYwMH0.TssSNnpT98ToVZpAKONH9xVGHWvjr5VA05GhTEi5dcE)
+  ![12](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/UI/12.jpg)
 
 #### 3.2.2 UML 类图
 
-![类图](https://striker.teambition.net/storage/110y9845b529dd0d4a86ef407c6c141a6bc2?download=%E7%B1%BB%E5%9B%BE(2).png&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHk5ODQ1YjUyOWRkMGQ0YTg2ZWY0MDdjNmMxNDFhNmJjMiIsImV4cCI6MTUwODY3MzYwMH0.yv62BwTTvhWmhzNt0AffNe__bk0SwsyKjCAiInTA_TU)
+![类图](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/classes.png)
 
 ### 3.3 性能需求
 
 #### 3.3.1 精度需求
 
-| 类别     | 字段   |                  | 精度          |
-| ------ | ---- | ---------------- | ----------- |
-| **用户** | 用户ID | userID           | 6-9 位数字      |
-|        | 用户名  | userName         | 6-18 位数字或字母  |
-|        | 密码   | password         | 6-18 位数字或字母  |
-|        | 注册时间 | registrationTime | 16 位数字或字母    |
+| 类别     | 字段   |                  | 精度            |
+| ------ | ---- | ---------------- | ------------- |
+| **用户** | 用户ID | userID           | 6-9 位数字       |
+|        | 用户名  | userName         | 6-18 位数字或字母   |
+|        | 密码   | password         | 6-18 位数字或字母   |
+|        | 注册时间 | registrationTime | 16 位数字或字母     |
 |        | 头像   | avatar           | 不超过 1MB 的图片   |
-|        | 记录集  | noteSet          | 不超过 5MB      |
-|        | 应用锁  | appLock          | 6-18 位数字或字母  |
+|        | 记录集  | noteSet          | 不超过 5MB       |
+|        | 应用锁  | appLock          | 6-18 位数字或字母   |
 | **文章** | 标题   | title            | 不超过 64 个字符    |
 |        | 作者   | auther           | 不超过 64 个字符    |
 |        | 内容   | content          | 不超过 10000 个字符 |
 |        | 链接   | url              | 不超过 128 个字符   |
-| **记录** | 记录ID | noteID           | 6-9 位数字      |
+| **记录** | 记录ID | noteID           | 6-9 位数字       |
 |        | 内容   | content          | 不超过 10000 个字符 |
-|        | 发布时间 | releaseTime      | 16 位数字或字母    |
-|        | 归属   | ascription       | 6-9 位数字      |
-|        | 分享状态 | isShared         | 布尔型         |
+|        | 发布时间 | releaseTime      | 16 位数字或字母     |
+|        | 归属   | ascription       | 6-9 位数字       |
+|        | 分享状态 | isShared         | 布尔型           |
 
 #### 3.3.2 静态数量化需求
 
 &emsp;&emsp;静态数量化需求包括以下方面：
 
-* 支持的终端数量：3000
+* 支持的终端数量：2000
 * 支持的同时在线人数：1000
 * 服务器的容量：500G
 
@@ -379,15 +379,8 @@
 | 9    | 个人信息页面   | 最顶栏右侧为进入设置页面的小齿轮图标。主体的上方为个人信息，包括圆形显示的用户头像，和头像下方的用户昵称。个人信息下方显示使用时间、记录个数、以及心情信息。心情信息一览右侧有小字“描述不对？”点击可修改描述 |
 | 10   | 个人信息设置页面 | 最顶栏内容为“设置”，左侧有返回按钮。下方为“修改头像”、“修改用户名”、“修改密码”、“开启密码锁”、“设置密码锁”。仅当“开启密码锁”开关被选为 ON 状态时，“设置密码锁”被激活为可编辑状态 |
 
-&emsp;&emsp;管理员界面：
-
-| 序号   | 界面名称     |                   界面描述                   |
-| ---- | -------- | -------------------------------------- |
-| 11   | 审核页面     | 最顶栏显示“待审核”，右边有“退出账号”按钮，主体是流星的列表，每条流星右侧有“删除”按钮 |
-| 12   | 审核流星详情页面     | 最顶栏显示“详细信息”，左边有“<”按钮返回上一级，右边有“通过”和“删除”按钮，主体是流星的详细信息 |
-
 ### 4.4 功能验收标准
 
 &emsp;&emsp;需求四象限及各阶段验收标准如图：
 
-![验收](https://striker.teambition.net/storage/110yd97e3f6f3d2e8769d8d6fb18a850da3e?download=%E9%9C%80%E6%B1%82%E5%9B%9B%E8%B1%A1%E9%99%90(1).png&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMHlkOTdlM2Y2ZjNkMmU4NzY5ZDhkNmZiMThhODUwZGEzZSIsImV4cCI6MTUwODY3MzYwMH0.lqJBBqww2WoqKQ06TutLNg_iHjWw9bSGX3sn37A-gMg)
+![验收](https://raw.githubusercontent.com/StardustProject/Stardust/dev/Docs/images/requirements.png)
