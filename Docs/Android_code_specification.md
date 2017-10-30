@@ -24,7 +24,7 @@
 
 工欲善其事，必先利其器。
 
-1. 使用最新版的IDE进行开发；
+1. 使用最新版的IDE进行开发，现版本为3.0；
 2. 编码格式统一为**UTF-8**；
 3. 缩进统一为4个空格（将Tab size设置为4则可以保证tab键按4个空格缩进。另外，不要勾选上Use tab character，可以保证切换到不同tab长度的环境时还能继续保持统一的4个空格的缩进样式）；
 4. 编辑完`.java`、 `.xml`等文件后一定要**格式化**（基本格式方面使用 AS 默认模板即可）；
@@ -346,20 +346,13 @@ static final Logger logger = Logger.getLogger(MyClass.getName());
 static final String[] nonEmptyArray = {"these", "can", "change"};
 ```
 
-
 #### 3.5 非常量字段名
 
-非常量字段名以`lowerCamelCase`风格的基础上改造为如下风格：基本结构为`scopeVariableNameType`。
+非公有，非静态字段命名以m开头，命名风格为mVariableNameType，
 
-**scope：范围**
+其他字段命名按照`lowerCamelCase`风格
 
-非公有，非静态字段命名以m开头。
 
-静态字段命名以s开头。
-
-公有非静态字段命名以p开头。
-
-公有静态字段（全局变量）命名以g开头。
 
 例子：
 
@@ -368,9 +361,7 @@ public class MyClass {
       int mPackagePrivate;
       private int mPrivate;
       protected int mProtected;
-      private static MyClass sSingleton;
-      public int pField;
-      public static int gField;
+      
 }
 ```
 
@@ -379,8 +370,6 @@ public class MyClass {
 **Type：类型**
 
 考虑到Android中使用很多UI控件，为避免控件和普通成员变量混淆以及更好达意，所有用来表示控件的成员变量统一加上控件缩写作为前缀。例：ImageView mIvXxx，ListView mLvXxx，CardView mCvXxxx。
-
-
 
 > 注意：如果项目中使用`ButterKnife`，则不添加m前缀，以`lowerCamelCase`风格命名。
 
@@ -677,7 +666,15 @@ public class MyClass {
 ### 5 版本统一规范
 
 Android开发存在着众多版本的不同，比如`compileSdkVersion`、`minSdkVersion`、`targetSdkVersion`以及项目中依赖第三方库的版本，不同的module及不同的开发人员都有不同的版本，所以需要一个统一版本规范的文件。
-//待定
+我们项目的版本统一如下：
+
+`compileSdkVersion`: 26
+
+`minSdkVersion`: 21
+
+`targetSdkVersion`: 26
+
+项目依赖第三方库统一使用最新版本
 
 
 ### 6 第三方库规范
@@ -784,7 +781,7 @@ AS已帮你集成了一些注释模板，我们只需要直接使用即可，在
 
 ### 8 测试规范
 
-// TODO...
+// TODO
 
 
 ### 9 代码格式
@@ -799,11 +796,11 @@ AS已帮你集成了一些注释模板，我们只需要直接使用即可，在
 - 象`［ ］`、` .`、` ->` 这类操作符前后不加空格。
 
 2. 大括号的使用约定。如果是大括号内为空，则简洁地写成{}即可，不需要换行； 如果是非空代码块则花括号不要单独一行，和它前面的代码同一行。而且，花括号与前面的代码之间用一个空格隔开。
-正例：
+  正例：
 ```
 if () {
     // TODO
-} else {
+}else {
     // TODO
 }
 ```
@@ -819,13 +816,13 @@ else
 }
 ```
 
-3. 单行字符数限制不超过 120 个，超出需要换行，换行时遵循如下原则：
+3. 单行字符数限制不超过 80 个，超出需要换行，换行时遵循如下原则：
 - 第二行相对第一行缩进 4 个空格，从第三行开始，不再继续缩进，参考示例。
 - 运算符与下文一起换行。
 - 方法调用的点符号与下文一起换行。
 - 方法调用时，多个参数， 需要换行时， 在逗号后进行。
 - 在括号前不要换行，见反例。
-正例：
+  正例：
 ```
 StringBuffer sb = new StringBuffer();
 // 超过 120 个字符的情况下，换行缩进 4 个空格， 点号和方法名称一起换行
