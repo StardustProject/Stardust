@@ -24,7 +24,7 @@
 
 工欲善其事，必先利其器。
 
-1. 使用最新版的IDE进行开发，现版本为3.0；
+1. 使用2.3.3版本的Android Studio（现最新版为3.0，但考虑到诸如不稳定以及新版本遇坑不好找到解决方法）；
 2. 编码格式统一为**UTF-8**；
 3. 缩进统一为4个空格（将Tab size设置为4则可以保证tab键按4个空格缩进。另外，不要勾选上Use tab character，可以保证切换到不同tab长度的环境时还能继续保持统一的4个空格的缩进样式）；
 4. 编辑完`.java`、 `.xml`等文件后一定要**格式化**（基本格式方面使用 AS 默认模板即可）；
@@ -361,7 +361,7 @@ public class MyClass {
       int mPackagePrivate;
       private int mPrivate;
       protected int mProtected;
-      
+
 }
 ```
 
@@ -673,6 +673,10 @@ Android开发存在着众多版本的不同，比如`compileSdkVersion`、`minSd
 `minSdkVersion`: 21
 
 `targetSdkVersion`: 26
+
+`buildToolsVersion`: 26.0.2
+
+`com.android.tools.build:gradle`: 2.3.3
 
 项目依赖第三方库统一使用最新版本
 
