@@ -29,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity{
      * description:  沉浸式状态栏
      * version:   :  1.0
      */
-	private void steepStatusBar() {
+	public void steepStatusBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
 			// 透明状态栏
