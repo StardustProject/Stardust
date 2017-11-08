@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--间距-->
-    <dimen name="spacing_90">90dp</dimen>
 
-    <!--控件宽高-->
-    <dimen name="layout_width_245">245dp</dimen>
-    <dimen name="layout_height_35">35dp</dimen>
 </resources>

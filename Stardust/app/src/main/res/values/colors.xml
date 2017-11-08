@@ -6,6 +6,9 @@
     <color name="colorAccent">#FF4081</color>
 
     <!--白色系颜色-->
-    <color name="white">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>  <!--白色-->
+
+    <!--灰色系颜色-->
+    <color name="gray">#888888</color>   <!--灰色-->
 
 </resources>

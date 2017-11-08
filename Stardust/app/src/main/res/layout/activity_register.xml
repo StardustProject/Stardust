@@ -9,19 +9,19 @@
     android:weightSum="1">
 
     <ImageView
-        android:id="@+id/iv_login_appName"
+        android:id="@+id/iv_register_appName"
         android:layout_width="245dp"
         android:layout_height="35dp"
         android:layout_marginLeft="75dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="55dp"
         android:background="@drawable/img_app_name" />
 
     <EditText
-        android:id="@+id/et_login_username"
+        android:id="@+id/et_register_username"
         android:layout_width="280dp"
         android:layout_gravity="center"
         android:layout_height="45dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:hint="用户名"
         android:textColor="@color/white"
         android:textColorHint="@color/gray"
@@ -29,33 +29,37 @@
         android:textCursorDrawable="@drawable/cursor_color"
         android:singleLine="true" />
     <EditText
-        android:id="@+id/et_login_password"
+        android:id="@+id/et_register_password"
         android:layout_width="282dp"
         android:layout_gravity="center"
         android:layout_height="45dp"
         android:layout_marginTop="15dp"
-        android:hint="密码"
+        android:hint="输入密码"
         android:textColor="@color/white"
         android:textColorHint="@color/gray"
         android:background="@drawable/bg_edit"
         android:textCursorDrawable="@drawable/cursor_color"
         android:singleLine="true" />
+    <EditText
+        android:id="@+id/et_register_confirmPassword"
+        android:layout_width="280dp"
+        android:layout_gravity="center"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:hint="确认密码"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:background="@drawable/bg_edit"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:singleLine="true" />
+
     <Button
-        android:id="@+id/btn_login_login"
+        android:id="@+id/btn_register_register"
         android:layout_width="280dp"
         android:layout_height="45dp"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/btn_login"
-        android:text="登录" />
-    <Button
-        android:id="@+id/btn_login_register"
-        android:layout_width="280dp"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/btn_register"
-        android:text="注册"
-        android:textColor="@color/white"/>
+        android:text="注册" />
 
 </LinearLayout>
