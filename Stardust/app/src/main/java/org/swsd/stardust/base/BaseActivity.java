@@ -31,7 +31,6 @@ public abstract class BaseActivity extends AppCompatActivity{
      */
 
 	public void steepStatusBar() {
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
 			// 透明状态栏
