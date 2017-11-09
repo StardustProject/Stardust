@@ -13,15 +13,14 @@
         android:background="@color/black">
     </LinearLayout>
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@color/white"
-        android:padding="15dp"
-        android:fitsSystemWindows="true">
+        android:orientation="horizontal"
+        android:padding="15dp">
+
         <ImageView
             android:id="@+id/iv_my_setting"
             android:layout_width="30dp"
@@ -64,10 +63,9 @@
             android:layout_marginTop="30dp"
             android:background="@color/white">
             <ImageView
-                android:id="@+id/iv_my_days"
                 android:src="@drawable/ic_my_days"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
 
@@ -92,7 +90,6 @@
             android:layout_marginTop="30dp"
             android:background="@color/white">
             <ImageView
-                android:id="@+id/iv_my_stars"
                 android:src="@drawable/ic_my_stars"
                 android:layout_width="35dp"
                 android:layout_height="35dp"

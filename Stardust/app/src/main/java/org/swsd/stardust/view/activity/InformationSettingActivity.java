@@ -7,16 +7,16 @@ import org.swsd.stardust.base.BaseActivity;
 
 /**
  * author     :  胡俊钦
- * time       :  2017/11/09
- * description:  个人信息模块
+ * time       :  2017/11/07
+ * description:  个人信息设置模块
  * version:   :  1.0
  */
 
-public class MyInformationActivity extends BaseActivity {
+public class InformationSettingActivity extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        setContentView(R.layout.activity_my_information);
+        setContentView(R.layout.activity_information_setting);
         return 0;
     }
 
