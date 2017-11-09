@@ -17,4 +17,7 @@
     <!--黑色系颜色-->
     <color name="black">#000000</color>   <!--黑色-->
 
+    <!--自定义-->
+    <color name="userPhoto">#271934</color>
+
 </resources>

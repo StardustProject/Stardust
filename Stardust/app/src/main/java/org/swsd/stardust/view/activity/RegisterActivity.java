@@ -5,6 +5,13 @@ import android.os.Bundle;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 
+/**
+ * author     :  胡俊钦
+ * time       :  2017/11/08
+ * description:  注册模块
+ * version:   :  1.0
+ */
+
 public class RegisterActivity extends BaseActivity {
 
     @Override

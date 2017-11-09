@@ -8,6 +8,13 @@ import android.widget.Button;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 
+/**
+ * author     :  胡俊钦
+ * time       :  2017/11/07
+ * description:  登录模块
+ * version:   :  1.0
+ */
+
 public class LoginActivity extends BaseActivity {
 
     @Override
@@ -37,22 +44,22 @@ public class LoginActivity extends BaseActivity {
         bindLayout();
 
         //设置“登录”按钮监听事件
-        Button btn_login=(Button)findViewById(R.id.btn_login_login);
-        btn_login.setOnClickListener(new View.OnClickListener(){
+        Button btnLogin = (Button) findViewById(R.id.btn_login_login);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //点击按钮后……
-               //逻辑待实现
+                //逻辑待实现
             }
         });
 
         //设置“注册”按钮监听事件
-        Button btn_register=(Button)findViewById(R.id.btn_login_register);
-        btn_register.setOnClickListener(new View.OnClickListener(){
+        Button btnRegister = (Button) findViewById(R.id.btn_login_register);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //点击按钮后跳转到注册页面
-                Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
