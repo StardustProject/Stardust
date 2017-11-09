@@ -20,7 +20,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void initView() {
         //沉浸式顶部栏，继承基类的方法
-        //steepStatusBar();
+        steepStatusBar();
     }
 
     @Override

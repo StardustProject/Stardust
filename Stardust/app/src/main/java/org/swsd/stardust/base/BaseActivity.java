@@ -30,7 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity{
      * version:   :  1.0
      */
 
-	private void steepStatusBar() {
+	public void steepStatusBar() {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 

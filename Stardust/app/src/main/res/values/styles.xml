@@ -9,4 +9,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 </resources>

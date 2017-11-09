@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteSmoke">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/black">
+    </LinearLayout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/white"
+        android:padding="15dp"
+        android:fitsSystemWindows="true">
+        <ImageView
+            android:id="@+id/iv_my_setting"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_my_setting"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ic_my_user"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_user"
+            android:layout_centerInParent="true"
+            app:civ_border_width="1dp"
+            app:civ_border_overlay="true"
+            app:civ_border_color="@color/silver"
+            app:civ_fill_color="@color/whiteSmoke" />
+
+        <TextView
+            android:id="@+id/tv_my_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/ic_my_user"
+            android:text="User"
+            android:textSize="15dp"
+            android:textColor="@color/dimGray" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white">
+            <ImageView
+                android:id="@+id/iv_my_days"
+                android:src="@drawable/ic_my_days"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_my_days"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white"
+            android:gravity="center_vertical|left"
+            android:text="来到Stardust的第1天"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white">
+            <ImageView
+                android:id="@+id/iv_my_stars"
+                android:src="@drawable/ic_my_stars"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_my_stars"
+            android:layout_width="325dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white"
+            android:text="已拥有8个星尘"
+            android:textSize="15dp"
+            android:gravity="center_vertical|left"/>
+    </LinearLayout>
+</LinearLayout>
+

@@ -10,5 +10,11 @@
 
     <!--灰色系颜色-->
     <color name="gray">#888888</color>   <!--灰色-->
+    <color name="whiteSmoke">#F5F5F5</color>  <!--白烟色-->
+    <color name="silver">#C0C0C0</color>     <!--银灰色-->
+    <color name="dimGray">#696969</color>    <!--暗灰色-->
+
+    <!--黑色系颜色-->
+    <color name="black">#000000</color>   <!--黑色-->
 
 </resources>

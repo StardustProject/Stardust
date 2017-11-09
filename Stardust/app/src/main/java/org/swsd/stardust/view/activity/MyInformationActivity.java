@@ -5,12 +5,11 @@ import android.os.Bundle;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 
-public class RegisterActivity extends BaseActivity {
+public class MyInformationActivity extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        //加载布局
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_my_information);
         return 0;
     }
 
@@ -32,7 +31,5 @@ public class RegisterActivity extends BaseActivity {
         initView();
         //绑定并加载登录界面布局
         bindLayout();
-
-
     }
 }
