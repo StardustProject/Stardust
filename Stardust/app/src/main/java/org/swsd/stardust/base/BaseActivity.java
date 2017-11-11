@@ -14,7 +14,7 @@ import android.view.WindowManager;
  * version:   :  1.0
  */
 
-public abstract class BaseActivity extends AppCompatActivity{
+public abstract class BaseActivity extends AppCompatActivity {
 
     //当前Class的名字
     protected final String TAG = this.getClass().getName();
@@ -29,9 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity{
      * description:  沉浸式状态栏
      * version:   :  1.0
      */
-
 	public void steepStatusBar() {
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
 			// 透明状态栏

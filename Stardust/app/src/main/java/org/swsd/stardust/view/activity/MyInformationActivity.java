@@ -11,7 +11,6 @@ import org.swsd.stardust.base.BaseActivity;
  * description:  个人信息模块
  * version:   :  1.0
  */
-
 public class MyInformationActivity extends BaseActivity {
 
     @Override

@@ -11,7 +11,6 @@ import org.swsd.stardust.base.BaseActivity;
  * description:  注册模块
  * version:   :  1.0
  */
-
 public class RegisterActivity extends BaseActivity {
 
     @Override

@@ -14,7 +14,6 @@ import org.swsd.stardust.base.BaseActivity;
  * description:  登录模块
  * version:   :  1.0
  */
-
 public class LoginActivity extends BaseActivity {
 
     @Override
