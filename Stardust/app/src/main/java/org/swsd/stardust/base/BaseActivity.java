@@ -14,7 +14,7 @@ import android.view.WindowManager;
  * version:   :  1.0
  */
 
-public abstract class BaseActivity extends AppCompatActivity{
+public abstract class BaseActivity extends AppCompatActivity {
 
     //当前Class的名字
     protected final String TAG = this.getClass().getName();
