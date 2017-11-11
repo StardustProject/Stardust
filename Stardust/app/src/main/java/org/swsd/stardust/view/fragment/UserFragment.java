@@ -11,7 +11,7 @@ import org.swsd.stardust.R;
 
 /**
  *     author : 熊立强
- *     time : ${YEAR}/${MONTH}/${DAY}
+ *     time : 2017/11/11
  *     description : 用户碎片
  *     version : 1.0
  */

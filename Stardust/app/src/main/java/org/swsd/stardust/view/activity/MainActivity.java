@@ -24,13 +24,13 @@ import org.swsd.stardust.view.fragment.UserFragment;
  */
 public class MainActivity extends BaseActivity {
 
-    private TabContainerView tabContainerView;
+    public TabContainerView tabContainerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         bindLayout();
-        initView();
+        //initView();
         steepStatusBar();
         MainViewAdapter mainViewAdapter=new MainViewAdapter(getSupportFragmentManager(),
                 new Fragment[] {new HomeFragment(), new ArticleFragment(),new NoteFragment(), new StarFragment(),new UserFragment()});
@@ -52,7 +52,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initView() {
         Log.d("熊立强", "initView: ");
-        tabContainerView = (TabContainerView) findViewById(R.id.tab_container);
+        this.tabContainerView = (TabContainerView) findViewById(R.id.tab_container);
     }
 
     @Override
