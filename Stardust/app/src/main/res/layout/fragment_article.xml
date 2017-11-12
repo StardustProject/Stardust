@@ -5,11 +5,9 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
-        android:id="@+id/dhf"
+
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="hfsahiofashfahfasdfsfsssssssssssssssssssssssfsfhsdhifhshfuihsuifhuiahuifhuihsdufhuagfusy9sfshfuihdsuifhus"
-        android:layout_weight="0.40" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>
