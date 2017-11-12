@@ -8,5 +8,4 @@ package org.swsd.stardust.base;
  */
 
 public class BaseFragment {
-
 }
