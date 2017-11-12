@@ -21,7 +21,7 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_tab_5, null);
+        return inflater.inflate(R.layout.activity_my_information, null);
 
     }
 }
