@@ -23,7 +23,7 @@ public class InformationSettingActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        //沉浸式顶部栏，继承基类的方法
+        // 沉浸式顶部栏，继承基类的方法
         steepStatusBar();
     }
 
@@ -35,17 +35,17 @@ public class InformationSettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //初始化界面,实现沉浸式顶部栏
+        // 初始化界面,实现沉浸式顶部栏
         initView();
-        //绑定并加载登录界面布局
+        // 绑定并加载登录界面布局
         bindLayout();
 
-        //设置“返回”图标监听事件
-        ImageView ivGoBack =(ImageView) findViewById(R.id.iv_go_back);
+        // 设置“返回”图标监听事件
+        ImageView ivGoBack = (ImageView) findViewById(R.id.iv_go_back);
         ivGoBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //点击按钮后回到到个人信息页面
+                // 点击按钮后回到到个人信息页面
                 finish();
             }
         });
