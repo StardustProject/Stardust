@@ -30,8 +30,9 @@ public class MainActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
         bindLayout();
+        //initView();
         initView();
-        steepStatusBar();
+       //steepStatusBar();
         MainViewAdapter mainViewAdapter=new MainViewAdapter(getSupportFragmentManager(),
                 new Fragment[] {new HomeFragment(), new ArticleFragment(),new NoteFragment(), new StarFragment(),new UserFragment()});
         tabContainerView.setAdapter(mainViewAdapter);
@@ -57,6 +58,5 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
     }
 }
