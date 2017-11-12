@@ -28,16 +28,16 @@
         </activity>
 
         <activity
-            android:name=".view.activity.MyInformationActivity"
+            android:name=".view.activity.InformationSettingActivity"
             android:theme="@style/MyTheme">
-
+            <intent-filter>
+                <action android:name="org.swsd.stardust.ACTION_START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
-        <activity
-            android:name=".view.activity.InformationSettingActivity"
-            android:theme="@style/MyTheme"></activity>
-
-        <activity android:name="org.swsd.stardust.view.activity.MainActivity">
+        <activity android:name="org.swsd.stardust.view.activity.MainActivity"
+            android:theme="@style/MyTheme">
 
         </activity>
     </application>

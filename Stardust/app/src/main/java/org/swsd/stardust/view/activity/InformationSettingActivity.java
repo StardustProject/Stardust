@@ -1,6 +1,8 @@
 package org.swsd.stardust.view.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
@@ -37,5 +39,15 @@ public class InformationSettingActivity extends BaseActivity {
         initView();
         //绑定并加载登录界面布局
         bindLayout();
+
+        //设置“返回”图标监听事件
+        ImageView ivGoBack =(ImageView) findViewById(R.id.iv_go_back);
+        ivGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //点击按钮后回到到个人信息页面
+                finish();
+            }
+        });
     }
 }

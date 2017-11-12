@@ -50,6 +50,7 @@ public class LoginActivity extends BaseActivity {
                 //点击按钮后跳转到主页面
                 Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(goToMain);
+                finish();
             }
         });
 
