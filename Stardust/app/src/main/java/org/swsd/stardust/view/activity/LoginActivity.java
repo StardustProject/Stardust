@@ -47,8 +47,9 @@ public class LoginActivity extends BaseActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //点击按钮后……
-                //逻辑待实现
+                //点击按钮后跳转到主页面
+                Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(goToMain);
             }
         });
 
@@ -58,8 +59,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //点击按钮后跳转到注册页面
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                Intent goToRegister = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(goToRegister);
             }
         });
     }
