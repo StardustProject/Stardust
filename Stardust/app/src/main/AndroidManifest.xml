@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.swsd.stardust">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
@@ -10,6 +12,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".view.activity.LoginActivity"
+            android:theme="@style/MyTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".view.activity.RegisterActivity"
+            android:theme="@style/MyTheme">
+
+        </activity>
+
+        <activity
+            android:name=".view.activity.MyInformationActivity"
+            android:theme="@style/MyTheme">
+
+        </activity>
+
+        <activity
+            android:name=".view.activity.InformationSettingActivity"
+            android:theme="@style/MyTheme"></activity>
+
         <activity android:name="org.swsd.stardust.view.activity.MainActivity">
         </activity>
     </application>

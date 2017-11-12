@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--默认颜色-->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!--白色系颜色-->
+    <color name="white">#FFFFFF</color>  <!--白色-->
+
+    <!--灰色系颜色-->
+    <color name="gray">#888888</color>   <!--灰色-->
+    <color name="whiteSmoke">#F5F5F5</color>  <!--白烟色-->
+    <color name="silver">#C0C0C0</color>     <!--银灰色-->
+    <color name="dimGray">#696969</color>    <!--暗灰色-->
+
+    <!--黑色系颜色-->
+    <color name="black">#000000</color>   <!--黑色-->
+
+    <!--自定义-->
+    <color name="userPhoto">#271934</color>
+
     <color name="common_red">#EB0000</color>
     <color name="bottom_icon_grey">#b5b5b5</color>
     <color name="common_line_two">#dcdcdc</color>
