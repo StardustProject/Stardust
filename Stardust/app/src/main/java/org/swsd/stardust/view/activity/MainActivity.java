@@ -2,6 +2,7 @@ package org.swsd.stardust.view.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import org.swsd.stardust.R;
@@ -30,9 +31,7 @@ public class MainActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
         bindLayout();
-        //initView();
         initView();
-       //steepStatusBar();
         MainViewAdapter mainViewAdapter=new MainViewAdapter(getSupportFragmentManager(),
                 new Fragment[] {new HomeFragment(), new ArticleFragment(),new NoteFragment(), new StarFragment(),new UserFragment()});
         tabContainerView.setAdapter(mainViewAdapter);
@@ -54,6 +53,11 @@ public class MainActivity extends BaseActivity {
     public void initView() {
         Log.d("熊立强", "initView: ");
         this.tabContainerView = (TabContainerView) findViewById(R.id.tab_container);
+        //隐藏标题栏
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.hide();
+        }
     }
 
     @Override
