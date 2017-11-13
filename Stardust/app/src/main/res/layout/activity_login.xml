@@ -4,9 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_login"
     android:orientation="vertical"
-    android:weightSum="1"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:weightSum="1">
 
     <ImageView
         android:id="@+id/iv_login_appName"
@@ -28,15 +26,7 @@
         android:textColor="@color/white"
         android:textColorHint="@color/gray"
         android:textCursorDrawable="@drawable/cursor_color" />
-    <TextView
-        android:id="@+id/tv_login_name_rule"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:text="@string/username_rule"
-        android:textColor="@color/common_red"
-        android:visibility="gone"/>
+
     <EditText
         android:id="@+id/et_login_password"
         android:layout_width="280dp"
@@ -50,15 +40,7 @@
         android:textColor="@color/white"
         android:textColorHint="@color/gray"
         android:textCursorDrawable="@drawable/cursor_color" />
-    <TextView
-        android:id="@+id/tv_login_passorrd_rule"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:text="@string/password_rule"
-        android:textColor="@color/common_red"
-        android:visibility="gone"/>
+
     <Button
         android:id="@+id/btn_login_login"
         android:layout_width="280dp"
