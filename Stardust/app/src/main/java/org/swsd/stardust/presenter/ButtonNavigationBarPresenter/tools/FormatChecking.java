@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.Editable;
 import android.widget.Toast;
 
+import java.util.regex.Pattern;
+
 /**
  * author  ： 胡俊钦
  * time    ： 2017/11/13
@@ -11,18 +13,26 @@ import android.widget.Toast;
  * version ： 1.0
  */
 public class FormatChecking {
-    // 判断长度
+
+    // 判断长度是否符合要求
     public boolean checkLength(Context context, Editable editable) {
+        // 匹配汉字和中文标点符号的正则表达式
+        String chinesePattern = "[\\u4e00-\\u9fff\\p{P}]+";
         boolean flag = false;
         // 统计字符数，汉字算一个字符
         int length = editable.length();
-        // 统计字符长度，汉字算两个字符长度
+        String str = "";
+        // 统计字符长度，汉字和中文字符算两个字符长度
         int count = 0;
         for (int i = 0; i < length; i++) {
-            if (editable.charAt(i) < 256) {
-                count++;
-            } else {
+            str += editable.charAt(i);
+            // 判断是否为汉字
+            if (Pattern.matches(chinesePattern, str)) {
                 count += 2;
+                str = "";
+            } else {
+                count++;
+                str = "";
             }
         }
 
@@ -41,54 +51,26 @@ public class FormatChecking {
 
     // 判断用户名字符是否合法
     public boolean checkUsernameChar(Context context, Editable editable) {
-        boolean flag = false;
-        // 统计字符数，汉字算一个字符
-        int length = editable.length();
-        char c;
-        int i;
-        for (i = 0; i < length; i++) {
-            c = editable.charAt(i);
-            // 允许数字、大小写字母和汉字
-            if ((c <= '9' && c >= '0') || (c <= 'z' && c >= 'a')
-                    || (c <= 'Z' && c >= 'A') || c > 128) {
-                continue;
+        // 允许数字、大小写字母和汉字
+        String usernamePattern = "[0-9a-zA-Z\\u4e00-\\u9fff]+";
 
-            } else {
-                Toast.makeText(context, "用户名不允许出现非法字符！", Toast.LENGTH_SHORT).show();
-                break;
-            }
+        if ((Pattern.matches(usernamePattern, editable.toString()))) {
+            return true;
+        } else {
+            Toast.makeText(context, "用户名不允许出现非法字符！", Toast.LENGTH_SHORT).show();
+            return false;
         }
-
-        if (i == length) {
-            flag = true;
-        }
-        return flag;
     }
 
-    // 判断密码字符是否合法，缺标点符号的判断
-    // …………………………………………………………
-    // ………………………………………………………………
+    // 判断密码字符是否合法
     public boolean checkPasswordChar(Context context, Editable editable) {
-        boolean flag = false;
-        //统计字符数，汉字算一个字符
-        int length = editable.length();
-        char c;
-        int i;
-        for (i = 0; i < length; i++) {
-            c = editable.charAt(i);
-            // 允许数字、大小写字母和标点符号
-            if ((c <= '9' && c >= '0') || (c <= 'z' && c >= 'a') || (c <= 'A' && c >= 'Z')) {
-                continue;
-
-            } else {
-                Toast.makeText(context, "密码不允许出现非法字符！", Toast.LENGTH_SHORT).show();
-                break;
-            }
+        // 允许数字、大小写字母和标点符号
+        String passwordPattern = "[0-9a-zA-Z\\u4e00-\\u9fff\\p{P}]+";
+        if ((Pattern.matches(passwordPattern, editable.toString()))) {
+            return true;
+        } else {
+            Toast.makeText(context, "密码不允许出现非法字符！", Toast.LENGTH_SHORT).show();
+            return false;
         }
-
-        if (i == length) {
-            flag = true;
-        }
-        return flag;
     }
 }

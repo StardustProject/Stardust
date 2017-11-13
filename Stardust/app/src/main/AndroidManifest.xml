@@ -36,8 +36,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.swsd.stardust.view.activity.MainActivity"
-            android:theme="@style/MyTheme">
+        <activity android:name="org.swsd.stardust.view.activity.MainActivity">
 
         </activity>
     </application>
