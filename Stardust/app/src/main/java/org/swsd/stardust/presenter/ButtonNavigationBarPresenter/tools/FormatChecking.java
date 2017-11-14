@@ -16,24 +16,18 @@ public class FormatChecking {
 
     // 判断长度是否符合要求
     public boolean checkLength(Context context, Editable editable) {
-        // 匹配汉字和中文标点符号的正则表达式
-        String chinesePattern = "[\\u4e00-\\u9fff\\p{P}]+";
         boolean flag = false;
-        // 统计字符数，汉字算一个字符
+        // 统计字符数，双字节字符只算一个字符
         int length = editable.length();
-        String str = "";
-        // 统计字符长度，汉字和中文字符算两个字符长度
+        // 统计字符长度，双字节字符算两个字符长度
         int count = 0;
         for (int i = 0; i < length; i++) {
-            str += editable.charAt(i);
-            // 判断是否为汉字
-            if (Pattern.matches(chinesePattern, str)) {
-                count += 2;
-                str = "";
-            } else {
-                count++;
-                str = "";
-            }
+            // 判断是否为双字节字符
+           if(editable.charAt(i)>0x80){
+               count += 2;
+           }else{
+               count++;
+           }
         }
 
         if (count == 0) {
