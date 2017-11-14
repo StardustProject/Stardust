@@ -59,7 +59,7 @@ public class FormatChecking {
     // 判断密码字符是否合法
     public boolean checkPasswordChar(Context context, Editable editable) {
         // 允许数字、大小写字母和标点符号
-        String passwordPattern = "[0-9a-zA-Z\\u4e00-\\u9fff\\p{P}]+";
+        String passwordPattern = "[0-9a-zA-Z\\p{P}]+";
         if ((Pattern.matches(passwordPattern, editable.toString()))) {
             return true;
         } else {
