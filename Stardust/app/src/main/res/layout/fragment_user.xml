@@ -19,7 +19,6 @@
             android:id="@+id/ic_my_user"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_user"
             android:layout_gravity="center"
             app:civ_border_width="1dp"
             app:civ_border_overlay="true"
@@ -72,7 +71,6 @@
             android:layout_marginTop="30dp"
             android:background="@color/white"
             android:gravity="center_vertical|left"
-            android:text="来到Stardust的第1天"
             android:textSize="15dp" />
     </LinearLayout>
 
@@ -94,11 +92,10 @@
 
         <TextView
             android:id="@+id/tv_my_stars"
-            android:layout_width="325dp"
+            android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="30dp"
             android:background="@color/white"
-            android:text="已拥有8个星尘"
             android:textSize="15dp"
             android:gravity="center_vertical|left"/>
     </LinearLayout>

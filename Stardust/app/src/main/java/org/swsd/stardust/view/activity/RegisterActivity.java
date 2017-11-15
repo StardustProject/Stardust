@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
-import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.FormatChecking;
+import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
 
 /**
  * author     :  胡俊钦
@@ -93,8 +93,6 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
-        // 创建工具类对象
-        final FormatChecking fCheck = new FormatChecking();
         // 设置“注册”按钮监听事件
         Button btnRegister = (Button) findViewById(R.id.btn_register_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -108,10 +106,9 @@ public class RegisterActivity extends BaseActivity {
                     Toast.makeText(RegisterActivity.this, "network is unavailable", Toast.LENGTH_SHORT).show();
                 } else {
                     // 若网络可用，则检查用户名密码长度及格式
-                    if (fCheck.checkLength(getApplicationContext(), etUsername.getText())
-                            && fCheck.checkLength(getApplicationContext(), etPassword.getText())
-                            && fCheck.checkUsernameChar(getApplicationContext(), etUsername.getText())
-                            && fCheck.checkPasswordChar(getApplicationContext(), etPassword.getText())) {
+                    // 创建工具类对象
+                   CommonFunctions fCheck = new CommonFunctions();
+                    if (fCheck.check(getApplicationContext(), etUsername.getText(),etPassword.getText()) ){
                         mStrUsername = etUsername.getText().toString();
                         mStrPassword = etPassword.getText().toString();
 

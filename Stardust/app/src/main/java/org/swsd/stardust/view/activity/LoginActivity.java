@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
-import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.FormatChecking;
+import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
 
 /**
  * author     :  胡俊钦
@@ -52,8 +52,7 @@ public class LoginActivity extends BaseActivity {
         final EditText etUsername = (EditText) findViewById(R.id.et_login_username);
         // 设置“密码”编辑框监听对象
         final EditText etPassword = (EditText) findViewById(R.id.et_login_password);
-        // 创建工具类对象
-        final FormatChecking fCheck = new FormatChecking();
+
         // 设置“登录”按钮监听事件
         Button btnLogin = (Button) findViewById(R.id.btn_login_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -66,11 +65,10 @@ public class LoginActivity extends BaseActivity {
                     //若当前无网络则提醒用户
                     Toast.makeText(LoginActivity.this, "network is unavailable", Toast.LENGTH_SHORT).show();
                 } else {
-                    // 若网络可用，则检查用户名密码长度及格式
-                    if (fCheck.checkLength(getApplicationContext(), etUsername.getText())
-                            && fCheck.checkLength(getApplicationContext(), etPassword.getText())
-                            && fCheck.checkUsernameChar(getApplicationContext(), etUsername.getText())
-                            && fCheck.checkPasswordChar(getApplicationContext(), etPassword.getText())) {
+                    // 若网络可用,进行格式检查
+                    // 创建工具类对象
+                    final CommonFunctions fCheck = new CommonFunctions();
+                    if (fCheck.check(getApplicationContext(),etUsername.getText(),etPassword.getText())){
                         // 用户名密码是否匹配
                         if (isMatch(etUsername.getText().toString(), etPassword.getText().toString())) {
                             // 若匹配，则跳转到主页面
