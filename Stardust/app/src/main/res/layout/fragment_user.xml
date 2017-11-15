@@ -7,35 +7,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whiteSmoke">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/black">
-    </LinearLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@color/white"
-        android:orientation="horizontal"
-        android:padding="15dp">
-
-        <ImageView
-            android:id="@+id/iv_my_setting"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/ic_my_setting"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"/>
+        android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ic_my_user"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/ic_user"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             app:civ_border_width="1dp"
             app:civ_border_overlay="true"
             app:civ_border_color="@color/silver"
@@ -45,14 +30,24 @@
             android:id="@+id/tv_my_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal|bottom"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:layout_below="@+id/ic_my_user"
             android:text="User"
             android:textSize="15dp"
             android:textColor="@color/dimGray" />
 
-    </RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_my_setting"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_my_setting"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -108,4 +103,3 @@
             android:gravity="center_vertical|left"/>
     </LinearLayout>
 </LinearLayout>
-
