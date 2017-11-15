@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * author     :  张昭锡
- * time       :  2017/11/12
- * description:  主页适配器
- * version:   :  1.0
+ *    author     :  张昭锡
+ *    time       :  2017/11/12
+ *    description:  主页适配器
+ *    version:   :  1.0
  */
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
@@ -91,6 +91,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         return mNoteList.size();
     }
 
+
+    /**
+     *    author     :  张昭锡
+     *    time       :  2017/11/12
+     *    description:  随机生成textview行数，使瀑布流不规则排列
+     *    version:   :  1.0
+     */
     private String getRandomLengthName(String name){
         Random random = new Random();
         int length = random.nextInt(5) + 1;
