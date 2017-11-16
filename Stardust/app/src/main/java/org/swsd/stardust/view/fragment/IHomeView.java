@@ -6,7 +6,6 @@ package org.swsd.stardust.view.fragment;
  *    description:  主页View层接口
  *    version:   :  1.0
  */
-
 public interface IHomeView {
     void showDate();
     void showDate(String date);

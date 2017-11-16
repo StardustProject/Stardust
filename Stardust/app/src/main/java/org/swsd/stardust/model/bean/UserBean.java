@@ -10,7 +10,6 @@ import org.litepal.crud.DataSupport;
  * description:  数据库用户表的JavaBean文件
  * version:   :  1.0
  */
-
 public class UserBean extends DataSupport{
 
     private int id;

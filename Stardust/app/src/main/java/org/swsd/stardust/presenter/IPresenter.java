@@ -8,7 +8,6 @@ import android.content.Context;
  * description:  Presenter层的基类接口
  * version:   :  1.0
  */
-
 public interface IPresenter<T> {
 
     /**

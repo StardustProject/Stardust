@@ -33,9 +33,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.swsd.stardust.view.activity.MainActivity">
+        <activity android:name=".view.activity.MainActivity">
 
         </activity>
+
     </application>
 
 </manifest>

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 
 import org.swsd.stardust.model.bean.NoteBean;
+import org.swsd.stardust.presenter.adapter.HomeAdapter;
 
 import java.util.List;
 
@@ -13,13 +14,20 @@ import java.util.List;
  *    description:  主页Presenter层接口
  *    version:   :  1.0
  */
-
 public interface IHomePresenter {
 
     void showDate();
     void showDate(String date);
     void setDatePickerDialogPotision();
-    void changeDate(Context context);
+    void changeDate(Context context,final HomeAdapter adapter,List<NoteBean>noteList);
     void updateDate();
+    void setNoteYear(int year);
+    void setNoteMonth(int month);
+    void setNoteDay(int day);
+    void refreshAdapter(HomeAdapter adapter);
     List<NoteBean> getNoteList();
+
+    int getNoteYear();
+    int getNoteMonth();
+    int getNoteDay();
 }
