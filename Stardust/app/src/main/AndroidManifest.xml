@@ -4,10 +4,6 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <user-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -40,7 +36,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.MainActivity" />
         <activity
             android:name=".view.activity.SetUsernameActivity"
             android:label="修改用户名"
@@ -48,6 +43,11 @@
         <activity android:name=".view.activity.setPasswordActivity"
             android:label="修改密码"
             android:theme="@style/MyTheme" />
+
+        <activity android:name=".view.activity.MainActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

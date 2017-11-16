@@ -8,7 +8,6 @@ import org.litepal.crud.DataSupport;
  * description:  数据库记录表的JavaBean文件
  * version:   :  1.0
  */
-
 public class NoteBean extends DataSupport{
 
     private int id;
@@ -17,6 +16,8 @@ public class NoteBean extends DataSupport{
     private int noteId;
     private long createTime;
     private boolean shareStatus;
+    private String content;
+
 
     //归属的用户ID
     private int userId;
@@ -59,5 +60,13 @@ public class NoteBean extends DataSupport{
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
