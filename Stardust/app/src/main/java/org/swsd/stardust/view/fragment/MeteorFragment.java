@@ -12,19 +12,21 @@ import android.view.ViewGroup;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.MeteorBean;
+import org.swsd.stardust.presenter.IMeteorPresenter;
 import org.swsd.stardust.presenter.adapter.MeteorAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *     author : 熊立强
- *     time : 2017/11/11
+ *     author : 骆景钊
+ *     time : 2017/11/15
  *     description : 流星碎片
  *     version : 1.0
  */
-public class StarFragment extends Fragment {
+public class MeteorFragment extends Fragment {
 
+    IMeteorPresenter meteorPresenter;
     private List<MeteorBean> meteorList = new ArrayList<>();
     MeteorAdapter meteorAdapter;
 
@@ -33,7 +35,8 @@ public class StarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_meteor, null);
-        initMetor();
+//        initMetor();
+        meteorList = meteorPresenter.getMeteorList();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
