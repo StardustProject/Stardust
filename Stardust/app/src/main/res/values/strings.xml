@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Stardust</string>
     <string name="login_app_name">STARDUST</string>
-
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_User">User</string>
+    <string name="title_article">Article</string>
+    <string name="title_metor">Metor</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
