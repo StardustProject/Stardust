@@ -14,66 +14,66 @@ import java.util.regex.Pattern;
  */
 public class CommonFunctions {
 
-    public boolean  check(Context context, Editable username, Editable password){
-        boolean flag=false;
+    public boolean check(Context context, Editable username, Editable password) {
+        boolean flag = false;
         // 检查用户名长度
-        switch (checkLength(username)){
+        switch (checkLength(username)) {
             case 1:
-                flag=false;
+                flag = false;
                 Toast.makeText(context, "用户名不能为空！", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                flag=false;
-                Toast.makeText(context,"用户名长度不能小于6！", Toast.LENGTH_SHORT).show();
+                flag = false;
+                Toast.makeText(context, "用户名长度不能小于6！", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
-                flag=false;
+                flag = false;
                 Toast.makeText(context, "用户名长度不能大于20！", Toast.LENGTH_SHORT).show();
                 break;
             case 0:
-                flag=true;
+                flag = true;
                 break;
             default:
         }
 
-        if(flag){
+        if (flag) {
             // 检查用户名是否存在非法字符
-            if(checkUsernameChar(username)){
-                flag=true;
-            }else{
-                flag=false;
+            if (checkUsernameChar(username)) {
+                flag = true;
+            } else {
+                flag = false;
                 Toast.makeText(context, "用户名不允许出现非法字符！", Toast.LENGTH_SHORT).show();
             }
         }
 
-        if(flag){
+        if (flag) {
             // 检查密码长度
-            switch (checkLength(password)){
+            switch (checkLength(password)) {
                 case 1:
-                    flag=false;
+                    flag = false;
                     Toast.makeText(context, "密码不能为空！", Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
-                    flag=false;
-                    Toast.makeText(context,"密码长度不能小于6！", Toast.LENGTH_SHORT).show();
+                    flag = false;
+                    Toast.makeText(context, "密码长度不能小于6！", Toast.LENGTH_SHORT).show();
                     break;
                 case 3:
-                    flag=false;
+                    flag = false;
                     Toast.makeText(context, "密码长度不能大于20！", Toast.LENGTH_SHORT).show();
                     break;
                 case 0:
-                    flag=true;
+                    flag = true;
                     break;
                 default:
             }
         }
 
-        if(flag){
+        if (flag) {
             // 检查密码是否存在非法字符
-            if(checkPasswordChar(password)){
-                flag=true;
-            }else{
-                flag=false;
+            if (checkPasswordChar(password)) {
+                flag = true;
+            } else {
+                flag = false;
                 Toast.makeText(context, "密码不允许出现非法字符！", Toast.LENGTH_SHORT).show();
             }
         }
@@ -112,7 +112,7 @@ public class CommonFunctions {
     // 判断用户名字符是否合法
     public boolean checkUsernameChar(Editable editable) {
         // 允许数字、大小写字母和汉字
-        String usernamePattern = "[0-9a-zA-Z\\u4e00-\\u9fff]+";
+        String usernamePattern = "[0-9a-zA-Z\\u4e00-\\u9fa5]+";
 
         if ((Pattern.matches(usernamePattern, editable.toString()))) {
             return true;

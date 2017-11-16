@@ -38,9 +38,9 @@ public class UserPresenter extends DataSupport {
         return userBean;
     }
 
-    public int toGetStarNum(){
-        int num=0;
-        num=DataSupport.count(NoteBean.class);
+    public int toGetStarNum() {
+        int num;
+        num = DataSupport.count(NoteBean.class);
         return num;
     }
 }

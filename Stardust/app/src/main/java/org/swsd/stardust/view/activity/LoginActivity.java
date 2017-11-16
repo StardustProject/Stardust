@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
-import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
+import org.swsd.stardust.presenter.LoginPresenter;
 
 /**
  * author     :  胡俊钦
@@ -58,7 +58,8 @@ public class LoginActivity extends BaseActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 点击按钮后检查网络状态
+                // 点击按钮后
+                // 检查网络状态
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
                 if (networkInfo == null || !networkInfo.isAvailable()) {
@@ -66,16 +67,12 @@ public class LoginActivity extends BaseActivity {
                     Toast.makeText(LoginActivity.this, "network is unavailable", Toast.LENGTH_SHORT).show();
                 } else {
                     // 若网络可用,进行格式检查
-                    // 创建工具类对象
-                    final CommonFunctions fCheck = new CommonFunctions();
-                    if (fCheck.check(getApplicationContext(),etUsername.getText(),etPassword.getText())){
-                        // 用户名密码是否匹配
-                        if (isMatch(etUsername.getText().toString(), etPassword.getText().toString())) {
-                            // 若匹配，则跳转到主页面
-                            Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(goToMain);
-                            finish();
-                        }
+                    LoginPresenter login = new LoginPresenter();
+                    if (login.checkBeforeLogin(getApplicationContext(), etUsername.getText(), etPassword.getText())) {
+                        // 若匹配，则跳转到主页面
+                        Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(goToMain);
+                        finish();
                     }
                 }
             }
@@ -99,11 +96,4 @@ public class LoginActivity extends BaseActivity {
         super.$log(msg);
     }
 
-    // 判断用户名和密码是否正确
-    boolean isMatch(String strUsername, String strPassword) {
-        boolean flag = true;
-        // 需要向服务器发送验证请求并返回结果，还未实现
-        //
-        return flag;
-    }
 }

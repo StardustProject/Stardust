@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
-import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
+import org.swsd.stardust.presenter.RegisterPresenter;
 
 /**
  * author     :  胡俊钦
@@ -22,11 +22,6 @@ import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunc
  * version:   :  1.0
  */
 public class RegisterActivity extends BaseActivity {
-
-    // 存放用户名输入框内容的变量
-    private String mStrUsername = "";
-    // 存放密码输入框内容的变量
-    private String mStrPassword = "";
 
     @Override
     public int bindLayout() {
@@ -106,38 +101,26 @@ public class RegisterActivity extends BaseActivity {
                     Toast.makeText(RegisterActivity.this, "network is unavailable", Toast.LENGTH_SHORT).show();
                 } else {
                     // 若网络可用，则检查用户名密码长度及格式
-                    // 创建工具类对象
-                   CommonFunctions fCheck = new CommonFunctions();
-                    if (fCheck.check(getApplicationContext(), etUsername.getText(),etPassword.getText()) ){
-                        mStrUsername = etUsername.getText().toString();
-                        mStrPassword = etPassword.getText().toString();
-
-                        // 判断确认密码和输入密码是否一致
-                        if (isPasswordSame(etConfirmPassword.getText().toString())) {
-                            // 此处缺少上传用户名和密码到服务器，返回结果成功或失败，给出提示
-                            // ……
-
+                    RegisterPresenter register = new RegisterPresenter();
+                    switch (register.checkBeforeRegister(getApplicationContext(), etUsername.getText(),
+                            etPassword.getText(), etConfirmPassword.getText())) {
+                        case 1:
                             // 注册成功则跳转到登录页面
                             Intent goToRegister = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(goToRegister);
                             finish();
-                        }
+                            break;
+                        case 2:
+                            Toast.makeText(RegisterActivity.this, "确认密码与输入密码不一致！", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 0:
+                            break;
+                        default:
+
                     }
+
                 }
             }
         });
-    }
-
-    // 判断确认密码是否和输入密码一致
-    public boolean isPasswordSame(String str) {
-        boolean flag = false;
-
-        if (str.equals(mStrPassword)) {
-            flag = true;
-        } else {
-            Toast.makeText(RegisterActivity.this, "确认密码与输入密码不一致！", Toast.LENGTH_SHORT).show();
-        }
-
-        return flag;
     }
 }
