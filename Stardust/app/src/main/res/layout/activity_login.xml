@@ -19,7 +19,7 @@
         android:layout_width="280dp"
         android:layout_height="45dp"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/bg_edit"
         android:hint="用户名"
         android:singleLine="true"
@@ -29,10 +29,10 @@
 
     <EditText
         android:id="@+id/et_login_password"
-        android:layout_width="282dp"
+        android:layout_width="280dp"
         android:layout_height="45dp"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/bg_edit"
         android:hint="密码"
         android:inputType="textPassword"

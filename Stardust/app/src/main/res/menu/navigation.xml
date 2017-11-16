@@ -18,7 +18,7 @@
 
     <item
         android:id="@+id/navigation_metor"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@mipmap/star_fill"
         android:title="@string/title_metor" />
 
     <item

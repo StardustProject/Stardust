@@ -26,6 +26,7 @@ import org.swsd.stardust.view.fragment.UserFragment;
  */
 public class MainActivity extends BaseActivity {
 
+    BottomNavigationView navigation;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -34,8 +35,10 @@ public class MainActivity extends BaseActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     replaceFragment(new HomeFragment());
+                    navigation.getBackground().setAlpha(0);
                     return true;
                 case R.id.navigation_article:
+                    navigation.getBackground().setAlpha(255);
                     replaceFragment(new ArticleFragment());
                     return true;
                 case R.id.navigation_addtion:
@@ -60,8 +63,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         bindLayout();
         initView();
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        //navigation.getBackground().setAlpha(95);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.getBackground().setAlpha(0);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
