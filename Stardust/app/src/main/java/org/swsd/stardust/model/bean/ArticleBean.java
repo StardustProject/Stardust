@@ -8,7 +8,6 @@ import org.litepal.crud.DataSupport;
  * description:  数据库中Article表的JavaBean文件
  * version:   :  1.0
  */
-
 public class ArticleBean extends DataSupport{
 
     private int id;

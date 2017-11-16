@@ -2,6 +2,7 @@ package org.swsd.stardust.presenter.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import java.util.Random;
  */
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
+
+    private static final String TAG = "HomeAdapter";
 
     private List<NoteBean>mNoteList;
     private Context mContext;
@@ -44,6 +47,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     public HomeAdapter(Context context, List<NoteBean>noteList){
         mContext = context;
         mNoteList = noteList;
+
+        int size = mNoteList.size() / 2;
+        Random random = new Random();
+        for (int i = 0;i < size;i++){
+            int cnt = random.nextInt(2);
+            for (int j = 0;j < cnt;j++){
+                NoteBean note = new NoteBean();
+                note.setId(-1);
+                int index = random.nextInt(mNoteList.size());
+                mNoteList.add(index,note);
+            }
+        }
+
+        Log.d(TAG, "HomeAdapter: " + mNoteList.size());
     }
 
     @Override
