@@ -87,6 +87,8 @@ public class HomePresenter implements IHomePresenter{
                 mHomeNoteModel.setMonth(month);
                 mHomeNoteModel.setDay(dayOfMonth);
                 showDate(date);
+
+                //更新界面光点数据
                 noteList.clear();
                 noteList.addAll(getNoteList());
                 refreshAdapter(adapter);

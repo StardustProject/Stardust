@@ -21,7 +21,6 @@ import java.util.Random;
  *    description:  主页适配器
  *    version:   :  1.0
  */
-
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
     private static final String TAG = "HomeAdapter";
@@ -48,6 +47,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         mContext = context;
         mNoteList = noteList;
 
+        //随机没有记录实体的记录
         int size = mNoteList.size() / 2;
         Random random = new Random();
         for (int i = 0;i < size;i++){
@@ -60,7 +60,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             }
         }
 
-        Log.d(TAG, "HomeAdapter: " + mNoteList.size());
     }
 
     @Override

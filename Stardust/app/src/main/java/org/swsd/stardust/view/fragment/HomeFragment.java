@@ -55,8 +55,6 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         //初始化
         mHomePresenter = new HomePresenter(this);
 
-        initDatabaseData();
-
         //控件初始化
         mRvLightspot = (RecyclerView)mView.findViewById(R.id.rv_home_lightspot);
         mTvDisplayDate = (TextView)mView.findViewById(R.id.tv_home_date);
@@ -113,19 +111,6 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
             case R.id.tv_home_date:
                 mHomePresenter.changeDate(getContext(),adapter,mNoteList);
                 break;
-        }
-    }
-
-
-    void initDatabaseData(){
-        for (int i = 0;i < 10;i++){
-            NoteBean noteBean = new NoteBean();
-            java.util.Date date = new java.util.Date();
-            long dateTime = date.getTime();
-            noteBean.setCreateTime(dateTime);
-            noteBean.setShareStatus(true);
-            noteBean.setUserId(1);
-            noteBean.save();
         }
     }
 

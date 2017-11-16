@@ -40,8 +40,10 @@ public class HomeNoteModel implements IHomeNoteModel{
 
         long startTime = calendar.getTimeInMillis();
         long endTime = startTime + 24 * 3600 * 1000;
-        Log.d(TAG, "zyzhang + start: " + startTime);
-        Log.d(TAG, "zyzhang + end: " + endTime);
+//        Log.d(TAG, "zyzhang + start: " + startTime);
+//        Log.d(TAG, "zyzhang + end: " + endTime);
+
+        //查询选定天数的记录
         mNoteList = DataSupport
                 .where("createTime > ? and createTime < ?",String.valueOf(startTime), String.valueOf(endTime))
                 .find(NoteBean.class);

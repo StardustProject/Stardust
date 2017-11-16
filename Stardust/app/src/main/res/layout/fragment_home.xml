@@ -45,7 +45,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_weight="1">
         <TextView
             android:id="@+id/tv_home_date"
             android:layout_width="match_parent"
@@ -54,6 +54,11 @@
             android:gravity="center"
             android:textColor="@color/white"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
     </LinearLayout>
 
 </LinearLayout>

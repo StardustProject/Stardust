@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name=".view.activity.LoginActivity"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,6 +33,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".view.activity.MainActivity">
+
+        </activity>
 
     </application>
 
