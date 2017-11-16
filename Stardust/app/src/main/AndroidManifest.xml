@@ -39,6 +39,10 @@
         <activity android:name="org.swsd.stardust.view.activity.MainActivity">
 
         </activity>
+
+        <activity android:name=".view.activity.MeteorDetail">
+
+        </activity>
     </application>
 
 </manifest>

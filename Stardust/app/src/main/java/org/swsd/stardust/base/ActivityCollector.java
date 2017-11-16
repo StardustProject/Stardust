@@ -35,4 +35,13 @@ public class ActivityCollector {
             return activityList.get(activityList.size() - 1);
         }
     }
+
+    //将所有活动销毁
+    public static void finishAll(){
+        for (Activity activity : activityList){
+            if(!activity.isFinishing()){
+                activity.finish();
+            }
+        }
+    }
 }

@@ -3,26 +3,19 @@ package org.swsd.stardust.model.bean;
 import org.litepal.crud.DataSupport;
 
 /**
- * Created by Administrator on 2017/11/15.
+ * author     :  骆景钊
+ * time       :  2017/11/14
+ * description:  数据库流星表的JavaBean文件
+ *               存储流星的内容
+ * version:   :  1.0
  */
 
 public class MeteorBean extends DataSupport {
 
-    private int id;
     private int noteId;
+    private String URL;
     private String meteorContent;
     private boolean isPureMedia;
-
-    //归属的用户ID
-    private int userId;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getNoteId() {
         return noteId;
@@ -30,6 +23,14 @@ public class MeteorBean extends DataSupport {
 
     public void setNoteId(int noteId) {
         this.noteId = noteId;
+    }
+
+    public String getURL(){
+        return URL;
+    }
+
+    public  void setURL(String URL){
+        this.URL = URL;
     }
 
     public String getMeteorContent() {
@@ -40,11 +41,11 @@ public class MeteorBean extends DataSupport {
         this.meteorContent = meteorContent;
     }
 
-    public boolean isPureMedia() {
+    public boolean getIsPureMedia() {
         return isPureMedia;
     }
 
-    public void setShareStatus(boolean isPureMedia) {
+    public void setIsPureMedia(boolean isPureMedia) {
         this.isPureMedia = isPureMedia;
     }
 
