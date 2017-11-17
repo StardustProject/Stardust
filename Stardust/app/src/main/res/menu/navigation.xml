@@ -14,7 +14,7 @@
     <item
         android:id="@+id/navigation_addtion"
         android:icon="@mipmap/addition_fill"
-        android:title="@string/title_dashboard" />
+        android:title="@string/title_note" />
 
     <item
         android:id="@+id/navigation_metor"

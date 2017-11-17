@@ -3,6 +3,9 @@
     package="org.swsd.stardust">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <user-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -34,8 +37,10 @@
         </activity>
 
         <activity android:name="org.swsd.stardust.view.activity.MainActivity">
-
         </activity>
+
+        <activity android:name=".view.activity.NoteActivity"
+            ></activity>
     </application>
 
 </manifest>
