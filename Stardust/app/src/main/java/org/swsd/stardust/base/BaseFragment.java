@@ -6,7 +6,5 @@ package org.swsd.stardust.base;
  * description:
  * version:   :  1.0
  */
-
 public class BaseFragment {
-
 }
