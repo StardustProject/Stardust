@@ -3,7 +3,10 @@ package org.swsd.stardust.util;
 import org.swsd.stardust.base.BaseActivity;
 
 /**
- * Created by Administrator on 2017/11/12.
+ * author     :  骆景钊
+ * time       :  2017/11/13
+ * description:  用户权限申请
+ * version:   :  1.0
  */
 
 public class PermissionUtil {

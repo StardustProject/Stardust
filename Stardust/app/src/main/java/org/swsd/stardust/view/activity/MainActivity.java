@@ -15,7 +15,7 @@ import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.view.fragment.ArticleFragment;
 import org.swsd.stardust.view.fragment.HomeFragment;
-import org.swsd.stardust.view.fragment.StarFragment;
+import org.swsd.stardust.view.fragment.MeteorFragment;
 import org.swsd.stardust.view.fragment.UserFragment;
 
 /**
@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
                     startActivity(intent);
                     return true;
                 case R.id.navigation_metor:
-                    replaceFragment(new StarFragment());
+                    replaceFragment(new MeteorFragment());
                     return true;
                 case R.id.navigation_user:
                     replaceFragment(new UserFragment());
