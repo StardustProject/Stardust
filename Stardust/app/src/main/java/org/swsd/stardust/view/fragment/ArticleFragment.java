@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 import org.swsd.stardust.R;
 import org.swsd.stardust.presenter.ArticlePresenter.Article;
 import org.swsd.stardust.presenter.ArticlePresenter.ArticleAdapter;
+import org.swsd.stardust.presenter.ArticlePresenter.JsoupWeiXin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,16 +52,14 @@ public class ArticleFragment extends Fragment {
     List<Article> getTestAdapter(){
         List<Article> list = new ArrayList<>();
         for (int i = 0; i < 30 ; i++) {
+            String articleUrl = "https://mp.weixin.qq.com/s/zfRFqZmk-AVtZ9BdQkllPA";
             Article article = new Article();
-            article.setArticleTitle("文章标题");
-            article.setArticleAuthor("豆腐君");
-            article.setArtilePublishTime("2017/11/11");
-            article.setArticleAbstract("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" +
-                    "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" +
-                    "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" +
-                    "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" +
-                    "cccccccccccccccc");
-            article.setArticleUrl("url++++" + i);
+            JsoupWeiXin.parseContent(articleUrl);
+            article.setArticleTitle(JsoupWeiXin.title);
+            article.setArticleAuthor(JsoupWeiXin.author);
+            article.setArtilePublishTime(JsoupWeiXin.publishTime);
+            article.setArticleAbstract(JsoupWeiXin.contentArticle);
+            article.setArticleUrl(articleUrl);
             list.add(article);
         }
         return list;

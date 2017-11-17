@@ -3,9 +3,9 @@
     package="org.swsd.stardust">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <user-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -44,10 +44,11 @@
             android:label="修改密码"
             android:theme="@style/MyTheme" />
 
-        <activity android:name=".view.activity.MainActivity"></activity>
+        <activity android:name=".view.activity.MainActivity"
+            android:theme="@style/MyTheme"></activity>
 
         <activity android:name=".view.activity.NoteActivity"></activity>
-
+        <activity android:name=".view.activity.WebViewActivity"></activity>
     </application>
 
 </manifest>

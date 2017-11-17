@@ -39,5 +39,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'jp.wasabeef:richeditor-android:1.2.2'
+    compile 'com.qiniu:qiniu-java-sdk:7.2.+'
+    compile 'org.jsoup:jsoup:1.11.1'
     testCompile 'junit:junit:4.12'
 }
