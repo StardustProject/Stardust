@@ -68,14 +68,13 @@ public class InfoSettingActivity extends BaseActivity {
 
         //根据图片路径显示头像
         CircleImageView circleImageView = (CircleImageView) findViewById(R.id.civ_setting_photo);
-        if (userBean.getAvatarPath() != null) {
-            Glide.with(this).load(userBean.getAvatarPath()).into(circleImageView);
-        } else {
+        if (userBean.getAvatarPath().equals("")) {
             // 如果头像路径为空，则使用默认头像
             Glide.with(this).load(R.drawable.ic_setting_photo)
                     .into(circleImageView);
+        } else {
+            Glide.with(this).load(userBean.getAvatarPath()).into(circleImageView);
         }
-
     }
 
     @Override
