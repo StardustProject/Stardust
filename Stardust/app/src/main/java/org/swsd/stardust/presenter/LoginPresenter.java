@@ -2,11 +2,11 @@ package org.swsd.stardust.presenter;
 
 import android.content.Context;
 import android.text.Editable;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
 
@@ -32,13 +32,13 @@ import okhttp3.Response;
 public class LoginPresenter {
     String responseData;
     int errorCode = 0;
-    int id;
+    int userId;
     String userName;
     String token;
     String avatarPath;
     String registerTime;
     String expireTime;
-    UserBean userBean = new UserBean();
+    UserBean userBean=new UserBean();
     boolean ready = false;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -68,7 +68,6 @@ public class LoginPresenter {
     // 向服务器发送请求
     public void sendRequestWithOkHttp(final String username, final String password) {
         try {
-            Log.i("hujunqin", "begin");
             // 创建OkHttpClient实例
             OkHttpClient client = new OkHttpClient();
             // 将用户名和密码设为Json格式
@@ -90,7 +89,6 @@ public class LoginPresenter {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     responseData = response.body().string();
-                    Log.i("hujunqin", responseData);
                     // 解析返回的Json
                     parseJson(responseData);
                 }
@@ -120,10 +118,12 @@ public class LoginPresenter {
 
             // 如果返回的错误代码为200，将用户信息存入数据库
             if (errorCode == 200) {
+                DataSupport.deleteAll(UserBean.class);
+
                 JSONObject innerObject = jsonObject.getJSONObject("data");
                 // 用户id
-                id = innerObject.getInt("user_id");
-                userBean.setId(id);
+                userId = innerObject.getInt("user_id");
+                userBean.setUserId(userId);
                 // 用户名
                 userName = innerObject.getString("account");
                 userBean.setUserName(userName);
@@ -153,6 +153,7 @@ public class LoginPresenter {
                 userBean.setRegisterTime(date.getTime());
                 // 保存数据库
                 userBean.save();
+                userBean=DataSupport.findLast(UserBean.class);
                 // 获取用户头像url
                 getPhoto();
             }
@@ -168,7 +169,7 @@ public class LoginPresenter {
             OkHttpClient client = new OkHttpClient();
             // 创建Request对象
             Request request = new Request.Builder()
-                    .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + id + "/avatar")
+                    .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() + "/avatar")
                     .header("Authorizations", token)
                     .build();
             // 发送请求并获取服务器返回的数据
@@ -183,7 +184,7 @@ public class LoginPresenter {
                 JSONObject innerObject = jsonObject.getJSONObject("data");
                 avatarPath = innerObject.getString("avatar_url");
                 userBean.setAvatarPath(avatarPath);
-                userBean.updateAll("userName=?", userName);
+                userBean.updateAll();
             }
             ready = true;
         } catch (Exception e) {

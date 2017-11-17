@@ -24,16 +24,16 @@ import okhttp3.Response;
 /**
  * author  ： 胡俊钦
  * time    ： 2017/11/17
- * desc    ：
+ * desc    ： 修改用户名Presenter
  * version ： 1.0
  */
 
 public class SetNamePresenter {
     int errorCode=0;
     String responseData;
-    UserPresenter userPresenter = new UserPresenter();
-    UserBean userBean;
+    UserBean userBean=new UserBean();
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
     public boolean checkBeforeSetName(Context context,Editable name){
         boolean correct = false;
         CommonFunctions check = new CommonFunctions();
@@ -71,15 +71,13 @@ public class SetNamePresenter {
 
         // 如果格式检查全部通过,更新服务器,更新数据库
         if (correct == true) {
-            Log.i("hujunqin0:","begin");
-            resetName(name.toString());
+            resetName();
             while(errorCode==0){
-                Log.i("hujunqin:","waiting");
+
             }
             if (errorCode == 200) {
-                userBean = userPresenter.toGetUserInfo();
                 userBean.setUserName(name.toString());
-                userBean.updateAll("userName=?", name.toString());
+                userBean.updateAll("userName=?", userBean.getUserName());
                 correct=true;
             }else if(errorCode==409){
                 Toast.makeText(context, "用户名已存在！", Toast.LENGTH_SHORT).show();
@@ -92,51 +90,41 @@ public class SetNamePresenter {
     }
 
     // 更新服务器
-    public void resetName(final String strName) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // 创建OkHttpClient实例
-                    OkHttpClient client = new OkHttpClient();
-                    // 将用户名和密码设为Json格式
-                    String json = getJsonString(strName);
-                    RequestBody requestBody = RequestBody.create(JSON, json);
-                    // 创建Request对象
-                    String strId=String.valueOf(userBean.getId());
-                    Request request = new Request.Builder().
-                            url("http://111.231.18.37/learnlaravel5/public/index.php/api//users/"
-                                    + strId + "/account")
-                            .header("access_token", userBean.getToken())
-                            .put(requestBody)
-                            .build();
-                    // 发送请求并获取服务器返回的数据
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            Log.i("hujunqin1:","fail");
-                        }
+    public void resetName() {
+        try {
+            // 创建OkHttpClient实例
+            OkHttpClient client = new OkHttpClient();
+            // 将用户名和密码设为Json格式
+            String json = getJsonString(userBean.getUserName());
+            RequestBody requestBody = RequestBody.create(JSON, json);
+            // 创建Request对象
+            Request request = new Request.Builder().
+                    url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/"
+                            + userBean.getUserId()+ "/account")
+                    .header("Authorizations", userBean.getToken())
+                    .put(requestBody)
+                    .build();
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            responseData = response.body().toString();
-                            Log.i("hujunqin1:",responseData);
-                            try{
-                                JSONObject jsonObject = new JSONObject(responseData);
-                                errorCode = jsonObject.getInt("error_code");
-                                String str=String.valueOf(errorCode);
-                                Log.i("hujunqin2:",str);
-                            }catch (JSONException e){
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+            // 发送请求并获取服务器返回的数据
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        }).start();
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    responseData = response.body().string();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        errorCode = jsonObject.getInt("error_code");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // 生成Json格式的字符串

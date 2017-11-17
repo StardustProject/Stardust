@@ -111,9 +111,8 @@ public class CommonFunctions {
 
     // 判断用户名字符是否合法
     public boolean checkUsernameChar(Editable editable) {
-        // 允许数字、大小写字母和汉字
-        String usernamePattern = "[0-9a-zA-Z\\u4e00-\\u9fa5]+";
-
+        //登录名应为 6 到 20 位的字母、数字、下划线、中文组合，且以字母或中文作为第一个字符
+        String usernamePattern = "/^[a-zA-Z\\u4e00-\\u9fa5][\\-\\w\\u4e00-\\u9fa5]{5,19}$/";
         if ((Pattern.matches(usernamePattern, editable.toString()))) {
             return true;
         } else {
@@ -123,8 +122,8 @@ public class CommonFunctions {
 
     // 判断密码字符是否合法
     public boolean checkPasswordChar(Editable editable) {
-        // 允许数字、大小写字母和标点符号
-        String passwordPattern = "[0-9a-zA-Z\\p{P}]+";
+        //密码应为 6 到 20 位的字母、数字、符号~!@#$%^&*()_=+|,.?:;'"{}[]-/\组合
+        String passwordPattern = "/^[~!@#$%^&*()_=+|,.?:;'\"{\\}\\[\\]\\-/\\\\w]{6,20}$/";
         if ((Pattern.matches(passwordPattern, editable.toString()))) {
             return true;
         } else {
