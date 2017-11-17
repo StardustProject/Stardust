@@ -61,7 +61,6 @@ public class InfoSettingActivity extends BaseActivity {
         super.onResume();
         // 从数据库获取用户信息
         userBean = userPresenter.toGetUserInfo();
-
         // 显示用户名
         TextView tvMyUser = (TextView) findViewById(R.id.tv_setting_username);
         tvMyUser.setText(userBean.getUserName());

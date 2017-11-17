@@ -26,8 +26,8 @@ public class UserPresenter extends DataSupport {
     public UserBean useDefaultData() {
         UserBean userBean = new UserBean();
 
-        // 设置默认用户id
-        userBean.setId(0);
+        // 设置默认用户userId
+        userBean.setUserId(0);
         // 设置默认用户名
         userBean.setUserName("Username");
         // 获取当前时间作为默认注册时间值
