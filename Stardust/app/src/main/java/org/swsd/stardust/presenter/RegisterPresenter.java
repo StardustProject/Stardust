@@ -51,6 +51,8 @@ public class RegisterPresenter {
                     return 1;
                 } else if (errorCode == 409) {
                     Toast.makeText(context, "此用户名已被注册！", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(context, "注册失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 return 2;
