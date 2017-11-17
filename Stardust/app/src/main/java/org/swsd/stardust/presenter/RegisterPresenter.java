@@ -62,40 +62,36 @@ public class RegisterPresenter {
 
     // 向服务器发送请求
     public void sendRequestWithOkHttp(final String username, final String password) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // 创建OkHttpClient实例
-                    OkHttpClient client = new OkHttpClient();
-                    String json = getJsonString(username, password);
-                    RequestBody requestBody = RequestBody.create(JSON, json);
-                    // 创建Request对象
-                    Request request = new Request.Builder()
-                            .url("http://111.231.18.37/learnlaravel5/public/index.php/api/user/registration")
-                            .post(requestBody)
-                            .build();
-                    // 发送请求并获取服务器返回的数据
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
 
-                        }
+        try {
+            // 创建OkHttpClient实例
+            OkHttpClient client = new OkHttpClient();
+            String json = getJsonString(username, password);
+            RequestBody requestBody = RequestBody.create(JSON, json);
+            // 创建Request对象
+            Request request = new Request.Builder()
+                    .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/user/registration")
+                    .post(requestBody)
+                    .build();
+            // 发送请求并获取服务器返回的数据
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            responseData = response.body().string();
-                            parseJson(responseData);
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        }).start();
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    responseData = response.body().string();
+                    parseJson(responseData);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-
+    // 将用户名密码设为json格式
     private static String getJsonString(String username, String password) {
         JSONObject obj = new JSONObject();
         try {
@@ -107,6 +103,7 @@ public class RegisterPresenter {
         return obj.toString();
     }
 
+    // 解析json
     private void parseJson(String jsonData) {
         try {
             JSONObject jsonObject = new JSONObject(jsonData);
