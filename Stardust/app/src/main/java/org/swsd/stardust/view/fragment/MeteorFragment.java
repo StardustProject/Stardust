@@ -50,7 +50,7 @@ public class MeteorFragment extends Fragment {
 //        initMetor();
         //编造的当前用户，之后应传入当前登录的用户
         UserBean userBean = new UserBean();
-        userBean.setId(3);
+        userBean.setUserId(3);
         userBean.setToken("NWEwZDMzYmIzOTJkZjUuNTA2NzQ4ODQsMTIzNDU2Nzg5LDIwMTctMTEtMjMgMTQ6NDQ6MTE=");
 
         meteorPresenter = new MeteorPresenter();

@@ -44,7 +44,7 @@ public class MeteorAdapter extends RecyclerView.Adapter<MeteorAdapter.ViewHolder
             holder.meteorContent.setText(meteor.getMeteorContent());
         }else {
             holder.meteorContent.setVisibility(View.GONE);
-            holder.meteorPicture.setImageResource(R.mipmap.ic_launcher_round);
+            holder.meteorPicture.setImageResource(R.mipmap.multimedia);
             holder.meteorPicture.setVisibility(View.VISIBLE);
         }
 
