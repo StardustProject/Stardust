@@ -2,13 +2,15 @@ package org.swsd.stardust.model.bean;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * author     :  张昭锡
  * time       :  2017/11/02
  * description:  数据库记录表的JavaBean文件
  * version:   :  1.0
  */
-public class NoteBean extends DataSupport{
+public class NoteBean extends DataSupport implements Serializable{
 
     private int id;
 
