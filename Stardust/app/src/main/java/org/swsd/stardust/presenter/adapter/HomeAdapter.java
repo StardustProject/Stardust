@@ -1,7 +1,10 @@
 package org.swsd.stardust.presenter.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,9 @@ import android.widget.TextView;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
+import org.swsd.stardust.view.activity.LoginActivity;
+import org.swsd.stardust.view.activity.MainActivity;
+import org.swsd.stardust.view.activity.NoteActivity;
 
 import java.util.List;
 import java.util.Random;
@@ -20,8 +26,9 @@ import java.util.Random;
  *    description:  主页适配器
  *    version:   :  1.0
  */
-
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
+
+    private static final String TAG = "HomeAdapter";
 
     private List<NoteBean>mNoteList;
     private Context mContext;
@@ -44,6 +51,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     public HomeAdapter(Context context, List<NoteBean>noteList){
         mContext = context;
         mNoteList = noteList;
+
+        //随机没有记录实体的记录
+        int size = mNoteList.size() / 2;
+        Random random = new Random();
+        for (int i = 0;i < size;i++){
+            int cnt = random.nextInt(2);
+            for (int j = 0;j < cnt;j++){
+                NoteBean note = new NoteBean();
+                note.setId(-1);
+                int index = random.nextInt(mNoteList.size());
+                mNoteList.add(index,note);
+            }
+        }
+
     }
 
     @Override
@@ -53,11 +74,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         final ViewHolder holder = new ViewHolder(view);
 
 
-        //TODO  记录详情页负责人员未创建记录详情相关代码文件
         holder.lightSpotImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int position= holder.getAdapterPosition();
+                NoteBean note = mNoteList.get(position);
+                Intent intent = new Intent(mContext, NoteActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("note",note);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
             }
         });
 
