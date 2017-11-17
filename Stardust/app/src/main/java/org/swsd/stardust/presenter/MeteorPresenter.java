@@ -41,7 +41,7 @@ public class MeteorPresenter implements IMeteorPresenter{
                 try {
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://jksue.com/learnlaravel5/public/index.php/api/users/aaa/meteors")
+                            .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/aaa/meteors")
                             .addHeader("Authorizations","NWEwZDMzYmIzOTJkZjUuNTA2NzQ4ODQsMTIzNDU2Nzg5LDIwMTctMTEtMjMgMTQ6NDQ6MTE=")
                             .build();
                     Response response = client.newCall(request).execute();

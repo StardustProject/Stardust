@@ -38,7 +38,7 @@ public class UpdateTokenUtil {
                     Log.d("luojingzhao",json);
                     RequestBody body = RequestBody.create(JSON, json);
                     Request request = new Request.Builder()
-                            .url("http://111.231.18.37/api/user/"+userBean.getId()+"/access_token")
+                            .url("http://www.cxpzz.com/api/user/"+userBean.getId()+"/access_token")
                             .addHeader("Content-Type","application/json")
                             .addHeader("Authorization",userBean.getToken())
                             .put(body)
@@ -68,7 +68,7 @@ public class UpdateTokenUtil {
                     Log.d("luojingzhao", json);
                     RequestBody body = RequestBody.create(JSON, json);
                     Request request = new Request.Builder()
-                            .url("http://111.231.18.37/api/user/"+userBean.getId()+"/qiniu_token")
+                            .url("http://www.cxpzz.com/api/user/"+userBean.getId()+"/qiniu_token")
                             .addHeader("Authorization", userBean.getToken())
                             .build();
                     Response response = client.newCall(request).execute();
