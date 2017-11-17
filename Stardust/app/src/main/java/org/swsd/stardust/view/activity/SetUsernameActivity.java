@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.UserBean;
-import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
+import org.swsd.stardust.presenter.SetNamePresenter;
 import org.swsd.stardust.presenter.UserPresenter;
 
 /**
@@ -77,46 +77,11 @@ public class SetUsernameActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean correct = false;
-                CommonFunctions check = new CommonFunctions();
-
-                // 点击按钮后,进行用户名长度检查
-                switch (check.checkLength(etSetName.getText())) {
-                    case 1:
-                        correct = false;
-                        Toast.makeText(SetUsernameActivity.this, "用户名不能为空！", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 2:
-                        correct = false;
-                        Toast.makeText(SetUsernameActivity.this, "用户名长度不能小于6！", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 3:
-                        correct = false;
-                        Toast.makeText(SetUsernameActivity.this, "用户名长度不能大于20！", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 0:
-                        correct = true;
-                        break;
-                    default:
-                }
-
-                // 如果用户名长度合法
-                if (correct == true) {
-                    // 检查用户名是否存在非法字符
-                    if (check.checkUsernameChar(etSetName.getText())) {
-                        correct = true;
-                    } else {
-                        correct = false;
-                        Toast.makeText(SetUsernameActivity.this, "用户名不允许出现非法字符！", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                // 如果格式检查全部通过，(更新服务器，缺)，更新数据库
-                if (correct == true) {
-                    userBean.setUserName(etSetName.getText().toString());
-                    userBean.updateAll("userName=?", name);
-                    finish();
-                }
+                SetNamePresenter namePresenter=new SetNamePresenter();
+               if(namePresenter.checkBeforeSetName(getApplicationContext(),etSetName.getText())) {
+                   Toast.makeText(SetUsernameActivity.this,"修改用户名成功",Toast.LENGTH_SHORT).show();
+                   finish();
+               }
             }
         });
     }
