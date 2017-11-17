@@ -3,11 +3,14 @@
     package="org.swsd.stardust">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -25,13 +28,21 @@
             android:name=".view.activity.RegisterActivity"
             android:theme="@style/MyTheme" />
         <activity
-            android:name=".view.activity.InformationSettingActivity"
+            android:name=".view.activity.InfoSettingActivity"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="org.swsd.stardust.ACTION_START" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.activity.SetUsernameActivity"
+            android:label="修改用户名"
+            android:theme="@style/MyTheme" />
+        <activity android:name=".view.activity.setPasswordActivity"
+            android:label="修改密码"
+            android:theme="@style/MyTheme" />
 
         <activity android:name=".view.activity.MainActivity"></activity>
 
