@@ -13,7 +13,6 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,7 +61,6 @@ public class InfoSettingActivity extends BaseActivity {
         super.onResume();
         // 从数据库获取用户信息
         userBean = userPresenter.toGetUserInfo();
-        Log.i("hujunqinset",""+userBean.getId());
         // 显示用户名
         TextView tvMyUser = (TextView) findViewById(R.id.tv_setting_username);
         tvMyUser.setText(userBean.getUserName());

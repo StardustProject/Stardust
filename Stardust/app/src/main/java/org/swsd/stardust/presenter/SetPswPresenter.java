@@ -20,37 +20,36 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
 /**
  * author  ： 胡俊钦
  * time    ： 2017/11/17
- * desc    ： 修改用户名Presenter
+ * desc    ： 修改密码presenter
  * version ： 1.0
  */
-
-public class SetNamePresenter {
+public class SetPswPresenter {
     int errorCode = 0;
     String responseData;
     UserBean userBean = new UserBean();
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    public boolean checkBeforeSetName(Context context, Editable name) {
+    public boolean checkBeforeSetPsw(Context context, Editable oldPassword,
+                                     Editable newPassword, Editable confirmPassword) {
         boolean correct = false;
         CommonFunctions check = new CommonFunctions();
 
-        // 点击按钮后,进行用户名长度检查
-        switch (check.checkLength(name)) {
+        // 判断新密码长度是否符合
+        switch (check.checkLength(newPassword)) {
             case 1:
                 correct = false;
-                Toast.makeText(context, "用户名不能为空！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "新密码不能为空！", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
                 correct = false;
-                Toast.makeText(context, "用户名长度不能小于6！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "新密码长度不能小于6！", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
                 correct = false;
-                Toast.makeText(context, "用户名长度不能大于20！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "新密码长度不能大于20！", Toast.LENGTH_SHORT).show();
                 break;
             case 0:
                 correct = true;
@@ -58,51 +57,60 @@ public class SetNamePresenter {
             default:
         }
 
-        // 如果用户名长度合法
+        // 如果新密码长度合法
         if (correct == true) {
-            // 检查用户名是否存在非法字符
-            if (check.checkUsernameChar(name)) {
+            // 检查新密码是否存在非法字符
+            if (check.checkUsernameChar(newPassword)) {
                 correct = true;
             } else {
                 correct = false;
-                Toast.makeText(context, "用户名不允许出现非法字符！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "密码不允许出现非法字符！", Toast.LENGTH_SHORT).show();
             }
         }
 
-        // 如果格式检查全部通过,更新服务器,更新数据库
+        // 如果格式检查全部通过
         if (correct == true) {
-            resetName(name.toString());
+            // 判断确认密码与新密码是否相同
+            if (newPassword.toString().equals(confirmPassword.toString())) {
+                correct = true;
+            } else {
+                correct = false;
+                Toast.makeText(context, "新密码与确认密码不一致！", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // 如果检查全部通过，(更新服务器，缺)
+        if (correct == true) {
+            resetPassword(oldPassword.toString(), newPassword.toString());
             while (errorCode == 0) {
 
             }
             if (errorCode == 200) {
-                userBean.setUserName(name.toString());
-                userBean.updateAll("userId=?", "" + userBean.getUserId());
                 correct = true;
-            } else if (errorCode == 409) {
-                Toast.makeText(context, "用户名已存在！", Toast.LENGTH_SHORT).show();
+            } else if (errorCode == 403) {
+                Toast.makeText(context, "您输入的旧密码不正确！", Toast.LENGTH_SHORT).show();
                 correct = false;
-            } else if (errorCode == 401) {
-                Toast.makeText(context, "修改用户名失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "修改密码失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                 correct = false;
             }
+
         }
         return correct;
     }
 
-    // 更新服务器
-    public void resetName(String newName) {
+    private void resetPassword(String oldPassword, String newPassword) {
         try {
             userBean = DataSupport.findLast(UserBean.class);
             // 创建OkHttpClient实例
             OkHttpClient client = new OkHttpClient();
-            // 将用户名设为Json格式
-            String json = getJsonString(newName);
+            // 将密码设为Json格式
+            String json = getJsonString(oldPassword, newPassword);
             RequestBody requestBody = RequestBody.create(JSON, json);
             // 创建Request对象
             Request request = new Request.Builder().
                     url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/"
-                            + userBean.getUserId() + "/account")
+                            + userBean.getUserId() + "/password")
                     .header("Authorizations", userBean.getToken())
                     .put(requestBody)
                     .build();
@@ -131,13 +139,15 @@ public class SetNamePresenter {
     }
 
     // 生成Json格式的字符串
-    private static String getJsonString(String username) {
+    private static String getJsonString(String oldPassword, String newPassword) {
         JSONObject obj = new JSONObject();
         try {
-            obj.put("account", username);
+            obj.put("old_password", oldPassword);
+            obj.put("new_password", newPassword);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return obj.toString();
     }
 }
+

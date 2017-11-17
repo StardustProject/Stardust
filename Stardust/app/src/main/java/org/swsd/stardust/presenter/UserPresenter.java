@@ -1,7 +1,5 @@
 package org.swsd.stardust.presenter;
 
-import android.util.Log;
-
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.NoteBean;
 import org.swsd.stardust.model.bean.UserBean;

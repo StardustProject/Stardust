@@ -2,6 +2,7 @@ package org.swsd.stardust.presenter;
 
 import android.content.Context;
 import android.text.Editable;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -89,6 +90,7 @@ public class LoginPresenter {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     responseData = response.body().string();
+                    Log.i("login","hujunqin:"+responseData);
                     // 解析返回的Json
                     parseJson(responseData);
                 }
@@ -156,6 +158,8 @@ public class LoginPresenter {
                 userBean=DataSupport.findLast(UserBean.class);
                 // 获取用户头像url
                 getPhoto();
+            }else{
+                ready=true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
