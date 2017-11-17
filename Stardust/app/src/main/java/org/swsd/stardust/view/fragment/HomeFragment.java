@@ -6,14 +6,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
+import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.HomePresenter;
 import org.swsd.stardust.presenter.IHomePresenter;
 import org.swsd.stardust.presenter.adapter.HomeAdapter;
@@ -43,6 +46,8 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_home,container,false);
 
+        //initDatabaseData();
+
         //初始化
         mHomePresenter = new HomePresenter(this);
 
@@ -69,6 +74,14 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         //创建主页适配器
         adapter = new HomeAdapter(getContext(), mNoteList);
         mRvLightspot.setAdapter(adapter);
+
+//        //int x = mRvLightspot.getScrollX();
+//        int [] x = new int[2];
+//        mRvLightspot.getLocationOnScreen(x);
+//        Log.d(TAG, "onCreateView: zyzhang: x = " + x[0]);
+//        int y = mRvLightspot.getScrollY();
+//        Log.d(TAG, "onCreateView: zyzhang: y = " + x[1]);
+        //Toast.makeText(getContext(),String.valueOf(x),Toast.LENGTH_SHORT).show();
 
         return mView;
     }

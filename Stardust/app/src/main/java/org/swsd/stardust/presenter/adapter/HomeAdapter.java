@@ -77,6 +77,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         holder.lightSpotImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                int[] pos = new int[2];
+//                v.getLocationOnScreen(pos);
+//                Log.d(TAG, "onClick: zzy: x = " + pos[0]);
+//                Log.d(TAG, "onClick: zzy: y = " + pos[1]);
                 int position= holder.getAdapterPosition();
                 NoteBean note = mNoteList.get(position);
                 Intent intent = new Intent(mContext, NoteActivity.class);
@@ -133,4 +137,5 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         }
         return builder.toString();
     }
+
 }

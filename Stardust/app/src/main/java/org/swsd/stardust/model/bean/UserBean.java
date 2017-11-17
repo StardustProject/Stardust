@@ -13,6 +13,9 @@ import org.litepal.crud.DataSupport;
 public class UserBean extends DataSupport{
 
     private int id;
+
+    //服务器返回的user的ID
+    private int userId;
     private String userName;
     private String email;
     private String tel;
@@ -29,6 +32,14 @@ public class UserBean extends DataSupport{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {

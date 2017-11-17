@@ -13,4 +13,5 @@
         <item name="colorAccent">@color/green</item>
         <item name="android:windowTranslucentStatus"> true </item>
     </style>
+
 </resources>
