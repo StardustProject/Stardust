@@ -34,7 +34,9 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 
+import org.litepal.tablemanager.Connector;
 import org.swsd.stardust.R;
+import org.swsd.stardust.model.bean.NoteBean;
 
 import java.io.ByteArrayInputStream;
 
@@ -55,6 +57,7 @@ public class NoteActivity extends AppCompatActivity {
     private static final int CHOOSE_PHOTO=2;
     private String imagePath;
     private static String URL = null;
+    private static int NoteId;
 
     private Handler handler  = new Handler(){
         @Override
@@ -311,6 +314,15 @@ public class NoteActivity extends AppCompatActivity {
         /*String filePath = saveFile(htmlCode);
         Log.d(TAG, "saveNote: " + filePath);*/
         uploadHtml(htmlCode);
+        uploadServer(URL);
+        Connector.getDatabase();
+        NoteBean note = new NoteBean();
+        note.setContent(htmlCode);
+        note.setNoteId(NoteId);
+        note.setCreateTime(0);
+        note.setShareStatus(false);
+        note.setUserId(0);
+        note.save();
         Log.d(TAG, "note 保存成功" );
     }
 
@@ -472,9 +484,9 @@ public class NoteActivity extends AppCompatActivity {
                 UploadManager uploadManager = new UploadManager(cfg);
                 //...生成上传凭证，然后准备上传
 
-                String accessKey = "DOfdo3zg69Wl_x6aZ5M8tkFhrh5oKYWbDvBMxZ68";
-                String secretKey = "BIxRMrvQw6Gt8PfIHZ3TO8zxVBpnPjPAP1_BGCFq";
-                String bucket = "xiong123";
+                String accessKey = "zV8eZYiEVp-Akvx_wGlUtfhjB3VmDd4mvl9u-s6O";
+                String secretKey = "ij9yPsXMxznSeifiblhNTVpiGAvnhhhsXS4gdenc";
+                String bucket = "thousfeet";
                 //普通上传
                 /*Auth auth = Auth.create(accessKey, secretKey);
                 String upToken = auth.uploadToken(bucket);*/
@@ -531,7 +543,7 @@ public class NoteActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(NoteActivity.this, "记录 上传完成", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NoteActivity.this, "记录上传完成", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -543,7 +555,6 @@ public class NoteActivity extends AppCompatActivity {
      */
     private String  uploadHtml(final String htmlCode){
 
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -553,9 +564,9 @@ public class NoteActivity extends AppCompatActivity {
                 Configuration cfg = new Configuration(Zone.zone0());
                 UploadManager uploadManager = new UploadManager(cfg);
                 //...生成上传凭证，然后准备上传
-                String accessKey = "DOfdo3zg69Wl_x6aZ5M8tkFhrh5oKYWbDvBMxZ68";
-                String secretKey = "BIxRMrvQw6Gt8PfIHZ3TO8zxVBpnPjPAP1_BGCFq";
-                String bucket = "xiong123";
+                String accessKey = "zV8eZYiEVp-Akvx_wGlUtfhjB3VmDd4mvl9u-s6O";
+                String secretKey = "ij9yPsXMxznSeifiblhNTVpiGAvnhhhsXS4gdenc";
+                String bucket = "thousfeet";
                 //普通上传
                 /*Auth auth = Auth.create(accessKey, secretKey);
                 String upToken = auth.uploadToken(bucket);*/
@@ -575,6 +586,7 @@ public class NoteActivity extends AppCompatActivity {
                     Log.d(TAG, "成功上传" + putRet.key);
                     Log.d(TAG, "成功上传" + putRet.hash);
                     String url = "http://oziec3aec.bkt.clouddn.com/" + putRet.key;
+                    URL = url;
                     Log.d(TAG, "url is " + url);
                     Message message = new Message();
                     message.what = SAVE_NOTE;
@@ -594,5 +606,17 @@ public class NoteActivity extends AppCompatActivity {
             }
         }).start();
         return URL;
+    }
+
+    private void uploadServer(String URL){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int serverId = 0;
+                // TODO: 2017/11/17  上传服务器
+
+                NoteId = serverId;
+            }
+        }).start();
     }
 }

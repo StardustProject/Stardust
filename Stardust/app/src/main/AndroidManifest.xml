@@ -44,9 +44,11 @@
             android:label="修改密码"
             android:theme="@style/MyTheme" />
 
-        <activity android:name=".view.activity.MainActivity"></activity>
+        <activity android:name=".view.activity.MainActivity"
+            android:theme="@style/MyTheme"></activity>
 
         <activity android:name=".view.activity.NoteActivity"></activity>
+        <activity android:name=".view.activity.WebViewActivity"></activity>
     </application>
 
 </manifest>

@@ -7,6 +7,11 @@
     android:background="#F5F5F5">
 
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="#F5F5F5"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/article_toolbar"
         android:layout_width="match_parent"
