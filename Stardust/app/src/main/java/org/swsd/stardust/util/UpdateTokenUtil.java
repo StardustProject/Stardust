@@ -39,6 +39,7 @@ public class UpdateTokenUtil {
                     RequestBody body = RequestBody.create(JSON, json);
                     Request request = new Request.Builder()
                             .url("http://111.231.18.37/api/user/"+userBean.getId()+"/access_token")
+                            .addHeader("Content-Type","application/json")
                             .addHeader("Authorization",userBean.getToken())
                             .put(body)
                             .build();
@@ -53,8 +54,8 @@ public class UpdateTokenUtil {
         }).start();
     }
 
-    //更新七牛云的Token（第一次获取七牛云Token）
-    public static void updataQiniuToken(UserBean user){
+    //获取七牛云Token
+    public static void getQiniuToken(UserBean user){
 
         final UserBean userBean = user;
 
@@ -69,7 +70,6 @@ public class UpdateTokenUtil {
                     Request request = new Request.Builder()
                             .url("http://111.231.18.37/api/user/"+userBean.getId()+"/qiniu_token")
                             .addHeader("Authorization", userBean.getToken())
-                            .put(body)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
@@ -82,7 +82,30 @@ public class UpdateTokenUtil {
         }).start();
     }
 
+    //更新数据库用户Token
     private static void updateDatabase(String responseData){
+        try {
+            JSONObject jsonObject = new JSONObject(responseData);
+
+            //检验是否成功
+            if(ErrorCodeJudgment.errorCodeJudge(responseData) == "Ok"){
+                String user_id = jsonObject.getString("user_id");
+                String refresh_token = jsonObject.getString("qiniu_token");
+                String expire_time = jsonObject.getString("expire_time");
+                UserBean userBean = new UserBean();
+                userBean.setId(Integer.parseInt(user_id));
+                userBean.setToken(refresh_token);
+                userBean.setTokenTime(expire_time);
+                userBean.updateAll("id = ?", user_id);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //更新数据库七牛云Token
+    private static void updateQiniuDatabase(String responseData){
         try {
             JSONObject jsonObject = new JSONObject(responseData);
 
@@ -95,27 +118,6 @@ public class UpdateTokenUtil {
                 userBean.setId(Integer.parseInt(user_id));
                 userBean.setQiniuToken(refresh_token);
                 userBean.setQiniuTime(expire_time);
-                userBean.updateAll("id = ?", user_id);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void updateQiniuDatabase(String responseData){
-        try {
-            JSONObject jsonObject = new JSONObject(responseData);
-
-            //检验是否成功
-            if(ErrorCodeJudgment.errorCodeJudge(responseData) == "Ok"){
-                String user_id = jsonObject.getString("user_id");
-                String refresh_token = jsonObject.getString("refresh_token");
-                String expire_time = jsonObject.getString("expire_time");
-                UserBean userBean = new UserBean();
-                userBean.setId(Integer.parseInt(user_id));
-                userBean.setToken(refresh_token);
-                userBean.setTokenTime(expire_time);
                 userBean.updateAll("id = ?", user_id);
             }
 

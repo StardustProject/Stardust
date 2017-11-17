@@ -11,4 +11,5 @@ import java.util.List;
 
 public interface IMeteorPresenter {
     List<MeteorBean> getMeteorList();
+    void updataMeteor();
 }

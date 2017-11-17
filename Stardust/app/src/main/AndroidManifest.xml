@@ -48,14 +48,9 @@
 
         <activity android:name=".view.activity.NoteActivity"></activity>
 
-<<<<<<< HEAD
-        </activity>
-
         <activity android:name=".view.activity.MeteorDetail">
 
         </activity>
-=======
->>>>>>> dev
     </application>
 
 </manifest>

@@ -7,5 +7,6 @@
         <mapping class="org.swsd.stardust.model.bean.MediaBean"></mapping>
         <mapping class="org.swsd.stardust.model.bean.NoteBean"></mapping>
         <mapping class="org.swsd.stardust.model.bean.UserBean"></mapping>
+        <mapping class="org.swsd.stardust.model.bean.MeteorBean"></mapping>
     </list>
 </litepal>

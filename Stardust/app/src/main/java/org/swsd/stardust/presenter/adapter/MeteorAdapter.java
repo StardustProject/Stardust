@@ -18,7 +18,10 @@ import org.swsd.stardust.view.activity.MeteorDetail;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/11/3.
+ *     author : 骆景钊
+ *     time : 2017/11/15
+ *     description : 流星RecyclerView的适配器
+ *     version : 1.0
  */
 
 public class MeteorAdapter extends RecyclerView.Adapter<MeteorAdapter.ViewHolder> {
@@ -41,7 +44,7 @@ public class MeteorAdapter extends RecyclerView.Adapter<MeteorAdapter.ViewHolder
             holder.meteorContent.setText(meteor.getMeteorContent());
         }else {
             holder.meteorContent.setVisibility(View.GONE);
-            holder.meteorPicture.setImageResource(R.mipmap.ic_launcher);
+            holder.meteorPicture.setImageResource(R.mipmap.ic_launcher_round);
             holder.meteorPicture.setVisibility(View.VISIBLE);
         }
 
@@ -51,10 +54,10 @@ public class MeteorAdapter extends RecyclerView.Adapter<MeteorAdapter.ViewHolder
 
                 Intent intent = new Intent(mContext,MeteorDetail.class);
                 Bundle bundle = new Bundle();
-//                //通过bundle传输数据
+                //通过bundle传输数据
 //                bundle.putSerializable("Meteor", meteor);
 //                intent.putExtras(bundle);
-                mContext.startActivity(intent);
+//                mContext.startActivity(intent);
             }
         });
     }

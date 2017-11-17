@@ -2,6 +2,8 @@ package org.swsd.stardust.model.bean;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * author     :  骆景钊
  * time       :  2017/11/14
@@ -10,7 +12,7 @@ import org.litepal.crud.DataSupport;
  * version:   :  1.0
  */
 
-public class MeteorBean extends DataSupport {
+public class MeteorBean extends DataSupport  {
 
     private int noteId;
     private String URL;

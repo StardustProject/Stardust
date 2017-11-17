@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_home,container,false);
 
+
         //初始化
         mHomePresenter = new HomePresenter(this);
 
@@ -64,6 +66,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         //设置瀑布流为4列
         StaggeredGridLayoutManager layoutManager = new
                 StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL);
+
         mRvLightspot.setLayoutManager(layoutManager);
 
         //创建主页适配器

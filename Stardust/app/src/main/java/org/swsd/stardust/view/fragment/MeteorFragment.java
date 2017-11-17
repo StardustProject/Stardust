@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.MeteorBean;
 import org.swsd.stardust.presenter.IMeteorPresenter;
+import org.swsd.stardust.presenter.MeteorPresenter;
 import org.swsd.stardust.presenter.adapter.MeteorAdapter;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class MeteorFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_meteor, null);
 //        initMetor();
+        meteorPresenter = new MeteorPresenter();
         meteorList = meteorPresenter.getMeteorList();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
