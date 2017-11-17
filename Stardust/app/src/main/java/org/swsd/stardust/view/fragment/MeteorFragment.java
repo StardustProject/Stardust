@@ -16,6 +16,7 @@ import android.widget.Toast;
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.MeteorBean;
+import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.IMeteorPresenter;
 import org.swsd.stardust.presenter.MeteorPresenter;
 import org.swsd.stardust.presenter.adapter.MeteorAdapter;
@@ -46,8 +47,12 @@ public class MeteorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_meteor, null);
-//        Toast.makeText(getContext(),"hhhh",Toast.LENGTH_SHORT).show();
 //        initMetor();
+        //编造的当前用户，之后应传入当前登录的用户
+        UserBean userBean = new UserBean();
+        userBean.setId(3);
+        userBean.setToken("NWEwZDMzYmIzOTJkZjUuNTA2NzQ4ODQsMTIzNDU2Nzg5LDIwMTctMTEtMjMgMTQ6NDQ6MTE=");
+
         meteorPresenter = new MeteorPresenter();
 
         //流星更新
@@ -60,14 +65,14 @@ public class MeteorFragment extends Fragment {
             //超过时间更新
             int day = (int) ((now - lastLanchTime)/(24*60*60*1000));
             if (day > 0) {
-                meteorPresenter.updataMeteor();
+                meteorPresenter.updataMeteor(userBean);
                 editor.putLong("isfisttoday", now);
                 editor.commit();
             }
         }else {
 
             //第一次点击更新
-            meteorPresenter.updataMeteor();
+            meteorPresenter.updataMeteor(userBean);
             editor.putLong("isfisttoday", System.currentTimeMillis());
             editor.commit();
         }
