@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
@@ -22,6 +23,11 @@ import org.swsd.stardust.presenter.adapter.MeteorAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  *     author : 骆景钊
@@ -40,6 +46,7 @@ public class MeteorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_meteor, null);
+//        Toast.makeText(getContext(),"hhhh",Toast.LENGTH_SHORT).show();
 //        initMetor();
         meteorPresenter = new MeteorPresenter();
 
@@ -64,15 +71,19 @@ public class MeteorFragment extends Fragment {
             editor.putLong("isfisttoday", System.currentTimeMillis());
             editor.commit();
         }
-
         //获取数据库流星信息
+        Log.d("luojingzhao","back");
         meteorList = meteorPresenter.getMeteorList();
+        for(int i = 0; i<meteorList.size(); i++){
+            Log.d("luojingzhao",meteorList.get(i).getURL());
+        }
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         meteorAdapter = new MeteorAdapter(getContext(), meteorList);
         Log.d("luojingzhao","success");
         recyclerView.setAdapter(meteorAdapter);
+//        sendRequestWithOkHttp();
         return view;
     }
 

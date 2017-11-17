@@ -16,7 +16,6 @@ import org.swsd.stardust.view.activity.LoginActivity;
  */
 
 public class HandleDisappearFile {
-
     public static void  handleDisappearFile(Context context,String errorCode){
         if(errorCode == "1"){
             Toast.makeText(context,"找不到相应文件，您已被强制退出", Toast.LENGTH_SHORT).show();

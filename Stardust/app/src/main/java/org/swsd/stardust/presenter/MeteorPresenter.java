@@ -1,6 +1,8 @@
 package org.swsd.stardust.presenter;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,9 +11,11 @@ import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.MeteorBean;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.util.ErrorCodeJudgment;
+import org.swsd.stardust.view.activity.MainActivity;
 
 import java.util.List;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -25,6 +29,7 @@ import okhttp3.Response;
  */
 
 public class MeteorPresenter implements IMeteorPresenter{
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @Override
     public List<MeteorBean> getMeteorList() {
@@ -32,20 +37,22 @@ public class MeteorPresenter implements IMeteorPresenter{
     }
 
     @Override
-    public void updataMeteor() {
-        final UserBean userBean = DataSupport.findFirst(UserBean.class);
-
+    public void updataMeteor(final UserBean userBean) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    Log.d("luojingzhao","thead1");
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/aaa/meteors")
-                            .addHeader("Authorizations","NWEwZDMzYmIzOTJkZjUuNTA2NzQ4ODQsMTIzNDU2Nzg5LDIwMTctMTEtMjMgMTQ6NDQ6MTE=")
+                            .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/"+userBean.getId()+"/meteors")
+                            .addHeader("Authorizations",userBean.getToken())
                             .build();
+                    Log.d("luojingzhao","success");
                     Response response = client.newCall(request).execute();
+                    Log.d("luojingzhao","3");
                     String responseData = response.body().string();
+                    Log.d("luojingzhao",responseData);
                     updateDatabase(responseData);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -58,19 +65,25 @@ public class MeteorPresenter implements IMeteorPresenter{
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(responseData);
+            Log.d("luojingzhao",responseData);
 
             //检验是否成功
             if(ErrorCodeJudgment.errorCodeJudge(responseData) == "Ok"){
+                jsonObject = new JSONObject(responseData);
+                String error = jsonObject.getString("error_code");
+                Log.d("luojingzhao",error);
                 JSONArray jsonArray = null;
                 jsonArray = jsonObject.getJSONArray("meteors");
+                Log.d("luojingzhao",jsonArray.length()+"");
                 JSONObject Meteor = null;
                 for (int i = 0; i < jsonArray.length(); i++) {
+                    Log.d("luojingzhao",i+"");
                     Meteor = jsonArray.getJSONObject(i);
-                    String userid = Meteor.getString("user_id");
-                    String meteorContent = jsonObject.getString("content");
-                    String url = jsonObject.getString("url");
+                    String meteorContent = Meteor.getString("content");
+                    String url = Meteor.getString("url");
+                    Log.d("luojingzhao",meteorContent);
+                    Log.d("luojingzhao",url);
                     MeteorBean meteorBean = new MeteorBean();
-                    meteorBean.setNoteId(Integer.parseInt(userid));
                     meteorBean.setURL(url);
                     if(meteorContent == null){
                         meteorBean.setIsPureMedia(true);
@@ -79,7 +92,9 @@ public class MeteorPresenter implements IMeteorPresenter{
                         meteorBean.setMeteorContent(meteorContent);
                     }
                     meteorBean.save();
+                    Log.d("luojingzhao",meteorBean.getURL());
                 }
+                Log.d("luojingzhao","the end");
             }
 
         } catch (JSONException e) {

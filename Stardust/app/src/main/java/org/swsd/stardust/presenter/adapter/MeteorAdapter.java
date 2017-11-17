@@ -55,9 +55,9 @@ public class MeteorAdapter extends RecyclerView.Adapter<MeteorAdapter.ViewHolder
                 Intent intent = new Intent(mContext,MeteorDetail.class);
                 Bundle bundle = new Bundle();
                 //通过bundle传输数据
-//                bundle.putSerializable("Meteor", meteor);
-//                intent.putExtras(bundle);
-//                mContext.startActivity(intent);
+                bundle.putSerializable("Meteor", meteor);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
             }
         });
     }

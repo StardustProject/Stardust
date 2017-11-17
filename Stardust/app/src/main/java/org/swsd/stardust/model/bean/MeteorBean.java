@@ -12,7 +12,7 @@ import java.io.Serializable;
  * version:   :  1.0
  */
 
-public class MeteorBean extends DataSupport  {
+public class MeteorBean extends DataSupport implements Serializable {
 
     private int noteId;
     private String URL;
