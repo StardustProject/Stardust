@@ -28,7 +28,6 @@ import java.util.List;
  * description:  封装Activity中的通用方法
  * version:   :  1.0
  */
-
 public abstract class BaseActivity extends AppCompatActivity {
 
 	private NetWorkChangeReceiver netWorkChangeReceiver;

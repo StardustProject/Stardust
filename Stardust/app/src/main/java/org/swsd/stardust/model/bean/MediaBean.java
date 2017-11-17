@@ -9,7 +9,6 @@ import org.litepal.crud.DataSupport;
  *               存储记录中多媒体实体的文件名及文件路径
  * version:   :  1.0
  */
-
 public class MediaBean extends DataSupport{
 
     private int id;
