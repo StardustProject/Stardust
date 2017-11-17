@@ -1,6 +1,8 @@
 package org.swsd.stardust.presenter.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,9 @@ import android.widget.TextView;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
+import org.swsd.stardust.view.activity.LoginActivity;
+import org.swsd.stardust.view.activity.MainActivity;
+import org.swsd.stardust.view.activity.NoteActivity;
 
 import java.util.List;
 import java.util.Random;
@@ -69,11 +74,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         final ViewHolder holder = new ViewHolder(view);
 
 
-        //TODO  记录详情页负责人员未创建记录详情相关代码文件
         holder.lightSpotImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int position= holder.getAdapterPosition();
+                NoteBean note = mNoteList.get(position);
+                Intent intent = new Intent(mContext, NoteActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("note",note);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
             }
         });
 
