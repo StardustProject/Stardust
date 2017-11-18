@@ -11,4 +11,8 @@
         android:title="@string/note_save"
         android:orderInCategory="90"
         app:showAsAction="always"></item>
+    <item android:id="@+id/note_delete"
+        android:title="@string/note_delete"
+        android:orderInCategory="90"
+        app:showAsAction="always"></item>
 </menu>
