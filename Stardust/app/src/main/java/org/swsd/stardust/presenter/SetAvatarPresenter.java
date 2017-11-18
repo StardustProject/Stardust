@@ -1,7 +1,6 @@
 package org.swsd.stardust.presenter;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -27,22 +26,22 @@ import okhttp3.Response;
  * version ： 1.0
  */
 public class SetAvatarPresenter {
-    UserBean userBean=new UserBean();
+    UserBean userBean = new UserBean();
     String responseData;
-    int errorCode=0;
+    int errorCode = 0;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     public void afterChangeAvatar(Context context, String imagePath) {
-        UploadToQiNiu upload=new UploadToQiNiu();
+        UploadToQiNiu upload = new UploadToQiNiu();
         upload.uploadQiNiu(imagePath);
-        while(!upload.uploadFinished){
+        while (!upload.uploadFinished) {
 
         }
-        if(upload.url==null){
+        if (upload.url == null) {
             Toast.makeText(context, "上传头像失败，请稍后再试！", Toast.LENGTH_SHORT).show();
-        }else{
-            resetAvatar(context,upload.url);
-            while(errorCode==0){
+        } else {
+            resetAvatar(context, upload.url);
+            while (errorCode == 0) {
 
             }
             if (errorCode == 200) {
@@ -60,21 +59,18 @@ public class SetAvatarPresenter {
     // 将七牛云的头像链接发给服务器
     public void resetAvatar(final Context context, final String imagePath) {
         try {
-            userBean= DataSupport.findLast(UserBean.class);
+            userBean = DataSupport.findLast(UserBean.class);
             // 创建OkHttpClient实例
             OkHttpClient client = new OkHttpClient();
             // 将用户名设为Json格式
             String json = getJsonString(imagePath);
-            Log.i("hujunqin.json",json);
             RequestBody requestBody = RequestBody.create(JSON, json);
             // 创建Request对象
-            Log.i("hujunqin.id.token",userBean.getUserId()+userBean.getToken());
             Request request = new Request.Builder().
                     url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/avatar")
                     .header("Authorization", userBean.getToken())
                     .put(requestBody)
                     .build();
-            Log.i("hujunqin.return","ok");
             // 发送请求并获取服务器返回的数据
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -85,7 +81,6 @@ public class SetAvatarPresenter {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     responseData = response.body().string();
-                    Log.i("hujunqin.serve.response",responseData);
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
                         errorCode = jsonObject.getInt("error_code");

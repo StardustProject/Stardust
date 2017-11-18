@@ -25,7 +25,6 @@ import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.SetAvatarPresenter;
 import org.swsd.stardust.presenter.UserPresenter;
-import org.swsd.stardust.util.GlideUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -74,11 +73,9 @@ public class InfoSettingActivity extends BaseActivity {
             Glide.with(this).load(R.drawable.ic_setting_photo)
                     .into(circleImageView);
         } else {
-            GlideUtils glideUtils=new GlideUtils();
-            glideUtils.loadImage(getApplication(),userBean.getAvatarPath(),circleImageView);
-           // Glide.with(this).load(userBean.getAvatarPath())
-          //          .placeholder(R.drawable.ic_setting_photo)
-           //         .into(circleImageView);
+            Glide.with(this).load(userBean.getAvatarPath())
+                    .placeholder(R.drawable.loading)
+                    .into(circleImageView);
         }
     }
 
@@ -215,7 +212,7 @@ public class InfoSettingActivity extends BaseActivity {
 
         // 把图片上传七牛云返回链接并把链接上传服务器
         SetAvatarPresenter setAvatar = new SetAvatarPresenter();
-        setAvatar.afterChangeAvatar(getApplicationContext(),imagePath);
+        setAvatar.afterChangeAvatar(getApplicationContext(), imagePath);
     }
 
     private void handleImageBeforeKitKat(Intent data) {
@@ -223,7 +220,7 @@ public class InfoSettingActivity extends BaseActivity {
         String imagePath = getImagePath(uri, null);
         // 把图片上传七牛云返回链接并把链接上传服务器
         SetAvatarPresenter setAvatar = new SetAvatarPresenter();
-        setAvatar.afterChangeAvatar(getApplicationContext(),imagePath);
+        setAvatar.afterChangeAvatar(getApplicationContext(), imagePath);
     }
 
     private String getImagePath(Uri uri, String selection) {
