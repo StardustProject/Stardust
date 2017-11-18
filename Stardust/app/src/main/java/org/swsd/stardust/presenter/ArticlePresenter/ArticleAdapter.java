@@ -1,6 +1,8 @@
 package org.swsd.stardust.presenter.ArticlePresenter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.swsd.stardust.R;
+import org.swsd.stardust.view.activity.WebViewActivity;
 
 import java.util.List;
 
@@ -49,6 +52,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     }
 
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(mContext == null){
@@ -57,12 +61,18 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         View view  = LayoutInflater.from(mContext).inflate(R.layout.article_item, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
 
+        // CardView 设置监听事件
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = viewHolder.getAdapterPosition();
                 Article article = mArticleList.get(position);
                 Log.d(TAG, "url is " + article.getArticleUrl());
+                Intent intent = new Intent(mContext, WebViewActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("url",article.getArticleUrl());
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
             }
         });
 

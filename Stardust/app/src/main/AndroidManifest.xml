@@ -3,9 +3,9 @@
     package="org.swsd.stardust">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <user-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -40,17 +40,28 @@
             android:name=".view.activity.SetUsernameActivity"
             android:label="修改用户名"
             android:theme="@style/MyTheme" />
-        <activity android:name=".view.activity.setPasswordActivity"
+        <activity
+            android:name=".view.activity.setPasswordActivity"
             android:label="修改密码"
             android:theme="@style/MyTheme" />
 
-        <activity android:name=".view.activity.MainActivity"></activity>
-
-        <activity android:name=".view.activity.NoteActivity"></activity>
-
-        <activity android:name=".view.activity.MeteorDetail">
-
+        <activity android:name=".view.activity.FeedBackActivity"
+            android:label="发送反馈"
+            android:theme="@style/MyTheme">
+            <intent-filter>
+                <action android:name="org.swsd.stardust.ACTION_FEEDBACK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+
+        <activity android:name=".view.activity.MainActivity"
+            android:theme="@style/MyTheme"/>
+
+        <activity android:name=".view.activity.NoteActivity"/>
+
+        <activity android:name=".view.activity.MeteorDetail"/>
+
+        <activity android:name=".view.activity.WebViewActivity"/>
     </application>
 
 </manifest>
