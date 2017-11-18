@@ -9,11 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
+
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.UserPresenter;
+
 import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -79,6 +83,16 @@ public class UserFragment extends Fragment {
         TextView tvMyStars = view.findViewById(R.id.tv_my_stars);
         tvMyStars.setText("已拥有" + num + "个星尘");
 
+        // 设置用户反馈监听
+        TextView tvFeedBack = view.findViewById(R.id.tv_my_feedback);
+        tvFeedBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 点击按钮后跳转到发送反馈页面
+                Intent goToFeedBack = new Intent("org.swsd.stardust.ACTION_FEEDBACK");
+                startActivity(goToFeedBack);
+            }
+        });
         return view;
     }
 }
