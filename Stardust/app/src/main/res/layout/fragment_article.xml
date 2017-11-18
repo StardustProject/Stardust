@@ -6,12 +6,6 @@
     android:weightSum="1"
     android:background="#F5F5F5">
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:background="#F5F5F5"/>
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/article_toolbar"
         android:layout_width="match_parent"
@@ -29,16 +23,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:src="@mipmap/article_title" />
 
         </LinearLayout>
+
 
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/article_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        />
 
 </LinearLayout>
