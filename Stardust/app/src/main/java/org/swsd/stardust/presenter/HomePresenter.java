@@ -27,7 +27,6 @@ import java.util.Random;
 public class HomePresenter implements IHomePresenter{
     private static final String TAG = "HomePresenter";
     
-    
     IHomeView mIHomeView;
     IHomeNoteModel mHomeNoteModel;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -41,89 +40,19 @@ public class HomePresenter implements IHomePresenter{
     /**
      *    author     :  张昭锡
      *    time       :  2017/11/14
-     *    description:  显示时间选择器日期
-     *    version:   :  1.0
-     */
-    @Override
-    public void showDate(){
-        mIHomeView.showDate();
-    }
-
-    @Override
-    public void showDate(String date) {
-        mIHomeView.showDate(date);
-    }
-
-    /**
-     *    author     :  张昭锡
-     *    time       :  2017/11/14
-     *    description:  设置时间选择器位置
-     *    version:   :  1.0
-     */
-    @Override
-    public void setDatePickerDialogPotision() {
-        mIHomeView.setDatePickerDialogPosition();
-    }
-
-
-    /**
-     *    author     :  张昭锡
-     *    time       :  2017/11/14
      *    description:  更改时间选择器时间
      *    version:   :  1.0
      */
     @Override
-    public void changeDate(final Context context, final HomeAdapter adapter, final List<NoteBean>noteList) {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+    public void changeDate(Context context, HomeAdapter adapter, List<NoteBean> noteList, int year, int month, int day) {
+        mHomeNoteModel.setYear(year);
+        mHomeNoteModel.setMonth(month - 1);
+        mHomeNoteModel.setDay(day);
 
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = year + "/" + (month + 1)+ "/" + dayOfMonth;
-                mHomeNoteModel.setYear(year);
-                mHomeNoteModel.setMonth(month);
-                mHomeNoteModel.setDay(dayOfMonth);
-                showDate(date);
-
-                //更新界面光点数据
-                noteList.clear();
-                noteList.addAll(getNoteList());
-                refreshAdapter(adapter);
-            }
-        };
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                context,android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                mDateSetListener,
-                year,month,day
-        );
-        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        datePickerDialog.show();
-
-    }
-
-
-    /**
-     *    author     :  张昭锡
-     *    time       :  2017/11/14
-     *    description:  更新时间选择器显示示数
-     *    version:   :  1.0
-     */
-    @Override
-    public void updateDate() {
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                mHomeNoteModel.setYear(year);
-                mHomeNoteModel.setMonth(month);
-                mHomeNoteModel.setDay(dayOfMonth);
-                String date = year + "/" + (month + 1) + "/" + dayOfMonth;
-                showDate(date);
-            }
-        };
+        noteList.clear();
+        noteList.addAll(getNoteList());
+        Log.d(TAG, "changeDate: zyzhang" + getNoteList().size());
+        refreshAdapter(adapter);
     }
 
 
@@ -153,23 +82,44 @@ public class HomePresenter implements IHomePresenter{
         mHomeNoteModel.setDay(day);
     }
 
-    @Override
-    public int getNoteYear() {
-        return mHomeNoteModel.getYear();
-    }
-
-    @Override
-    public int getNoteMonth() {
-        return mHomeNoteModel.getMonth();
-    }
-
-    @Override
-    public int getNoteDay() {
-        return mHomeNoteModel.getDay();
-    }
 
     @Override
     public void refreshAdapter(final HomeAdapter adapter) {
         adapter.notifyDataSetChanged();
+    }
+
+    /**
+     *    author     :  张昭锡
+     *    time       :  2017/11/18
+     *    description:  判断是否是闰年
+     *    version:   :  1.0
+     */
+    @Override
+    public boolean isLeapYear(int year) {
+        boolean res = false;
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0){
+            res = true;
+        }else{
+            res = false;
+        }
+        return res;
+    }
+
+    /**
+     *    author     :  张昭锡
+     *    time       :  2017/11/18
+     *    description:  判断本月份天数是否是31天
+     *    version:   :  1.0
+     */
+    @Override
+    public boolean isBigMonth(int month) {
+         boolean res = false;
+        if (month == 1 || month == 3 || month == 5 || month == 7
+                || month == 8 || month == 10 || month == 12){
+            res = true;
+        }else if (month == 4 || month == 6 || month == 9 || month == 11){
+            res = false;
+        }
+        return res;
     }
 }

@@ -7,7 +7,5 @@ package org.swsd.stardust.view.fragment;
  *    version:   :  1.0
  */
 public interface IHomeView {
-    void showDate();
-    void showDate(String date);
-    void setDatePickerDialogPosition();
+
 }
