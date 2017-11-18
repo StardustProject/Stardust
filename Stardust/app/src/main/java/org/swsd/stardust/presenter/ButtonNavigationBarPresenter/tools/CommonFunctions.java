@@ -3,7 +3,6 @@ package org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools;
 import android.content.Context;
 import android.text.Editable;
 import android.widget.Toast;
-
 import java.util.regex.Pattern;
 
 /**
