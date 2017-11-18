@@ -42,5 +42,6 @@ dependencies {
     compile 'com.qiniu:qiniu-java-sdk:7.2.+'
     compile 'org.jsoup:jsoup:1.11.1'
     compile 'com.orhanobut:hawk:2.0.1'
+    compile 'cn.carbswang.android:NumberPickerView:1.1.1'
     testCompile 'junit:junit:4.12'
 }
