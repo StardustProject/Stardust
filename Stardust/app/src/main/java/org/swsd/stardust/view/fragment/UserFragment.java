@@ -4,22 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.UserPresenter;
-import org.swsd.stardust.util.GlideUtils;
-
 import java.util.Date;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -57,14 +51,11 @@ public class UserFragment extends Fragment {
 
         // 显示用户头像
         CircleImageView civMyPhoto = view.findViewById(R.id.ic_my_user);
-        Log.i("hujunqin.userFragment",userBean.getAvatarPath());
-        if(userBean.getAvatarPath()!=null){
-            GlideUtils glideUtils=new GlideUtils();
-            glideUtils.loadImage(getContext(),userBean.getAvatarPath(),civMyPhoto);
-           // Glide.with(this).load(userBean.getAvatarPath())
-           //         .placeholder(R.drawable.ic_user)
-           //         .into(civMyPhoto);
-        }else{
+        if (userBean.getAvatarPath() != null) {
+            Glide.with(this).load(userBean.getAvatarPath())
+                    .placeholder(R.drawable.loading)
+                    .into(civMyPhoto);
+        } else {
             // 如果头像路径为空，则使用默认头像
             Glide.with(this).load(R.drawable.ic_user)
                     .into(civMyPhoto);
@@ -84,9 +75,9 @@ public class UserFragment extends Fragment {
         tvMyDays.setText("来到Stardust的第" + str + "天");
 
         // 显示用户星尘数
-        int num= userPresenter.toGetStarNum();
+        int num = userPresenter.toGetStarNum();
         TextView tvMyStars = view.findViewById(R.id.tv_my_stars);
-        tvMyStars.setText("已拥有"+num+"个星尘");
+        tvMyStars.setText("已拥有" + num + "个星尘");
 
         return view;
     }
