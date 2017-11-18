@@ -77,11 +77,11 @@ public class SetUsernameActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SetNamePresenter namePresenter=new SetNamePresenter();
-               if(namePresenter.checkBeforeSetName(getApplicationContext(),etSetName.getText())) {
-                   Toast.makeText(SetUsernameActivity.this,"修改用户名成功",Toast.LENGTH_SHORT).show();
-                   finish();
-               }
+                SetNamePresenter namePresenter = new SetNamePresenter();
+                if (namePresenter.checkBeforeSetName(getApplicationContext(), etSetName.getText())) {
+                    Toast.makeText(SetUsernameActivity.this, "修改用户名成功", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         });
     }
