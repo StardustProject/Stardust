@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteSmoke">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ic_my_user"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            app:civ_border_width="1dp"
+            app:civ_border_overlay="true"
+            app:civ_border_color="@color/silver"
+            app:civ_fill_color="@color/whiteSmoke" />
+
+        <TextView
+            android:id="@+id/tv_my_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/ic_my_user"
+            android:text="User"
+            android:textSize="15dp"
+            android:textColor="@color/dimGray" />
+
+        <ImageView
+            android:id="@+id/iv_my_setting"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_my_setting"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white">
+            <ImageView
+                android:src="@drawable/ic_my_days"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_my_days"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white"
+            android:gravity="center_vertical|left"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white">
+            <ImageView
+                android:src="@drawable/ic_my_stars"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_my_stars"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white"
+            android:textSize="15dp"
+            android:gravity="center_vertical|left"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white">
+            <ImageView
+                android:src="@mipmap/feedback"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_my_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white"
+            android:text="点我发送反馈"
+            android:textSize="15dp"
+            android:gravity="center_vertical|left"/>
+    </LinearLayout>
+</LinearLayout>

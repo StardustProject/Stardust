@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value="StardustDB"></dbname>
+    <version value="2"></version>
+    <list>
+        <mapping class="org.swsd.stardust.model.bean.ArticleBean"></mapping>
+        <mapping class="org.swsd.stardust.model.bean.MediaBean"></mapping>
+        <mapping class="org.swsd.stardust.model.bean.NoteBean"></mapping>
+        <mapping class="org.swsd.stardust.model.bean.UserBean"></mapping>
+        <mapping class="org.swsd.stardust.model.bean.MeteorBean"></mapping>
+    </list>
+</litepal>
