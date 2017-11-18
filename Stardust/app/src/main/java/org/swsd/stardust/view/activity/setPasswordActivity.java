@@ -78,10 +78,10 @@ public class setPasswordActivity extends AppCompatActivity {
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SetPswPresenter namePresenter=new SetPswPresenter();
-                if(namePresenter.checkBeforeSetPsw(getApplicationContext(),
-                        etOldPassword.getText(),etNewPassword.getText(),etConfirmPassword.getText())){
-                    Toast.makeText(setPasswordActivity.this,"修改密码成功",Toast.LENGTH_SHORT).show();
+                SetPswPresenter namePresenter = new SetPswPresenter();
+                if (namePresenter.checkBeforeSetPsw(getApplicationContext(),
+                        etOldPassword.getText(), etNewPassword.getText(), etConfirmPassword.getText())) {
+                    Toast.makeText(setPasswordActivity.this, "修改密码成功", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }

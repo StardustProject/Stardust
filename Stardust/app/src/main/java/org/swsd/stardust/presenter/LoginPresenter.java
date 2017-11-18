@@ -2,7 +2,6 @@ package org.swsd.stardust.presenter;
 
 import android.content.Context;
 import android.text.Editable;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -39,7 +38,7 @@ public class LoginPresenter {
     String avatarPath;
     String registerTime;
     String expireTime;
-    UserBean userBean=new UserBean();
+    UserBean userBean = new UserBean();
     boolean ready = false;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -154,11 +153,11 @@ public class LoginPresenter {
                 userBean.setRegisterTime(date.getTime());
                 // 保存数据库
                 userBean.save();
-                userBean=DataSupport.findLast(UserBean.class);
+                userBean = DataSupport.findLast(UserBean.class);
                 // 获取用户头像url
                 getPhoto();
-            }else{
-                ready=true;
+            } else {
+                ready = true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -186,7 +185,6 @@ public class LoginPresenter {
             if (errorCode == 200) {
                 JSONObject innerObject = jsonObject.getJSONObject("data");
                 avatarPath = innerObject.getString("avatar_url");
-                Log.i("hujunqin.login",avatarPath);
                 userBean.setAvatarPath(avatarPath);
                 userBean.updateAll();
             }
