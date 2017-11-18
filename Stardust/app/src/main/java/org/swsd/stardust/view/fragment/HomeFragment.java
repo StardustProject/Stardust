@@ -46,8 +46,6 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_home,container,false);
 
-        //initDatabaseData();
-
         //初始化
         mHomePresenter = new HomePresenter(this);
 
@@ -69,6 +67,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         //设置瀑布流为4列
         StaggeredGridLayoutManager layoutManager = new
                 StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL);
+
         mRvLightspot.setLayoutManager(layoutManager);
 
         //创建主页适配器

@@ -50,7 +50,7 @@
         android:background="#f0000000" />
 
     <WebView
-        android:id="@+id/tv_MeteorDetail_Message"
+        android:id="@+id/wv_MeteorDetail_Message"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
