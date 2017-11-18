@@ -1,5 +1,7 @@
 package org.swsd.stardust.presenter;
 
+import android.util.Log;
+
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.NoteBean;
 import org.swsd.stardust.model.bean.UserBean;
@@ -16,6 +18,7 @@ public class UserPresenter extends DataSupport {
     public UserBean toGetUserInfo() {
         UserBean userBean;
         userBean = DataSupport.findLast(UserBean.class);
+        Log.i("hujunqin.user.photo",userBean.getAvatarPath());
         if (userBean == null) {
             userBean = useDefaultData();
         }

@@ -76,7 +76,7 @@ public class LoginPresenter {
             RequestBody requestBody = RequestBody.create(JSON, json);
             // 创建Request对象
             Request request = new Request.Builder()
-                    .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/user/login")
+                    .url("http://119.29.179.150:81/api/user/login")
                     .put(requestBody)
                     .build();
 
@@ -90,7 +90,6 @@ public class LoginPresenter {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     responseData = response.body().string();
-                    Log.i("login","hujunqin:"+responseData);
                     // 解析返回的Json
                     parseJson(responseData);
                 }
@@ -173,8 +172,8 @@ public class LoginPresenter {
             OkHttpClient client = new OkHttpClient();
             // 创建Request对象
             Request request = new Request.Builder()
-                    .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() + "/avatar")
-                    .header("Authorizations", token)
+                    .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/avatar")
+                    .header("Authorization", token)
                     .build();
             // 发送请求并获取服务器返回的数据
             errorCode = 0;
@@ -187,6 +186,7 @@ public class LoginPresenter {
             if (errorCode == 200) {
                 JSONObject innerObject = jsonObject.getJSONObject("data");
                 avatarPath = innerObject.getString("avatar_url");
+                Log.i("hujunqin.login",avatarPath);
                 userBean.setAvatarPath(avatarPath);
                 userBean.updateAll();
             }

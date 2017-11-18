@@ -101,9 +101,9 @@ public class SetNamePresenter {
             RequestBody requestBody = RequestBody.create(JSON, json);
             // 创建Request对象
             Request request = new Request.Builder().
-                    url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/"
+                    url("http://119.29.179.150:81/api/users/"
                             + userBean.getUserId() + "/account")
-                    .header("Authorizations", userBean.getToken())
+                    .header("Authorization", userBean.getToken())
                     .put(requestBody)
                     .build();
 
