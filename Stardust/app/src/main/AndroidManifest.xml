@@ -48,6 +48,10 @@
             android:theme="@style/MyTheme"></activity>
 
         <activity android:name=".view.activity.NoteActivity"></activity>
+
+        <activity android:name=".view.activity.MeteorDetail">
+
+        </activity>
         <activity android:name=".view.activity.WebViewActivity"></activity>
     </application>
 
