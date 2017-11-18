@@ -72,7 +72,7 @@ public class RegisterPresenter {
             RequestBody requestBody = RequestBody.create(JSON, json);
             // 创建Request对象
             Request request = new Request.Builder()
-                    .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/user/registration")
+                    .url("http://119.29.179.150:81/api/user/registration")
                     .post(requestBody)
                     .build();
             // 发送请求并获取服务器返回的数据
