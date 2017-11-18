@@ -18,7 +18,7 @@ public class JsoupWeiXin {
     public static String title;
     public static String publishTime;
     public static String author;
-
+    public static String htmlContent;
     public static void parseContent(final String url){
         new Thread(new Runnable() {
             @Override
@@ -52,6 +52,22 @@ public class JsoupWeiXin {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
+            }
+        }).start();
+    }
+
+    public static void parseHtml(final String htmlCode){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Document doc = Jsoup.parse(htmlCode);
+                Elements elements = doc.getAllElements();
+                StringBuffer sb = new StringBuffer();
+/*                for (Element element: elements) {
+                    sb.append(element.text());
+                }*/
+                Log.d("熊立强", "run: " + doc.body().text());
+                htmlContent = doc.body().text();
             }
         }).start();
     }

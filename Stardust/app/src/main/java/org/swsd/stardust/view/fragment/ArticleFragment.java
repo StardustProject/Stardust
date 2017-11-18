@@ -14,12 +14,19 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.swsd.stardust.R;
+import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.ArticlePresenter.Article;
 import org.swsd.stardust.presenter.ArticlePresenter.ArticleAdapter;
 import org.swsd.stardust.presenter.ArticlePresenter.JsoupWeiXin;
+import org.swsd.stardust.presenter.UserPresenter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  *     author : 熊立强
@@ -37,6 +44,7 @@ public class ArticleFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.article_recycler_view);
         refreshRv();
         return view;
+
     }
 
     private void refreshRv(){
@@ -44,6 +52,7 @@ public class ArticleFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         ArticleAdapter adapter = new ArticleAdapter(getTestAdapter());
         recyclerView.setAdapter(adapter);
+        getArticle();
     }
     /**
      *  获得测试测试的适配器
@@ -65,6 +74,7 @@ public class ArticleFragment extends Fragment {
         return list;
     }
 
+
     // 使用Gson解析json格式的数据
     private void parseJSONWithGSON(String jsonData){
         Gson gson = new Gson();
@@ -72,5 +82,42 @@ public class ArticleFragment extends Fragment {
         for(Article article : articleList){
             Log.d(TAG, "name is  " + article.getArticleUrl());
         }
+    }
+
+    /**
+     * 获取文章
+     */
+    private void getArticle(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 获取当前用户id
+                UserBean userBean;
+                UserPresenter userPresenter = new UserPresenter();
+                userBean = userPresenter.toGetUserInfo();
+                Log.d(TAG, "userBean" + userBean.getToken());
+                Log.d(TAG, "userBean" + userBean.getUserId());
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url("")
+                        .build();
+                try {
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.d(TAG, "run: Get response()" + responseData);
+                    // // TODO: 2017/11/18 解析json 获得url，根据url填充适配器
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }).start();
+
+
+    }
+
+    private void putArticle(){
+        // TODO: 2017/11/18  上传url
     }
 }

@@ -34,13 +34,24 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.litepal.tablemanager.Connector;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
+import org.swsd.stardust.model.bean.UserBean;
+import org.swsd.stardust.presenter.NotePresenter.Note;
+import org.swsd.stardust.presenter.UserPresenter;
 
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import jp.wasabeef.richeditor.RichEditor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  *     author : 熊立强
@@ -50,11 +61,12 @@ import jp.wasabeef.richeditor.RichEditor;
  */
 public class NoteActivity extends AppCompatActivity {
 
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static final int SAVE_NOTE = 1;
     private RichEditor mEditor;
     private boolean isEdited = false;
     private static final String TAG = "熊立强";
-    private static final int CHOOSE_PHOTO=2;
+    private static final int CHOOSE_PHOTO = 2;
     private String imagePath;
     private static String URL = null;
     private static int NoteId;
@@ -314,7 +326,6 @@ public class NoteActivity extends AppCompatActivity {
         /*String filePath = saveFile(htmlCode);
         Log.d(TAG, "saveNote: " + filePath);*/
         uploadHtml(htmlCode);
-        uploadServer(URL);
         Connector.getDatabase();
         NoteBean note = new NoteBean();
         note.setContent(htmlCode);
@@ -588,6 +599,24 @@ public class NoteActivity extends AppCompatActivity {
                     String url = "http://oziec3aec.bkt.clouddn.com/" + putRet.key;
                     URL = url;
                     Log.d(TAG, "url is " + url);
+
+                    // 上传服务器
+                    int serverId = 0;
+                    Log.d(TAG, "upLoadServer Url" + URL);
+                    // 获取当前用户id
+                    UserBean userBean;
+                    UserPresenter userPresenter = new UserPresenter();
+                    userBean = userPresenter.toGetUserInfo();
+                    Log.d(TAG, "userBean" + userBean.getToken());
+                    Log.d(TAG, "userBean" + userBean.getUserId());
+                    String content = parseHtml(htmlCode);
+                    // TODO: 2017/11/18
+                    // 获取安卓系统时间
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");
+                    Date currentDate = new Date(System.currentTimeMillis());
+                    String dTime = formatter.format(currentDate);
+                    sendNote(URL,dTime,false,content);
+                    // 结束上传
                     Message message = new Message();
                     message.what = SAVE_NOTE;
                     handler.sendMessage(message);
@@ -608,15 +637,49 @@ public class NoteActivity extends AppCompatActivity {
         return URL;
     }
 
-    private void uploadServer(String URL){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int serverId = 0;
-                // TODO: 2017/11/17  上传服务器
+    private String parseHtml(String html){
+        Document doc = Jsoup.parse(html);
+        return doc.body().text();
+    }
+    private void sendNote(String url,String createTime,boolean share, String content){
+        //创建一个Client对象
+        OkHttpClient okHttpClient = new OkHttpClient();
+        //json为String类型的json数据
+        // 使用Gson生成
+        Note note = new Note(url,createTime,share,content);
+        String json = getJsonString(note);
+        Log.d(TAG, "json is " + json);
+        RequestBody requestBody = RequestBody.create(JSON,json);
+        // 获取当前用户id
+        UserBean userBean;
+        UserPresenter userPresenter = new UserPresenter();
+        userBean = userPresenter.toGetUserInfo();
+        Log.d(TAG, "userBean" + userBean.getToken());
+        Log.d(TAG, "userBean" + userBean.getUserId());
+        // "http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() +"/notes"
+        Request request = new Request.Builder()
+                .addHeader("Content-Type","tapplication/json")
+                .addHeader("Authorization",userBean.getToken())
+                .post(requestBody)
+                .build();
+        try{
+            okhttp3.Response response = okHttpClient.newCall(request).execute();
+            String responseData = response.body().string();
+            Log.d(TAG, "sendNote: response" + responseData);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
-                NoteId = serverId;
-            }
-        }).start();
+    /**
+     * 给定一个类，生成Json格式。
+     *
+     * @param object 需要被解析成Json的类
+     * @return
+     */
+    private String getJsonString(Object object){
+        Gson gson = new Gson();
+        String json = gson.toJson(object);
+        return json;
     }
 }
