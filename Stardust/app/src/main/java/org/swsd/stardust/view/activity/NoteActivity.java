@@ -940,6 +940,7 @@ public class NoteActivity extends AppCompatActivity {
                         shareNote(url,content);
                         noteTemp.setCreateTime(createTime);
                         noteTemp.setContent(htmlCode);
+                        noteTemp.setShareStatus(true);
                         String updateNoteId = String.valueOf(noteTemp.getNoteId());
                         noteTemp.updateAll("noteId = ?",updateNoteId);
                     }
