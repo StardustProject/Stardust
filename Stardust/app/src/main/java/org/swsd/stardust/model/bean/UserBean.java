@@ -13,12 +13,18 @@ import org.litepal.crud.DataSupport;
 public class UserBean extends DataSupport{
 
     private int id;
+
+    //服务器返回的user的ID
+    private int userId;
     private String userName;
     private String email;
     private String tel;
     private String avatarPath;
     private String recentMood;
     private String token;
+    private String tokenTime;
+    private String qiniuToken;
+    private String qiniuTime;
 
 
     private long registerTime;
@@ -29,6 +35,14 @@ public class UserBean extends DataSupport{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -85,5 +99,29 @@ public class UserBean extends DataSupport{
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getTokenTime(){
+        return tokenTime;
+    }
+
+    public void setTokenTime(String tokenTime){
+        this.tokenTime = tokenTime;
+    }
+
+    public String getQiniuToken() {
+        return qiniuToken;
+    }
+
+    public void setQiniuToken(String qiniuToken) {
+        this.qiniuToken = qiniuToken;
+    }
+
+    public String getQiniuTime(){
+        return qiniuTime;
+    }
+
+    public void setQiniuTime(String qiniuTime){
+        this.qiniuTime = qiniuTime;
     }
 }
