@@ -3,6 +3,7 @@ package org.swsd.stardust.view.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,6 +25,8 @@ import org.swsd.stardust.presenter.adapter.MeteorAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,8 +42,9 @@ import okhttp3.Response;
 public class MeteorFragment extends Fragment {
 
     IMeteorPresenter meteorPresenter;
-    private List<MeteorBean> meteorList = new ArrayList<>();
-    MeteorAdapter meteorAdapter;
+    public static List<MeteorBean> meteorList = new ArrayList<>();
+    public static MeteorAdapter meteorAdapter;
+    RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -54,6 +58,7 @@ public class MeteorFragment extends Fragment {
         userBean.setToken("NWEwZDMzYmIzOTJkZjUuNTA2NzQ4ODQsMTIzNDU2Nzg5LDIwMTctMTEtMjMgMTQ6NDQ6MTE=");
 
         meteorPresenter = new MeteorPresenter();
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         //流星更新
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("lanchtime", Context.MODE_PRIVATE);
@@ -65,16 +70,19 @@ public class MeteorFragment extends Fragment {
             //超过时间更新
             int day = (int) ((now - lastLanchTime)/(24*60*60*1000));
             if (day > 0) {
-                meteorPresenter.updataMeteor(userBean);
+                meteorList.clear();
+                meteorPresenter.updataMeteor(userBean,getActivity());
                 editor.putLong("isfisttoday", now);
                 editor.commit();
             }
         }else {
 
             //第一次点击更新
-            meteorPresenter.updataMeteor(userBean);
+            meteorList.clear();
+            meteorPresenter.updataMeteor(userBean, getActivity());
             editor.putLong("isfisttoday", System.currentTimeMillis());
             editor.commit();
+            Log.d("luojingzhao","back");
         }
         //获取数据库流星信息
         Log.d("luojingzhao","back");
@@ -82,13 +90,11 @@ public class MeteorFragment extends Fragment {
         for(int i = 0; i<meteorList.size(); i++){
             Log.d("luojingzhao",meteorList.get(i).getURL());
         }
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         meteorAdapter = new MeteorAdapter(getContext(), meteorList);
         Log.d("luojingzhao","success");
         recyclerView.setAdapter(meteorAdapter);
-//        sendRequestWithOkHttp();
         return view;
     }
 
