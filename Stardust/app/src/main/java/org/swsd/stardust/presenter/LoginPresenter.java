@@ -2,7 +2,6 @@ package org.swsd.stardust.presenter;
 
 import android.content.Context;
 import android.text.Editable;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -39,7 +38,7 @@ public class LoginPresenter {
     String avatarPath;
     String registerTime;
     String expireTime;
-    UserBean userBean=new UserBean();
+    UserBean userBean = new UserBean();
     boolean ready = false;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -76,7 +75,7 @@ public class LoginPresenter {
             RequestBody requestBody = RequestBody.create(JSON, json);
             // 创建Request对象
             Request request = new Request.Builder()
-                    .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/user/login")
+                    .url("http://119.29.179.150:81/api/user/login")
                     .put(requestBody)
                     .build();
 
@@ -90,7 +89,6 @@ public class LoginPresenter {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     responseData = response.body().string();
-                    Log.i("login","hujunqin:"+responseData);
                     // 解析返回的Json
                     parseJson(responseData);
                 }
@@ -155,11 +153,11 @@ public class LoginPresenter {
                 userBean.setRegisterTime(date.getTime());
                 // 保存数据库
                 userBean.save();
-                userBean=DataSupport.findLast(UserBean.class);
+                userBean = DataSupport.findLast(UserBean.class);
                 // 获取用户头像url
                 getPhoto();
-            }else{
-                ready=true;
+            } else {
+                ready = true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -173,8 +171,8 @@ public class LoginPresenter {
             OkHttpClient client = new OkHttpClient();
             // 创建Request对象
             Request request = new Request.Builder()
-                    .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() + "/avatar")
-                    .header("Authorizations", token)
+                    .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/avatar")
+                    .header("Authorization", token)
                     .build();
             // 发送请求并获取服务器返回的数据
             errorCode = 0;

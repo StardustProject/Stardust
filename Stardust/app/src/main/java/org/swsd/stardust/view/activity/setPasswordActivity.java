@@ -74,14 +74,14 @@ public class setPasswordActivity extends AppCompatActivity {
             }
         });
 
-        // 设置“保存”按钮监听事件
+        // 设置“完成”按钮监听事件
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SetPswPresenter namePresenter=new SetPswPresenter();
-                if(namePresenter.checkBeforeSetPsw(getApplicationContext(),
-                        etOldPassword.getText(),etNewPassword.getText(),etConfirmPassword.getText())){
-                    Toast.makeText(setPasswordActivity.this,"修改用户名成功",Toast.LENGTH_SHORT).show();
+                SetPswPresenter namePresenter = new SetPswPresenter();
+                if (namePresenter.checkBeforeSetPsw(getApplicationContext(),
+                        etOldPassword.getText(), etNewPassword.getText(), etConfirmPassword.getText())) {
+                    Toast.makeText(setPasswordActivity.this, "修改密码成功", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }

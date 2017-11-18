@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 /**
  * author  ： 胡俊钦
  * time    ： 2017/11/16
@@ -51,7 +52,7 @@ public class RegisterPresenter {
                     return 1;
                 } else if (errorCode == 409) {
                     Toast.makeText(context, "此用户名已被注册！", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Toast.makeText(context, "注册失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -71,7 +72,7 @@ public class RegisterPresenter {
             RequestBody requestBody = RequestBody.create(JSON, json);
             // 创建Request对象
             Request request = new Request.Builder()
-                    .url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/user/registration")
+                    .url("http://119.29.179.150:81/api/user/registration")
                     .post(requestBody)
                     .build();
             // 发送请求并获取服务器返回的数据

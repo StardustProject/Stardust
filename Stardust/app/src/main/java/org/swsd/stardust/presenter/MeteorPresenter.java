@@ -34,6 +34,7 @@ import okhttp3.Response;
  */
 
 public class MeteorPresenter implements IMeteorPresenter{
+
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @Override
@@ -47,6 +48,8 @@ public class MeteorPresenter implements IMeteorPresenter{
             @Override
             public void run() {
                 try {
+
+                    //获取服务器数据
                     Log.d("luojingzhao","thead1");
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
@@ -58,20 +61,19 @@ public class MeteorPresenter implements IMeteorPresenter{
                     Log.d("luojingzhao","3");
                     String responseData = response.body().string();
                     Log.d("luojingzhao",responseData);
+
+                    //更新数据库信息
                     DataSupport.deleteAll(MeteorBean.class);
                     updateDatabase(responseData);
-//                    Message message = new Message();
-//                    message.what = 1001;
                     MeteorFragment.meteorList.addAll(DataSupport.findAll(MeteorBean.class));
+
+                    //回主线程更新UI
                     mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mActivity, "toshi", Toast.LENGTH_SHORT).show();
                             MeteorFragment.meteorAdapter.notifyDataSetChanged();
                         }
                     });
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -79,6 +81,7 @@ public class MeteorPresenter implements IMeteorPresenter{
         }).start();
     }
 
+    //处理返回的json格式的流星信息，并保存到数据库
     private void updateDatabase(String responseData){
         JSONObject jsonObject = null;
         try {
@@ -92,15 +95,11 @@ public class MeteorPresenter implements IMeteorPresenter{
                 Log.d("luojingzhao",error);
                 JSONArray jsonArray = null;
                 jsonArray = jsonObject.getJSONArray("meteors");
-//                Log.d("luojingzhao",jsonArray.length()+"");
                 JSONObject Meteor = null;
                 for (int i = 0; i < jsonArray.length(); i++) {
-//                    Log.d("luojingzhao",i+"");
                     Meteor = jsonArray.getJSONObject(i);
                     String meteorContent = Meteor.getString("content");
                     String url = Meteor.getString("url");
-//                    Log.d("luojingzhao",meteorContent);
-//                    Log.d("luojingzhao",url);
                     MeteorBean meteorBean = new MeteorBean();
                     meteorBean.setURL(url);
                     if(meteorContent == null){
@@ -110,7 +109,6 @@ public class MeteorPresenter implements IMeteorPresenter{
                         meteorBean.setMeteorContent(meteorContent);
                     }
                     meteorBean.save();
-//                    Log.d("luojingzhao",meteorBean.getURL());
                 }
                 Log.d("luojingzhao","the end");
             }

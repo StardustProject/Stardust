@@ -68,6 +68,17 @@ public class SetPswPresenter {
             }
         }
 
+        // 如果上诉检查通过，检查新密码与旧密码是否相同
+        if (correct == true) {
+            // 判断旧密码与新密码是否相同
+            if (newPassword.toString().equals(oldPassword.toString())) {
+                correct = false;
+                Toast.makeText(context, "新密码不能与原密码相同！", Toast.LENGTH_SHORT).show();
+            } else {
+                correct = true;
+            }
+        }
+
         // 如果格式检查全部通过
         if (correct == true) {
             // 判断确认密码与新密码是否相同
@@ -109,9 +120,9 @@ public class SetPswPresenter {
             RequestBody requestBody = RequestBody.create(JSON, json);
             // 创建Request对象
             Request request = new Request.Builder().
-                    url("http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/"
+                    url("http://119.29.179.150:81/api/users/"
                             + userBean.getUserId() + "/password")
-                    .header("Authorizations", userBean.getToken())
+                    .header("Authorization", userBean.getToken())
                     .put(requestBody)
                     .build();
 

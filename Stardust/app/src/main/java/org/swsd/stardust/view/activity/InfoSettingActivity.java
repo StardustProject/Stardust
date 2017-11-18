@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.model.bean.UserBean;
+import org.swsd.stardust.presenter.SetAvatarPresenter;
 import org.swsd.stardust.presenter.UserPresenter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -72,7 +73,9 @@ public class InfoSettingActivity extends BaseActivity {
             Glide.with(this).load(R.drawable.ic_setting_photo)
                     .into(circleImageView);
         } else {
-            Glide.with(this).load(userBean.getAvatarPath()).into(circleImageView);
+            Glide.with(this).load(userBean.getAvatarPath())
+                    .placeholder(R.drawable.loading)
+                    .into(circleImageView);
         }
     }
 
@@ -207,20 +210,17 @@ public class InfoSettingActivity extends BaseActivity {
             imagePath = getImagePath(uri, null);
         }
 
-        // 把图片上传七牛云返回链接存进数据库，缺,
-        // String newImagePath=
-        userBean.setAvatarPath(imagePath);
-        userBean.updateAll("userName=?", userBean.getUserName());
-
+        // 把图片上传七牛云返回链接并把链接上传服务器
+        SetAvatarPresenter setAvatar = new SetAvatarPresenter();
+        setAvatar.afterChangeAvatar(getApplicationContext(), imagePath);
     }
 
     private void handleImageBeforeKitKat(Intent data) {
         Uri uri = data.getData();
         String imagePath = getImagePath(uri, null);
-        // 把图片上传七牛云返回链接存进数据库，缺,
-        // String newImagePath=
-        userBean.setAvatarPath(imagePath);
-        userBean.updateAll("userName=?", userBean.getUserName());
+        // 把图片上传七牛云返回链接并把链接上传服务器
+        SetAvatarPresenter setAvatar = new SetAvatarPresenter();
+        setAvatar.afterChangeAvatar(getApplicationContext(), imagePath);
     }
 
     private String getImagePath(Uri uri, String selection) {

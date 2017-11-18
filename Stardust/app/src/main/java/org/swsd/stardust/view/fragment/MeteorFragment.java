@@ -12,26 +12,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.MeteorBean;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.IMeteorPresenter;
 import org.swsd.stardust.presenter.MeteorPresenter;
 import org.swsd.stardust.presenter.adapter.MeteorAdapter;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  *     author : 骆景钊
