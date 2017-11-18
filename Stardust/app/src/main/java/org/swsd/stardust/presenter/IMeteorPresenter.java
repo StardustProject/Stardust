@@ -1,10 +1,12 @@
 package org.swsd.stardust.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 
 import org.swsd.stardust.model.bean.MeteorBean;
 import org.swsd.stardust.model.bean.NoteBean;
 import org.swsd.stardust.model.bean.UserBean;
+import org.swsd.stardust.presenter.adapter.MeteorAdapter;
 
 import java.util.List;
 
@@ -17,5 +19,5 @@ import java.util.List;
 
 public interface IMeteorPresenter {
     List<MeteorBean> getMeteorList();
-    void updataMeteor(UserBean userBean);
+    void updataMeteor(UserBean userBean, final Activity mActivity);
 }
