@@ -57,25 +57,25 @@ public class LoginActivity extends BaseActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                // 点击按钮后
-//                // 检查网络状态
-//                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-//                if (networkInfo == null || !networkInfo.isAvailable()) {
-//                    //若当前无网络则提醒用户
-//                    Toast.makeText(LoginActivity.this, "network is unavailable", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    // 若网络可用,进行格式检查
-//                    LoginPresenter login = new LoginPresenter();
-//                    if (login.checkBeforeLogin(getApplicationContext(), etUsername.getText(), etPassword.getText())) {
-//                        // 若匹配，则跳转到主页面
-//                        Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
-//                        startActivity(goToMain);
-//                        finish();
-//                    }
-//                }
-                Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(goToMain);
+                // 点击按钮后
+                // 检查网络状态
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                if (networkInfo == null || !networkInfo.isAvailable()) {
+                    //若当前无网络则提醒用户
+                    Toast.makeText(LoginActivity.this, "network is unavailable", Toast.LENGTH_SHORT).show();
+                } else {
+                    // 若网络可用,进行格式检查
+                    LoginPresenter login = new LoginPresenter();
+                    if (login.checkBeforeLogin(getApplicationContext(), etUsername.getText(), etPassword.getText())) {
+                        // 若匹配，则跳转到主页面
+                        Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(goToMain);
+                        finish();
+                    }
+                }
+//                Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
+//                startActivity(goToMain);
             }
         });
 
