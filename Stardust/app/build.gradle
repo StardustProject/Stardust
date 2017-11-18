@@ -42,5 +42,7 @@ dependencies {
     compile 'com.qiniu:qiniu-java-sdk:7.2.+'
     compile 'org.jsoup:jsoup:1.11.1'
     compile 'com.orhanobut:hawk:2.0.1'
+    compile 'com.sun.mail:android-mail:1.6.0'
+    compile 'com.sun.mail:android-activation:1.6.0'
     testCompile 'junit:junit:4.12'
 }
