@@ -57,7 +57,9 @@
             android:maxLines="4"
             android:textSize="20sp"
             android:text="Hello"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="5dp"
+            android:ellipsize="end"
+            />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

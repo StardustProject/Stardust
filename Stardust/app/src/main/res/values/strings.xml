@@ -2,11 +2,13 @@
     <string name="app_name">Stardust</string>
     <string name="login_app_name">STARDUST</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_note">Note</string>
     <string name="title_User">User</string>
     <string name="title_article">Article</string>
     <string name="title_metor">Metor</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="username_rule">请输入6-20个字符，支持数字、英文(最长20个字符)和中文(最长10个字符)。</string>
     <string name="password_rule">请输入6-20个字符，支持数字、大小写字母和标点符号,不允许有空格。</string>
+    <string name="note_save">保存</string>
+    <string name="note_share">分享</string>
 </resources>
