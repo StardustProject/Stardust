@@ -48,6 +48,24 @@ public class UserFragment extends Fragment {
             }
         });
 
+        // 显示用户信息
+        showUserInfo(view);
+
+        // 设置用户反馈监听
+        TextView tvFeedBack = view.findViewById(R.id.tv_my_feedback);
+        tvFeedBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 点击按钮后跳转到发送反馈页面
+                Intent goToFeedBack = new Intent("org.swsd.stardust.ACTION_FEEDBACK");
+                startActivity(goToFeedBack);
+            }
+        });
+        return view;
+    }
+
+    // 显示用户信息
+    public void showUserInfo(View view){
         // 从数据库获取用户信息
         UserBean userBean;
         UserPresenter userPresenter = new UserPresenter();
@@ -82,17 +100,5 @@ public class UserFragment extends Fragment {
         int num = userPresenter.toGetStarNum();
         TextView tvMyStars = view.findViewById(R.id.tv_my_stars);
         tvMyStars.setText("已拥有" + num + "个星尘");
-
-        // 设置用户反馈监听
-        TextView tvFeedBack = view.findViewById(R.id.tv_my_feedback);
-        tvFeedBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 点击按钮后跳转到发送反馈页面
-                Intent goToFeedBack = new Intent("org.swsd.stardust.ACTION_FEEDBACK");
-                startActivity(goToFeedBack);
-            }
-        });
-        return view;
     }
 }
