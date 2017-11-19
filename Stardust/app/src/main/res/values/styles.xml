@@ -13,5 +13,10 @@
         <item name="colorAccent">@color/green</item>
         <item name="android:windowTranslucentStatus"> true </item>
     </style>
+    <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        ...
+        <item name="actionMenuTextColor">@color/black</item>
+        ...
+    </style>
 
 </resources>

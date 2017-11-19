@@ -61,6 +61,7 @@
             android:maxLines="4"
             android:textSize="15sp"
             android:text="Hello"
+            android:textColor="@color/dimGray"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"

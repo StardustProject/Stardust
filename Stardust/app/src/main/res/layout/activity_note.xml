@@ -8,8 +8,8 @@
         android:id="@+id/note_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/black"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/silver"
+        android:theme="@style/AppTheme.ActionBar"
         android:layout_gravity="center"
         />
 
@@ -22,7 +22,7 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/black"
+        android:background="@color/silver"
         >
 
         <LinearLayout
