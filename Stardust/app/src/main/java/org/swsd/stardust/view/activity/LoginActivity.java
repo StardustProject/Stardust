@@ -74,8 +74,6 @@ public class LoginActivity extends BaseActivity {
                         finish();
                     }
                 }
-//                Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
-//                startActivity(goToMain);
             }
         });
 

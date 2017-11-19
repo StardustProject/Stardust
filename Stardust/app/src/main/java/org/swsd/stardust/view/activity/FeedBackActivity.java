@@ -72,7 +72,7 @@ public class FeedBackActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendEmail("848804259@qq.com");
-                Toast.makeText(FeedBackActivity.this, "发送邮件中，请不要进行任何操作", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FeedBackActivity.this, "正在发送您的反馈，请不要进行任何操作！", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -88,7 +88,7 @@ public class FeedBackActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(FeedBackActivity.this, "邮件发送成功！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FeedBackActivity.this, "我们已成功收到您的反馈，感谢您的反馈！", Toast.LENGTH_SHORT).show();
                         }
                     });
 

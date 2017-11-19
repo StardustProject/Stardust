@@ -74,7 +74,6 @@ public class InfoSettingActivity extends BaseActivity {
                     .into(circleImageView);
         } else {
             Glide.with(this).load(userBean.getAvatarPath())
-                    .placeholder(R.drawable.loading)
                     .into(circleImageView);
         }
     }
