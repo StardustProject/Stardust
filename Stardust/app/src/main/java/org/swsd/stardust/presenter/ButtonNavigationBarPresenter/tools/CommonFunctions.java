@@ -41,7 +41,7 @@ public class CommonFunctions {
                 flag = true;
             } else {
                 flag = false;
-                Toast.makeText(context, "用户名不允许出现非法字符！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "用户名格式不正确！", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -110,8 +110,8 @@ public class CommonFunctions {
 
     // 判断用户名字符是否合法
     public boolean checkUsernameChar(Editable editable) {
-        // 允许数字、大小写字母和汉字
-        String usernamePattern = "[0-9a-zA-Z\\u4e00-\\u9fa5]+";
+        // 用户名应为6-20位的字母、数字、下划线、中文组合，且以字母或中文作为第一个字符
+        String usernamePattern = "^[a-zA-Z\\u4e00-\\u9fa5][\\w_\\u4e00-\\u9fa5]*$";
 
         if ((Pattern.matches(usernamePattern, editable.toString()))) {
             return true;
@@ -122,8 +122,8 @@ public class CommonFunctions {
 
     // 判断密码字符是否合法
     public boolean checkPasswordChar(Editable editable) {
-        // 允许数字、大小写字母和标点符号
-        String passwordPattern = "[0-9a-zA-Z\\p{P}]+";
+        // 密码应为6-20位的字母、数字、符号~!@#$%^&*()_=+|,.?:;'"{}[]-/\组合
+        String passwordPattern = "[\\w~!@#$%\\^&*()_=+|,.?:;'\"{\\}\\[\\]\\-/\\\\]+";
         if ((Pattern.matches(passwordPattern, editable.toString()))) {
             return true;
         } else {
