@@ -53,8 +53,8 @@ public class MeteorPresenter implements IMeteorPresenter{
                     Log.d("luojingzhao","thead1");
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://111.231.18.37/learnlaravel5/public/index.php/api/users/"+userBean.getUserId()+"/meteors")
-                            .addHeader("Authorizations",userBean.getToken())
+                            .url("http://119.29.179.150:81/api/users/"+userBean.getUserId()+"/meteors")
+                            .addHeader("Authorization",userBean.getToken())
                             .build();
                     Log.d("luojingzhao","success");
                     Response response = client.newCall(request).execute();

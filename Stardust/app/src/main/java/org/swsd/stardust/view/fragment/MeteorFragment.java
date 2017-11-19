@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.MeteorBean;
 import org.swsd.stardust.model.bean.UserBean;
@@ -42,10 +44,8 @@ public class MeteorFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_meteor, null);
 //        initMetor();
-        //编造的当前用户，之后应传入当前登录的用户
-        UserBean userBean = new UserBean();
-        userBean.setUserId(3);
-        userBean.setToken("NWEwZDMzYmIzOTJkZjUuNTA2NzQ4ODQsMTIzNDU2Nzg5LDIwMTctMTEtMjMgMTQ6NDQ6MTE=");
+        //假设为第一个用户，之后应传入当前登录的用户
+        UserBean userBean = DataSupport.findFirst(UserBean.class);
 
         meteorPresenter = new MeteorPresenter();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
