@@ -90,14 +90,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		ActivityCollector.addActivity(this);
-        initView();
-        initData();
-    }
-    
-    @Override
-	protected void onResume() {
-		super.onResume();
-        Log.d(TAG, "onResume: ");
 
 		/**
 		 * author     :  骆景钊
@@ -109,6 +101,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 		intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
 		netWorkChangeReceiver = new NetWorkChangeReceiver();
 		registerReceiver(netWorkChangeReceiver, intentFilter);
+        initView();
+        initData();
+    }
+    
+    @Override
+	protected void onResume() {
+		super.onResume();
+        Log.d(TAG, "onResume: ");
+
     }
 
 	@Override
