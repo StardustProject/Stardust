@@ -3,9 +3,12 @@
     package="org.swsd.stardust">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <user-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -62,6 +65,8 @@
         <activity android:name=".view.activity.MeteorDetail"/>
 
         <activity android:name=".view.activity.WebViewActivity"/>
+        <meta-data android:value="b561073b2da04d2ab028e2c5c64128e3" android:name = "ZHUGE_APPKEY"/>
+        <meta-data android:value="自定义您的渠道名豌豆荚" android:name = "ZHUGE_CHANNEL"/>
     </application>
 
 </manifest>

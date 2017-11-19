@@ -12,6 +12,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.zhuge.analysis.stat.ZhugeSDK;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.swsd.stardust.R;
 
 import static android.view.KeyEvent.KEYCODE_BACK;
@@ -29,6 +33,7 @@ public class WebViewActivity extends AppCompatActivity {
     private String url = "https://www.baidu.com/";
     private ProgressBar prograssBar;
     private int resourceCount = 0;
+    private static String ARTICLE_ID;
 
     /**
      *     按下返回键实现后退网页功能
@@ -46,11 +51,30 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZhugeSDK.getInstance().flush(getApplicationContext());
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         webView = (WebView)findViewById(R.id.web_view);
         initBudle();
+        //初始化分析跟踪
+        ZhugeSDK.getInstance().init(getApplicationContext());
+        //定义与事件相关的属性信息
+        try {
+            JSONObject eventObject = new JSONObject();
+            eventObject.put("用户事件", "点击文章");
+            eventObject.put("文章ID", ARTICLE_ID);
+            eventObject.put("数量", 1);
+            //记录事件,以购买为例
+            ZhugeSDK.getInstance().track(getApplicationContext(), "用户事件", eventObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         prograssBar = (ProgressBar)findViewById(R.id.loading_progress);
         webView.setWebViewClient(new WebViewClient(){
             @Override
@@ -113,6 +137,9 @@ public class WebViewActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle = getIntent().getExtras();
         url = bundle.getString("url");
+        ARTICLE_ID = bundle.getString("articleID");
+
         Log.d(TAG, "initBudle: url is " + url);
+        Log.d(TAG, "initBudle: id is " + ARTICLE_ID);
     }
 }

@@ -47,6 +47,7 @@ public class ArticleFragment extends Fragment {
     private static final String TAG = "熊立强：ArticleFragment";
     private RecyclerView recyclerView;
     private static List<Article> mArticleList = new ArrayList<>();
+    private static String ARTICLE_ID;
     List<String> articleUrls = new ArrayList<>();
     @Nullable
     @Override
@@ -123,7 +124,7 @@ public class ArticleFragment extends Fragment {
                             Log.d(TAG, "run: id is " + id);
                             Log.d(TAG, "run: url is "+url);
                             Log.d(TAG, "run: status is " + status);
-
+                            ARTICLE_ID = id;
                             if(status == "true"){
                                 // 需要发送的文章
                                 putArticle(url,id);
@@ -155,6 +156,7 @@ public class ArticleFragment extends Fragment {
                 Document doc = Jsoup.connect(url).get();
                 Elements elements = doc.select("h2[class=rich_media_title]");
                 Article ListItem = new Article();
+                ListItem.setArticleId(ARTICLE_ID);
                 Log.d("熊立强", "title" + elements.text());
                 ListItem.setArticleTitle(elements.text());
                 elements = doc.select("em[id=post-date]");
@@ -229,6 +231,7 @@ public class ArticleFragment extends Fragment {
                 Response response = client.newCall(request).execute();
                 Log.d(TAG, "putResponse +" + response.body().string());
                 Article temp  = new Article();
+                temp.setArticleId(ARTICLE_ID);
                 temp.setArticleAbstract(putArticle.getContent());
                 temp.setArticleTitle(putArticle.getTitle());
                 temp.setArticleUrl(url);

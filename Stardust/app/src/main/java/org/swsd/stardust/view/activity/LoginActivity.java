@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.zhuge.analysis.stat.ZhugeSDK;
+
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.presenter.LoginPresenter;
@@ -42,6 +45,8 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //初始化分析跟踪
+        ZhugeSDK.getInstance().init(getApplicationContext());
         // 初始化界面,实现沉浸式顶部栏
         initView();
         // 绑定并加载登录界面布局

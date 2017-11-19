@@ -35,7 +35,9 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
+import com.zhuge.analysis.stat.ZhugeSDK;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -180,7 +182,30 @@ public class NoteActivity extends AppCompatActivity {
             case R.id.note_share:{
                 Log.d(TAG, "Share 正在分享");
                 if(!isEmpty){
-                    shareHtml(mEditor.getHtml());
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
+                    dialog.setTitle("确定将此记录匿名分享为流星吗？");
+                    dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //定义与事件相关的属性信息
+                            try {
+                                JSONObject eventObject = new JSONObject();
+                                eventObject.put("用户事件", "分享");
+                                eventObject.put("数量", 1);
+                                //记录事件,以购买为例
+                                ZhugeSDK.getInstance().track(getApplicationContext(), "购买商品", eventObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            shareHtml(mEditor.getHtml());
+                        }
+                    });
+                    dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    dialog.show();
                 }
                 else {
                     Toast.makeText(this, "请输入文字", Toast.LENGTH_SHORT).show();
@@ -192,7 +217,16 @@ public class NoteActivity extends AppCompatActivity {
                 Log.d(TAG, "Save 正在保存");
                 if(!isEmpty){
                     if(isNew){
-
+                        //定义与事件相关的属性信息
+                        try {
+                            JSONObject eventObject = new JSONObject();
+                            eventObject.put("用户事件", "新建记录");
+                            eventObject.put("数量", 1);
+                            //记录事件,以购买为例
+                            ZhugeSDK.getInstance().track(getApplicationContext(), "用户事件", eventObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         saveNote();
                     }
                     else {
@@ -847,6 +881,16 @@ public class NoteActivity extends AppCompatActivity {
                         noteTemp.updateAll("noteId = ?",updateNoteId);
                     }
                     else{
+                        //定义与事件相关的属性信息
+                        try {
+                            JSONObject eventObject = new JSONObject();
+                            eventObject.put("用户事件", "新建记录");
+                            eventObject.put("数量", 1);
+                            //记录事件,以购买为例
+                            ZhugeSDK.getInstance().track(getApplicationContext(), "用户事件", eventObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         sendNote(url,dTime,"true",content);
                         shareNote(url,content);
                         // 新建笔记 服务器，本地
