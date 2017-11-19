@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,19 +25,30 @@ import org.swsd.stardust.presenter.adapter.HomeAdapter;
 import java.util.Calendar;
 import java.util.List;
 
+import cn.carbswang.android.numberpickerview.library.NumberPickerView;
+
 /**
  *    author     :  张昭锡
  *    time       :  2017/11/13
  *    description:  编写主页View层
  *    version:   :  1.0
  */
-public class HomeFragment extends Fragment implements IHomeView,View.OnClickListener{
+public class HomeFragment extends Fragment implements IHomeView,View.OnClickListener,NumberPickerView.OnValueChangeListener,NumberPickerView.OnScrollListener{
 
     private View mView;
     private RecyclerView mRvLightspot;
-    private TextView mTvDisplayDate;
+    private NumberPickerView mNpYear;
+    private NumberPickerView mNpMonth;
+    private NumberPickerView mNpDay;
+    private Button mBtnCheckdate;
     private HomeAdapter adapter;
     private List<NoteBean>mNoteList;
+    private String[] mStrYear;
+    private String[] mStrMonth;
+    private String[] mStrDateOfSmallMonth;
+    private String[] mStrDateOfBigMonth;
+    private String[] mStrLeapFeb;
+    private String[] mStrComFeb;
     IHomePresenter mHomePresenter;
 
     private static final String TAG = "HomeFragment";
@@ -51,16 +63,23 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
 
         //控件初始化
         mRvLightspot = (RecyclerView)mView.findViewById(R.id.rv_home_lightspot);
-        mTvDisplayDate = (TextView)mView.findViewById(R.id.tv_home_date);
+        mNpYear = (NumberPickerView)mView.findViewById(R.id.np_home_year);
+        mNpMonth = (NumberPickerView)mView.findViewById(R.id.np_home_month);
+        mNpDay = (NumberPickerView)mView.findViewById(R.id.np_home_day);
+        mBtnCheckdate = (Button)mView.findViewById(R.id.btn_home_checkdate);
 
-        //设置时间选择器响应事件
-        mTvDisplayDate.setOnClickListener(this);
+        initNumberPickerString();
+        initDate();
 
-        //设置时间选择器主页显示位置
-        mHomePresenter.setDatePickerDialogPotision();
+        //设置响应事件
+        mBtnCheckdate.setOnClickListener(this);
+        mNpYear.setOnValueChangedListener(this);
+        mNpYear.setOnScrollListener(this);
+        mNpMonth.setOnValueChangedListener(this);
+        mNpMonth.setOnScrollListener(this);
+        mNpDay.setOnValueChangedListener(this);
+        mNpDay.setOnScrollListener(this);
 
-        //显示日期
-        mHomePresenter.showDate();
 
         mNoteList = mHomePresenter.getNoteList();
 
@@ -74,19 +93,85 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         adapter = new HomeAdapter(getContext(), mNoteList);
         mRvLightspot.setAdapter(adapter);
 
-//        //int x = mRvLightspot.getScrollX();
-//        int [] x = new int[2];
-//        mRvLightspot.getLocationOnScreen(x);
-//        Log.d(TAG, "onCreateView: zyzhang: x = " + x[0]);
-//        int y = mRvLightspot.getScrollY();
-//        Log.d(TAG, "onCreateView: zyzhang: y = " + x[1]);
-        //Toast.makeText(getContext(),String.valueOf(x),Toast.LENGTH_SHORT).show();
-
         return mView;
     }
 
+
     @Override
-    public void showDate() {
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_home_checkdate:
+                mBtnCheckdate.setAlpha(0.0f);
+                mHomePresenter.changeDate(getContext(),adapter,mNoteList,
+                        Integer.parseInt(mNpYear.getContentByCurrValue()),
+                        Integer.parseInt(mNpMonth.getContentByCurrValue()), Integer.parseInt(mNpDay.getContentByCurrValue()));
+                break;
+        }
+    }
+
+    @Override
+    public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
+        mBtnCheckdate.setAlpha(1.0f);
+    }
+
+    @Override
+    public void onScrollStateChange(NumberPickerView view, int scrollState) {
+        switch (scrollState){
+            case SCROLL_STATE_IDLE:
+                int year = Integer.parseInt(mNpYear.getContentByCurrValue());
+                int month = Integer.parseInt(mNpMonth.getContentByCurrValue());
+                int day = Integer.parseInt(mNpDay.getContentByCurrValue());
+                if (mHomePresenter.isLeapYear(year) && month == 2){
+                    mNpDay.refreshByNewDisplayedValues(mStrLeapFeb);
+                }else if (!mHomePresenter.isLeapYear(year) && month == 2){
+                    mNpDay.refreshByNewDisplayedValues(mStrComFeb);
+                }else if (mHomePresenter.isBigMonth(month)){
+                    mNpDay.refreshByNewDisplayedValues(mStrDateOfBigMonth);
+                }else{
+                    mNpDay.refreshByNewDisplayedValues(mStrDateOfSmallMonth);
+                }
+                mNpDay.setValue(day - 1);
+                break;
+            default:
+
+        }
+    }
+
+
+    public void initNumberPickerString(){
+        mStrYear = new String[81];
+        for (int i = 1970;i <= 2050;i++){
+            mStrYear[i - 1970] = String.valueOf(i);
+        }
+
+        mStrMonth = new String[12];
+        for (int i = 1;i <= 12;i++){
+            mStrMonth[i - 1] = String.valueOf(i);
+        }
+
+        mStrDateOfSmallMonth = new String[30];
+        for (int i = 1;i <= 30;i++){
+            mStrDateOfSmallMonth[i - 1] = String.valueOf(i);
+        }
+
+        mStrDateOfBigMonth = new String[31];
+        for (int i = 1;i <= 31;i++){
+            mStrDateOfBigMonth[i - 1] = String.valueOf(i);
+        }
+
+        mStrLeapFeb = new String[29];
+        for (int i = 1;i <= 29;i++){
+            mStrLeapFeb[i - 1] = String.valueOf(i);
+        }
+
+        mStrComFeb = new String[28];
+        for (int i = 1;i <= 28;i++){
+            mStrComFeb[i - 1] = String.valueOf(i);
+        }
+    }
+
+    void initDate(){
+        //获取日期
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -94,27 +179,15 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         mHomePresenter.setNoteYear(year);
         mHomePresenter.setNoteMonth(month);
         mHomePresenter.setNoteDay(day);
-        mTvDisplayDate.setText(year + "/" + (month + 1) + "/" + day);
 
-    }
+        mNpYear.refreshByNewDisplayedValues(mStrYear);
+        mNpYear.setValue(year - 1970);
 
-    @Override
-    public void showDate(String date) {
-        mTvDisplayDate.setText(date);
-    }
+        mNpMonth.refreshByNewDisplayedValues(mStrMonth);
+        mNpMonth.setValue(month);
 
-    @Override
-    public void setDatePickerDialogPosition() {
-        mTvDisplayDate.setGravity(Gravity.CENTER);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.tv_home_date:
-                mHomePresenter.changeDate(getContext(),adapter,mNoteList);
-                break;
-        }
+        mNpDay.refreshByNewDisplayedValues(mStrDateOfBigMonth);
+        mNpDay.setValue(day - 1);
     }
 
 }

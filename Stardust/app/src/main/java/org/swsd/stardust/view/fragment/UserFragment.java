@@ -9,11 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
+
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.UserPresenter;
+
 import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -44,6 +48,24 @@ public class UserFragment extends Fragment {
             }
         });
 
+        // 显示用户信息
+        showUserInfo(view);
+
+        // 设置用户反馈监听
+        TextView tvFeedBack = view.findViewById(R.id.tv_my_feedback);
+        tvFeedBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 点击按钮后跳转到发送反馈页面
+                Intent goToFeedBack = new Intent("org.swsd.stardust.ACTION_FEEDBACK");
+                startActivity(goToFeedBack);
+            }
+        });
+        return view;
+    }
+
+    // 显示用户信息
+    public void showUserInfo(View view){
         // 从数据库获取用户信息
         UserBean userBean;
         UserPresenter userPresenter = new UserPresenter();
@@ -51,13 +73,12 @@ public class UserFragment extends Fragment {
 
         // 显示用户头像
         CircleImageView civMyPhoto = view.findViewById(R.id.ic_my_user);
-        if (userBean.getAvatarPath() != null) {
-            Glide.with(this).load(userBean.getAvatarPath())
-                    .placeholder(R.drawable.loading)
-                    .into(civMyPhoto);
-        } else {
+        if (userBean.getAvatarPath().equals("")) {
             // 如果头像路径为空，则使用默认头像
             Glide.with(this).load(R.drawable.ic_user)
+                    .into(civMyPhoto);
+        } else {
+            Glide.with(this).load(userBean.getAvatarPath())
                     .into(civMyPhoto);
         }
 
@@ -78,7 +99,5 @@ public class UserFragment extends Fragment {
         int num = userPresenter.toGetStarNum();
         TextView tvMyStars = view.findViewById(R.id.tv_my_stars);
         tvMyStars.setText("已拥有" + num + "个星尘");
-
-        return view;
     }
 }

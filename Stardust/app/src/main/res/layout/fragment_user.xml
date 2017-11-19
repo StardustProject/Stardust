@@ -8,6 +8,11 @@
     android:layout_height="match_parent"
     android:background="@color/whiteSmoke">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/black"></LinearLayout>
+
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -96,6 +101,32 @@
             android:layout_height="70dp"
             android:layout_marginTop="30dp"
             android:background="@color/white"
+            android:textSize="15dp"
+            android:gravity="center_vertical|left"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white">
+            <ImageView
+                android:src="@mipmap/feedback"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_my_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/white"
+            android:text="点我发送反馈"
             android:textSize="15dp"
             android:gravity="center_vertical|left"/>
     </LinearLayout>
