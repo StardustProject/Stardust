@@ -41,15 +41,12 @@ public class SetNamePresenter {
         // 点击按钮后,进行用户名长度检查
         switch (check.checkLength(name)) {
             case 1:
-                correct = false;
                 Toast.makeText(context, "用户名不能为空！", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                correct = false;
                 Toast.makeText(context, "用户名长度不能小于6！", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
-                correct = false;
                 Toast.makeText(context, "用户名长度不能大于20！", Toast.LENGTH_SHORT).show();
                 break;
             case 0:
@@ -61,11 +58,9 @@ public class SetNamePresenter {
         // 如果用户名长度合法
         if (correct == true) {
             // 检查用户名是否存在非法字符
-            if (check.checkUsernameChar(name)) {
-                correct = true;
-            } else {
+            if (!check.checkUsernameChar(name)) {
                 correct = false;
-                Toast.makeText(context, "用户名不允许出现非法字符！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "用户名格式不正确！", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -78,12 +73,14 @@ public class SetNamePresenter {
             if (errorCode == 200) {
                 userBean.setUserName(name.toString());
                 userBean.updateAll("userId=?", "" + userBean.getUserId());
-                correct = true;
             } else if (errorCode == 409) {
                 Toast.makeText(context, "用户名已存在！", Toast.LENGTH_SHORT).show();
                 correct = false;
             } else if (errorCode == 401) {
                 Toast.makeText(context, "修改用户名失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                correct = false;
+            } else {
+                Toast.makeText(context, "用户名格式不正确！", Toast.LENGTH_SHORT).show();
                 correct = false;
             }
         }
