@@ -81,6 +81,7 @@ public class NoteActivity extends AppCompatActivity {
     private static long createTime = new Date().getTime();
     private static boolean isNew = false;
     private static NoteBean noteTemp;
+    private static String NOTE_ID;
     private Handler handler  = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -534,6 +535,10 @@ public class NoteActivity extends AppCompatActivity {
         OkHttpClient okHttpClient = new OkHttpClient();
         //json为String类型的json数据
         // 使用Gson生成
+        Log.d(TAG, "sendNote: " + url);
+        Log.d(TAG, "sendNote: " + createTime);
+        Log.d(TAG, "sendNote: " + share);
+        Log.d(TAG, "sendNote: " + content);
         Note note = new Note(url,createTime,share,content);
         String json = getJsonString(note);
         Log.d(TAG, "json is " + json);
@@ -561,6 +566,7 @@ public class NoteActivity extends AppCompatActivity {
                 Log.d(TAG, "sendNote: noteJson" + jsonObject.getString("note"));
                 JSONObject getNoteId = new JSONObject(jsonObject.getString("note"));
                 NoteId = getNoteId.getInt("id");
+                NOTE_ID = String.valueOf(NoteId);
                 Log.d(TAG, "sendNote: Noteid " + NoteId);
                 // 之后保存数据库
             }
@@ -599,6 +605,7 @@ public class NoteActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle = getIntent().getExtras();
             noteTemp = (NoteBean)bundle.getSerializable("note");
+            NOTE_ID = String.valueOf(noteTemp.getNoteId());
             Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
             mEditor.setHtml(noteTemp.getContent());
         }
@@ -890,7 +897,7 @@ public class NoteActivity extends AppCompatActivity {
         Log.d(TAG, "userBean" + userBean.getUserId());
         // "http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() +"/notes"
         Request request = new Request.Builder()
-                .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/notes/" + noteTemp.getNoteId())
+                .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/notes/" + NOTE_ID)
                 .addHeader("Content-Type","application/json")
                 .addHeader("Authorization",userBean.getToken())
                 .put(requestBody)
