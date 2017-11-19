@@ -74,6 +74,7 @@ public class WebViewActivity extends AppCompatActivity {
             }
 
         });
+        // String
         webView.loadUrl(url);
         webView.canGoBack();
         webView.canGoForward();
