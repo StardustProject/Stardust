@@ -18,12 +18,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:layout_marginLeft="5dp"
-            android:textSize="24sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:textSize="19sp"
             android:text="title"/>
 
         <!--作者&日期-->
         <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -32,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
                 android:text="xiong"
                 android:textColor="@color/silver"
                 android:maxLines="1"/>
@@ -46,7 +50,7 @@
                 android:gravity="right"
                 android:text="20170101"
                 android:textColor="@color/silver"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="10dp"
                 />
         </LinearLayout>
 
@@ -55,9 +59,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="4"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:text="Hello"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
             android:ellipsize="end"
             />
     </LinearLayout>

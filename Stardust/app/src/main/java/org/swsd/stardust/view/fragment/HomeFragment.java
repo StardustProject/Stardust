@@ -67,6 +67,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         mNpMonth = (NumberPickerView)mView.findViewById(R.id.np_home_month);
         mNpDay = (NumberPickerView)mView.findViewById(R.id.np_home_day);
         mBtnCheckdate = (Button)mView.findViewById(R.id.btn_home_checkdate);
+
         initNumberPickerString();
         initDate();
 

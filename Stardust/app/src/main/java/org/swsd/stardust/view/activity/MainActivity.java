@@ -99,4 +99,11 @@ public class MainActivity extends BaseActivity {
         transaction.replace(R.id.top_content, fragment);
         transaction.commit();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: Main ");
+        replaceFragment(new HomeFragment());
+    }
 }

@@ -34,13 +34,16 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.NotePresenter.Note;
+import org.swsd.stardust.presenter.NotePresenter.putNote;
 import org.swsd.stardust.presenter.UserPresenter;
 
 import java.io.ByteArrayInputStream;
@@ -63,13 +66,18 @@ public class NoteActivity extends AppCompatActivity {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static final int SAVE_NOTE = 1;
-    private RichEditor mEditor;
+    public static final int DELETE_NOTE = 2;
+    private static RichEditor mEditor;
     private boolean isEdited = false;
     private static final String TAG = "熊立强";
     private static final int CHOOSE_PHOTO = 2;
     private String imagePath;
     private static String URL = null;
     private static int NoteId;
+    private static int UserId;
+    private static long createTime = new Date().getTime();
+    private static boolean isNew = false;
+    private static NoteBean noteTemp;
 
     private Handler handler  = new Handler(){
         @Override
@@ -78,6 +86,9 @@ public class NoteActivity extends AppCompatActivity {
                 case SAVE_NOTE :
                     finish();
                     break;
+                case DELETE_NOTE:
+                    Log.d(TAG, "handleMessage: " + "删除成功" );
+                    finish();
                 default:
                     break;
             }
@@ -87,6 +98,9 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
+        mEditor = (RichEditor)findViewById(R.id.md_editor);
+        initBundle();
+        createTime = new Date().getTime();
         Toolbar toolbar = (Toolbar) findViewById(R.id.note_toolbar);
         toolbar.setTitle("Note");
         setSupportActionBar(toolbar);
@@ -97,7 +111,6 @@ public class NoteActivity extends AppCompatActivity {
                 saveNote();
             }
         });
-        mEditor = (RichEditor)findViewById(R.id.md_editor);
         //mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(22);
         mEditor.setEditorFontColor(Color.BLACK);
@@ -299,16 +312,24 @@ public class NoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.note_share:{
-                //// TODO: 2017/11/16
                 Log.d(TAG, "Share 正在分享");
-                shareNote();
+                shareHtml(mEditor.getHtml());
                 return true;
             }
 
             case R.id.note_save:{
                 Log.d(TAG, "Save 正在保存");
-                saveNote();
+                if(isNew){
+                    saveNote();
+                }
+                else {
+                    updateNote();
+                }
                 return true;
+            }
+            case R.id.note_delete:{
+                // TODO: 2017/11/18  delete
+                deleteNote();
             }
             default:
                 return super.onOptionsItemSelected(item);
@@ -323,28 +344,8 @@ public class NoteActivity extends AppCompatActivity {
         // TODO: 2017/11/16 保存内容到本地，上传七牛云，上传服务器url
         String htmlCode = mEditor.getHtml();
         Log.d(TAG, "saveNote: " + htmlCode);
-        /*String filePath = saveFile(htmlCode);
-        Log.d(TAG, "saveNote: " + filePath);*/
+        // 上传html  上传html到七牛云和服务器在上传完之后保存本地数据库，之后关闭Activity
         uploadHtml(htmlCode);
-        Connector.getDatabase();
-        NoteBean note = new NoteBean();
-        note.setContent(htmlCode);
-        note.setNoteId(NoteId);
-        note.setCreateTime(0);
-        note.setShareStatus(false);
-        note.setUserId(0);
-        note.save();
-        Log.d(TAG, "note 保存成功" );
-    }
-
-    /**
-     *  分享笔记函数
-     */
-    private void shareNote(){
-        String noteHtml = mEditor.getHtml();
-        // TODO: 2017/11/16  上传七牛云，回调之后上传服务器
-
-        Log.d(TAG, "分享成功");
     }
 
     /**
@@ -547,21 +548,6 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     /**
-     *  显示 上传html 到七牛云
-     * @param response
-     */
-    private void showHtml(final String response){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(NoteActivity.this, "记录上传完成", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-    }
-
-
-    /**
      *  根据路径上传七牛云
      */
     private String  uploadHtml(final String htmlCode){
@@ -596,10 +582,9 @@ public class NoteActivity extends AppCompatActivity {
                     DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                     Log.d(TAG, "成功上传" + putRet.key);
                     Log.d(TAG, "成功上传" + putRet.hash);
-                    String url = "http://oziec3aec.bkt.clouddn.com/" + putRet.key;
+                    String url = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
                     URL = url;
                     Log.d(TAG, "url is " + url);
-
                     // 上传服务器
                     int serverId = 0;
                     Log.d(TAG, "upLoadServer Url" + URL);
@@ -609,13 +594,26 @@ public class NoteActivity extends AppCompatActivity {
                     userBean = userPresenter.toGetUserInfo();
                     Log.d(TAG, "userBean" + userBean.getToken());
                     Log.d(TAG, "userBean" + userBean.getUserId());
-                    String content = parseHtml(htmlCode);
-                    // TODO: 2017/11/18
-                    // 获取安卓系统时间
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");
+                    Document doc = Jsoup.parse(htmlCode);
+                    String content = doc.body().text();
+                    Log.d(TAG, " Html Content is " + content);
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date currentDate = new Date(System.currentTimeMillis());
                     String dTime = formatter.format(currentDate);
-                    sendNote(URL,dTime,false,content);
+                    // 上传服务器
+                    sendNote(URL,dTime,"false",content);
+                    //
+                    Connector.getDatabase();
+                    NoteBean note = new NoteBean();
+                    note.setContent(htmlCode);
+                    note.setNoteId(NoteId);
+                    note.setCreateTime(createTime);
+                    note.setShareStatus(false);
+                    note.setUserId(userBean.getUserId());
+                    note.save();
+                    Log.d(TAG, "note 保存成功" );
+                    //Toast.makeText(NoteActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                     // 结束上传
                     Message message = new Message();
                     message.what = SAVE_NOTE;
@@ -637,11 +635,7 @@ public class NoteActivity extends AppCompatActivity {
         return URL;
     }
 
-    private String parseHtml(String html){
-        Document doc = Jsoup.parse(html);
-        return doc.body().text();
-    }
-    private void sendNote(String url,String createTime,boolean share, String content){
+    private void sendNote(String url,String createTime,String share, String content){
         //创建一个Client对象
         OkHttpClient okHttpClient = new OkHttpClient();
         //json为String类型的json数据
@@ -658,7 +652,8 @@ public class NoteActivity extends AppCompatActivity {
         Log.d(TAG, "userBean" + userBean.getUserId());
         // "http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() +"/notes"
         Request request = new Request.Builder()
-                .addHeader("Content-Type","tapplication/json")
+                .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/notes")
+                .addHeader("Content-Type","application/json")
                 .addHeader("Authorization",userBean.getToken())
                 .post(requestBody)
                 .build();
@@ -666,6 +661,15 @@ public class NoteActivity extends AppCompatActivity {
             okhttp3.Response response = okHttpClient.newCall(request).execute();
             String responseData = response.body().string();
             Log.d(TAG, "sendNote: response" + responseData);
+            JSONObject jsonObject = new JSONObject(responseData);
+            Log.d(TAG, "sendNote: errorCode is " + jsonObject.getInt("error_code"));
+            if(jsonObject.getInt("error_code") == 200){
+                Log.d(TAG, "sendNote: noteJson" + jsonObject.getString("note"));
+                JSONObject getNoteId = new JSONObject(jsonObject.getString("note"));
+                NoteId = getNoteId.getInt("id");
+                Log.d(TAG, "sendNote: Noteid " + NoteId);
+                // 之后保存数据库
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -682,4 +686,336 @@ public class NoteActivity extends AppCompatActivity {
         String json = gson.toJson(object);
         return json;
     }
+
+    /**
+     * 初始化数据
+     */
+    private void initBundle(){
+        if(getIntent().getExtras() == null){
+            Log.d(TAG, "initBundle: 是新建里的" );
+            isNew = true;
+        }
+        else{
+            isNew = false;
+            Log.d(TAG, "initBundle: 不是新的" );
+        }
+        // 不是新建日记
+        if(!isNew){
+            Bundle bundle = new Bundle();
+            bundle = getIntent().getExtras();
+            noteTemp = (NoteBean)bundle.getSerializable("note");
+            Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
+            mEditor.setHtml(noteTemp.getContent());
+        }
+    }
+
+    /**
+     * 删除云端后删除本地数据库
+     */
+    private void deleteNote(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 获取当前用户id
+                UserBean userBean;
+                UserPresenter userPresenter = new UserPresenter();
+                userBean = userPresenter.toGetUserInfo();
+                Log.d(TAG, "userBean" + userBean.getToken());
+                Log.d(TAG, "userBean" + userBean.getUserId());
+                OkHttpClient client = new OkHttpClient();
+                String json = "";
+                RequestBody body = RequestBody.create(JSON,json);
+                Request request = new Request.Builder()
+                        .url("http://119.29.179.150:81/api/users/"+userBean.getUserId()+"/notes/"+noteTemp.getNoteId())
+                        .addHeader("Authorization",userBean.getToken())
+                        .delete(body)
+                        .build();
+                try {
+                    okhttp3.Response response = client.newCall(request).execute();
+                    Log.d(TAG, "delete response" + response.body().string());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // 删除本地数据库
+                String deleteId = String.valueOf(noteTemp.getId());
+                Log.d(TAG, "delete id is " + deleteId);
+                DataSupport.deleteAll(NoteBean.class,"id == ?", deleteId);
+                Message msg = new Message();
+                msg.what = DELETE_NOTE;
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
+
+    /**
+     *  更新云端数据库，然后更新本地数据库
+     */
+    private void updateNote(){
+        String htmlCode = mEditor.getHtml();
+        updateHtml(htmlCode);
+    }
+
+    /**
+     *  根据路径更新七牛云html
+     */
+    private String  updateHtml(final String htmlCode){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String Code = htmlCode;
+                String key = null;
+                // 七牛机房设置，构造一个带指定Zone对象的配置类
+                Configuration cfg = new Configuration(Zone.zone0());
+                UploadManager uploadManager = new UploadManager(cfg);
+                //...生成上传凭证，然后准备上传
+                String accessKey = "zV8eZYiEVp-Akvx_wGlUtfhjB3VmDd4mvl9u-s6O";
+                String secretKey = "ij9yPsXMxznSeifiblhNTVpiGAvnhhhsXS4gdenc";
+                String bucket = "thousfeet";
+                //普通上传
+                /*Auth auth = Auth.create(accessKey, secretKey);
+                String upToken = auth.uploadToken(bucket);*/
+                //魔法变量设置回调格式
+                Auth auth = Auth.create(accessKey, secretKey);
+                StringMap putPolicy = new StringMap();
+                putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"fsize\":$(fsize)}");
+                long expireSeconds = 3600;
+                String upToken = auth.uploadToken(bucket, null, expireSeconds, putPolicy);
+                Log.d(TAG, "Token is " + upToken);
+                try {
+                    byte[] uploadBytes = Code.getBytes("utf-8");
+                    ByteArrayInputStream byteInputStream=new ByteArrayInputStream(uploadBytes);
+                    Response response = uploadManager.put(byteInputStream, key, upToken,null,null);
+                    //解析上传成功的结果
+                    DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+                    Log.d(TAG, "成功上传" + putRet.key);
+                    Log.d(TAG, "成功上传" + putRet.hash);
+                    String url = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
+                    URL = url;
+                    Log.d(TAG, "url is " + url);
+                    // 更新服务器
+                    int serverId = 0;
+                    Log.d(TAG, "upLoadServer Url" + URL);
+                    // 获取当前用户id
+                    UserBean userBean;
+                    UserPresenter userPresenter = new UserPresenter();
+                    userBean = userPresenter.toGetUserInfo();
+                    Log.d(TAG, "userBean" + userBean.getToken());
+                    Log.d(TAG, "userBean" + userBean.getUserId());
+                    Document doc = Jsoup.parse(htmlCode);
+                    String content = doc.body().text();
+                    Log.d(TAG, " Html Content is " + content);
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date currentDate = new Date(System.currentTimeMillis());
+                    String dTime = formatter.format(currentDate);
+                    // 更新服务器
+                    updateNote(URL,dTime,"false",content);
+                    //更新本地数据
+                    noteTemp.setCreateTime(createTime);
+                    noteTemp.setContent(htmlCode);
+                    String updateNoteId = String.valueOf(noteTemp.getNoteId());
+                    noteTemp.updateAll("noteId = ?",updateNoteId);
+                    Log.d(TAG, "note 修改成功" );
+                    // 结束上传
+                    Message message = new Message();
+                    message.what = SAVE_NOTE;
+                    handler.sendMessage(message);
+                } catch (QiniuException ex) {
+                    Response r = ex.response;
+                    System.err.println(r.toString());
+                    try {
+                        System.err.println(r.bodyString());
+                    } catch (QiniuException ex2) {
+                        //ignore
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d(TAG, "run: " + "expireSeconds");
+                }
+            }
+        }).start();
+        return URL;
+    }
+
+    private void updateNote(String url,String createTime,String share, String content){
+        //创建一个Client对象
+        OkHttpClient okHttpClient = new OkHttpClient();
+        //json为String类型的json数据
+        // 使用Gson生成
+        putNote putNote = new putNote(url,share,content);
+        String json = getJsonString(putNote);
+        Log.d(TAG, "json is " + json);
+        RequestBody requestBody = RequestBody.create(JSON,json);
+        // 获取当前用户id
+        UserBean userBean;
+        UserPresenter userPresenter = new UserPresenter();
+        userBean = userPresenter.toGetUserInfo();
+        Log.d(TAG, "userBean" + userBean.getToken());
+        Log.d(TAG, "userBean" + userBean.getUserId());
+        // "http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() +"/notes"
+        Request request = new Request.Builder()
+                .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/notes/" + noteTemp.getNoteId())
+                .addHeader("Content-Type","application/json")
+                .addHeader("Authorization",userBean.getToken())
+                .put(requestBody)
+                .build();
+        try{
+            okhttp3.Response response = okHttpClient.newCall(request).execute();
+            String responseData = response.body().string();
+            Log.d(TAG, "updateNote: response" + responseData);
+            JSONObject jsonObject = new JSONObject(responseData);
+            Log.d(TAG, "updateNote: errorCode is " + jsonObject.getInt("error_code"));
+            if(jsonObject.getInt("error_code") == 200){
+                Log.d(TAG, "sendNote: noteJson" + jsonObject.getString("note"));
+/*                JSONObject getNoteId = new JSONObject(jsonObject.getString("note"));
+                NoteId = getNoteId.getInt("id");
+                Log.d(TAG, "sendNote: Noteid " + NoteId);
+                // 之后保存数据库*/
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     *  根据路径更新七牛云html
+     */
+    private String  shareHtml(final String htmlCode){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String Code = htmlCode;
+                String key = null;
+                // 七牛机房设置，构造一个带指定Zone对象的配置类
+                Configuration cfg = new Configuration(Zone.zone0());
+                UploadManager uploadManager = new UploadManager(cfg);
+                //...生成上传凭证，然后准备上传
+                String accessKey = "zV8eZYiEVp-Akvx_wGlUtfhjB3VmDd4mvl9u-s6O";
+                String secretKey = "ij9yPsXMxznSeifiblhNTVpiGAvnhhhsXS4gdenc";
+                String bucket = "thousfeet";
+                //普通上传
+                /*Auth auth = Auth.create(accessKey, secretKey);
+                String upToken = auth.uploadToken(bucket);*/
+                //魔法变量设置回调格式
+                Auth auth = Auth.create(accessKey, secretKey);
+                StringMap putPolicy = new StringMap();
+                putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"fsize\":$(fsize)}");
+                long expireSeconds = 3600;
+                String upToken = auth.uploadToken(bucket, null, expireSeconds, putPolicy);
+                Log.d(TAG, "Token is " + upToken);
+                try {
+                    byte[] uploadBytes = Code.getBytes("utf-8");
+                    ByteArrayInputStream byteInputStream=new ByteArrayInputStream(uploadBytes);
+                    Response response = uploadManager.put(byteInputStream, key, upToken,null,null);
+                    //解析上传成功的结果
+                    DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+                    Log.d(TAG, "成功上传" + putRet.key);
+                    Log.d(TAG, "成功上传" + putRet.hash);
+                    String url = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
+                    URL = url;
+                    Log.d(TAG, "url is " + url);
+                    // 更新服务器
+                    int serverId = 0;
+                    Log.d(TAG, "upLoadServer Url" + URL);
+                    // 获取当前用户id
+                    UserBean userBean;
+                    UserPresenter userPresenter = new UserPresenter();
+                    userBean = userPresenter.toGetUserInfo();
+                    Log.d(TAG, "userBean" + userBean.getToken());
+                    Log.d(TAG, "userBean" + userBean.getUserId());
+                    Document doc = Jsoup.parse(htmlCode);
+                    String content = doc.body().text();
+                    Log.d(TAG, " Html Content is " + content);
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date currentDate = new Date(System.currentTimeMillis());
+                    String dTime = formatter.format(currentDate);
+
+                    // 更新服务器,更新本地数据
+                    if (!isNew){
+                        shareNote(url,content);
+                        noteTemp.setCreateTime(createTime);
+                        noteTemp.setContent(htmlCode);
+                        noteTemp.setShareStatus(true);
+                        String updateNoteId = String.valueOf(noteTemp.getNoteId());
+                        noteTemp.updateAll("noteId = ?",updateNoteId);
+                    }
+                    else{
+                        sendNote(url,dTime,"true",content);
+                        shareNote(url,content);
+                        // 新建笔记 服务器，本地
+                        Connector.getDatabase();
+                        NoteBean note = new NoteBean();
+                        note.setContent(htmlCode);
+                        note.setNoteId(NoteId);
+                        note.setCreateTime(createTime);
+                        note.setShareStatus(true);
+                        note.setUserId(userBean.getUserId());
+                        note.save();
+                    }
+                    Log.d(TAG, "note 分享成功" );
+                    // 结束上传
+                    Message message = new Message();
+                    message.what = SAVE_NOTE;
+                    handler.sendMessage(message);
+                } catch (QiniuException ex) {
+                    Response r = ex.response;
+                    System.err.println(r.toString());
+                    try {
+                        System.err.println(r.bodyString());
+                    } catch (QiniuException ex2) {
+                        //ignore
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Log.d(TAG, "run: " + "expireSeconds");
+                }
+            }
+        }).start();
+        return URL;
+    }
+    private void shareNote(String url,String content){
+        //创建一个Client对象
+        OkHttpClient okHttpClient = new OkHttpClient();
+        //json为String类型的json数据
+        // 使用Gson生成
+        putNote putNote = new putNote(url,"true",content);
+        String json = getJsonString(putNote);
+        Log.d(TAG, "json is " + json);
+        RequestBody requestBody = RequestBody.create(JSON,json);
+        // 获取当前用户id
+        UserBean userBean;
+        UserPresenter userPresenter = new UserPresenter();
+        userBean = userPresenter.toGetUserInfo();
+        Log.d(TAG, "userBean" + userBean.getToken());
+        Log.d(TAG, "userBean" + userBean.getUserId());
+        // "http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() +"/notes"
+        Request request = new Request.Builder()
+                .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/notes/" + noteTemp.getNoteId())
+                .addHeader("Content-Type","application/json")
+                .addHeader("Authorization",userBean.getToken())
+                .put(requestBody)
+                .build();
+        try{
+            okhttp3.Response response = okHttpClient.newCall(request).execute();
+            String responseData = response.body().string();
+            Log.d(TAG, "shareNote: response" + responseData);
+            JSONObject jsonObject = new JSONObject(responseData);
+            Log.d(TAG, "shareNote: errorCode is " + jsonObject.getInt("error_code"));
+            if(jsonObject.getInt("error_code") == 200){
+                Log.d(TAG, "shareNote: noteJson" + jsonObject.getString("note"));
+/*                JSONObject getNoteId = new JSONObject(jsonObject.getString("note"));
+                NoteId = getNoteId.getInt("id");
+                Log.d(TAG, "sendNote: Noteid " + NoteId);
+                // 之后保存数据库*/
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }
