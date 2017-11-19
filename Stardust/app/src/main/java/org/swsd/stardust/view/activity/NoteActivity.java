@@ -3,6 +3,7 @@ package org.swsd.stardust.view.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -16,6 +17,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -69,6 +71,7 @@ public class NoteActivity extends AppCompatActivity {
     public static final int DELETE_NOTE = 2;
     private static RichEditor mEditor;
     private boolean isEdited = false;
+    private boolean isEmpty = true;
     private static final String TAG = "熊立强";
     private static final int CHOOSE_PHOTO = 2;
     private String imagePath;
@@ -78,7 +81,7 @@ public class NoteActivity extends AppCompatActivity {
     private static long createTime = new Date().getTime();
     private static boolean isNew = false;
     private static NoteBean noteTemp;
-
+    private static String NOTE_ID;
     private Handler handler  = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -102,28 +105,31 @@ public class NoteActivity extends AppCompatActivity {
         initBundle();
         createTime = new Date().getTime();
         Toolbar toolbar = (Toolbar) findViewById(R.id.note_toolbar);
-        toolbar.setTitle("Note");
+        toolbar.setTitle(" ");
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.go_back);
+        toolbar.setNavigationIcon(R.mipmap.go_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveNote();
+                Log.d(TAG, "返回按钮，退出编辑");
+                finish();
             }
         });
         //mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(22);
         mEditor.setEditorFontColor(Color.BLACK);
-        //mEditor.setEditorBackgroundColor(Color.BLUE);
-        //mEditor.setBackgroundColor(Color.BLUE);
+        //mEditor.setEditorBackgroundColor(R.color.common_red);
+        mEditor.setBackgroundColor(getResources().getColor(R.color.white));
         //mEditor.setBackgroundResource(R.drawable.bg);
         mEditor.setPadding(10, 10, 10, 10);
         //mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        mEditor.setPlaceholder("Insert text here...");
+        mEditor.setPlaceholder("请输入文字...");
         //mEditor.setInputEnabled(false);
         mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override public void onTextChange(String text) {
                 isEdited = true;
+                isEmpty = mEditor.getHtml().isEmpty();
+                Log.d(TAG, "onTextChange: is empty" + mEditor.getHtml().isEmpty());
                 Log.d(TAG, "onTextChange: " + isEdited);
             }
         });
@@ -140,143 +146,6 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setBold();
-            }
-        });
-
-        findViewById(R.id.action_italic).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setItalic();
-            }
-        });
-
-        findViewById(R.id.action_subscript).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setSubscript();
-            }
-        });
-
-        findViewById(R.id.action_superscript).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setSuperscript();
-            }
-        });
-
-        findViewById(R.id.action_strikethrough).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setStrikeThrough();
-            }
-        });
-
-        findViewById(R.id.action_underline).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setUnderline();
-            }
-        });
-
-        findViewById(R.id.action_heading1).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setHeading(1);
-            }
-        });
-
-        findViewById(R.id.action_heading2).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setHeading(2);
-            }
-        });
-
-        findViewById(R.id.action_heading3).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setHeading(3);
-            }
-        });
-
-        findViewById(R.id.action_heading4).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setHeading(4);
-            }
-        });
-
-        findViewById(R.id.action_heading5).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setHeading(5);
-            }
-        });
-
-        findViewById(R.id.action_heading6).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setHeading(6);
-            }
-        });
-
-        findViewById(R.id.action_txt_color).setOnClickListener(new View.OnClickListener() {
-            private boolean isChanged;
-
-            @Override public void onClick(View v) {
-                mEditor.setTextColor(isChanged ? Color.BLACK : Color.RED);
-                isChanged = !isChanged;
-            }
-        });
-
-        findViewById(R.id.action_bg_color).setOnClickListener(new View.OnClickListener() {
-            private boolean isChanged;
-
-            @Override public void onClick(View v) {
-                mEditor.setTextBackgroundColor(isChanged ? Color.TRANSPARENT : Color.YELLOW);
-                isChanged = !isChanged;
-            }
-        });
-
-        findViewById(R.id.action_indent).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setIndent();
-            }
-        });
-
-        findViewById(R.id.action_outdent).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setOutdent();
-            }
-        });
-
-        findViewById(R.id.action_align_left).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setAlignLeft();
-            }
-        });
-
-        findViewById(R.id.action_align_center).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setAlignCenter();
-            }
-        });
-
-        findViewById(R.id.action_align_right).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setAlignRight();
-            }
-        });
-
-        findViewById(R.id.action_blockquote).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setBlockquote();
-            }
-        });
-
-        findViewById(R.id.action_insert_bullets).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setBullets();
-            }
-        });
-
-        findViewById(R.id.action_insert_numbers).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.setNumbers();
-            }
-        });
 
         findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -285,16 +154,13 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.action_insert_audio).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                mEditor.insertLink("https://github.com/wasabeef", "wasabeef");
+                Toast.makeText(NoteActivity.this, "正在开发中", Toast.LENGTH_SHORT).show();
             }
         });
-        findViewById(R.id.action_insert_checkbox).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.insertTodo();
-            }
-        });
+
+
     }
 
     /**
@@ -313,23 +179,52 @@ public class NoteActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.note_share:{
                 Log.d(TAG, "Share 正在分享");
-                shareHtml(mEditor.getHtml());
+                if(!isEmpty){
+                    shareHtml(mEditor.getHtml());
+                }
+                else {
+                    Toast.makeText(this, "请输入文字", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
 
             case R.id.note_save:{
                 Log.d(TAG, "Save 正在保存");
-                if(isNew){
-                    saveNote();
+                if(!isEmpty){
+                    if(isNew){
+
+                        saveNote();
+                    }
+                    else {
+                        updateNote();
+                    }
                 }
                 else {
-                    updateNote();
+                    Toast.makeText(this, "请输入文字", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
             case R.id.note_delete:{
-                // TODO: 2017/11/18  delete
-                deleteNote();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
+                dialog.setTitle("是否删除?");
+                dialog.setMessage("删除将无法恢复，请谨慎操作！");
+                dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(!isNew){
+                            deleteNote();
+                        }
+                        else{
+                            finish();
+                        }
+                    }
+                });
+                dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.show();
             }
             default:
                 return super.onOptionsItemSelected(item);
@@ -516,7 +411,7 @@ public class NoteActivity extends AppCompatActivity {
                     DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                     Log.d(TAG, "成功上传" + putRet.key);
                     Log.d(TAG, "成功上传" + putRet.hash);
-                    String url = "http://oziec3aec.bkt.clouddn.com/" + putRet.key;
+                    String url = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
                     Log.d(TAG, "url is " + url);
                     insertEditor(url);
                 } catch (QiniuException ex) {
@@ -640,6 +535,10 @@ public class NoteActivity extends AppCompatActivity {
         OkHttpClient okHttpClient = new OkHttpClient();
         //json为String类型的json数据
         // 使用Gson生成
+        Log.d(TAG, "sendNote: " + url);
+        Log.d(TAG, "sendNote: " + createTime);
+        Log.d(TAG, "sendNote: " + share);
+        Log.d(TAG, "sendNote: " + content);
         Note note = new Note(url,createTime,share,content);
         String json = getJsonString(note);
         Log.d(TAG, "json is " + json);
@@ -667,6 +566,7 @@ public class NoteActivity extends AppCompatActivity {
                 Log.d(TAG, "sendNote: noteJson" + jsonObject.getString("note"));
                 JSONObject getNoteId = new JSONObject(jsonObject.getString("note"));
                 NoteId = getNoteId.getInt("id");
+                NOTE_ID = String.valueOf(NoteId);
                 Log.d(TAG, "sendNote: Noteid " + NoteId);
                 // 之后保存数据库
             }
@@ -697,6 +597,7 @@ public class NoteActivity extends AppCompatActivity {
         }
         else{
             isNew = false;
+            isEmpty = false;
             Log.d(TAG, "initBundle: 不是新的" );
         }
         // 不是新建日记
@@ -704,6 +605,7 @@ public class NoteActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle = getIntent().getExtras();
             noteTemp = (NoteBean)bundle.getSerializable("note");
+            NOTE_ID = String.valueOf(noteTemp.getNoteId());
             Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
             mEditor.setHtml(noteTemp.getContent());
         }
@@ -995,7 +897,7 @@ public class NoteActivity extends AppCompatActivity {
         Log.d(TAG, "userBean" + userBean.getUserId());
         // "http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() +"/notes"
         Request request = new Request.Builder()
-                .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/notes/" + noteTemp.getNoteId())
+                .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/notes/" + NOTE_ID)
                 .addHeader("Content-Type","application/json")
                 .addHeader("Authorization",userBean.getToken())
                 .put(requestBody)

@@ -26,7 +26,9 @@ import org.swsd.stardust.view.fragment.UserFragment;
  */
 public class MainActivity extends BaseActivity {
 
+    private static int FRAGMENT_HOLDER = 0;
     BottomNavigationView navigation;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -35,10 +37,12 @@ public class MainActivity extends BaseActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     replaceFragment(new HomeFragment());
+                    FRAGMENT_HOLDER = 0;
                     navigation.getBackground().setAlpha(0);
                     return true;
                 case R.id.navigation_article:
                     navigation.getBackground().setAlpha(255);
+                    FRAGMENT_HOLDER = 1;
                     replaceFragment(new ArticleFragment());
                     return true;
                 case R.id.navigation_addtion:
@@ -46,9 +50,13 @@ public class MainActivity extends BaseActivity {
                     startActivity(intent);
                     return true;
                 case R.id.navigation_metor:
+                    FRAGMENT_HOLDER = 2;
+                    navigation.getBackground().setAlpha(255);
                     replaceFragment(new MeteorFragment());
                     return true;
                 case R.id.navigation_user:
+                    FRAGMENT_HOLDER = 3;
+                    navigation.getBackground().setAlpha(255);
                     replaceFragment(new UserFragment());
                     return true;
 
@@ -104,6 +112,18 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: Main ");
-        replaceFragment(new HomeFragment());
+        // 判断恢复逻辑
+        if(FRAGMENT_HOLDER == 0){
+            navigation.setSelectedItemId(R.id.navigation_home);
+        }
+        else if (FRAGMENT_HOLDER == 1){
+            navigation.setSelectedItemId(R.id.navigation_article);
+        }
+        else if (FRAGMENT_HOLDER == 2){
+            navigation.setSelectedItemId(R.id.navigation_metor);
+        }
+        else if (FRAGMENT_HOLDER == 3){
+            navigation.setSelectedItemId(R.id.navigation_user);
+        }
     }
 }
