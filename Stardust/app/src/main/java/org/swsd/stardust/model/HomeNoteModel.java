@@ -38,10 +38,9 @@ public class HomeNoteModel implements IHomeNoteModel{
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.set(year,month,day,0,0,0);
 
+        //根据日期计算得到的long值查询数据库
         long startTime = calendar.getTimeInMillis();
         long endTime = startTime + 24 * 3600 * 1000;
-//        Log.d(TAG, "zyzhang + start: " + startTime);
-//        Log.d(TAG, "zyzhang + end: " + endTime);
 
         //查询选定天数的记录
         mNoteList = DataSupport

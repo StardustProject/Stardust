@@ -16,7 +16,7 @@ public class UserBean extends DataSupport{
 
     //服务器返回的user的ID
     private int userId;
-    private String userName;
+    private String userName ;
     private String email;
     private String tel;
     private String avatarPath;

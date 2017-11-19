@@ -11,4 +11,25 @@
     <string name="password_rule">请输入6-20个字符，支持数字、大小写字母和标点符号,不允许有空格。</string>
     <string name="note_save">保存</string>
     <string name="note_share">分享</string>
+    <string name="note_delete">删除</string>
+
+
+
+    <string-array name="month">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+
+
 </resources>

@@ -16,18 +16,13 @@ import java.util.List;
  */
 public interface IHomePresenter {
 
-    void showDate();
-    void showDate(String date);
-    void setDatePickerDialogPotision();
-    void changeDate(Context context,final HomeAdapter adapter,List<NoteBean>noteList);
-    void updateDate();
+    void changeDate(Context context,final HomeAdapter adapter,List<NoteBean>noteList,int year,int month,int day);
     void setNoteYear(int year);
     void setNoteMonth(int month);
     void setNoteDay(int day);
     void refreshAdapter(HomeAdapter adapter);
     List<NoteBean> getNoteList();
+    boolean isLeapYear(int year);
+    boolean isBigMonth(int month);
 
-    int getNoteYear();
-    int getNoteMonth();
-    int getNoteDay();
 }
