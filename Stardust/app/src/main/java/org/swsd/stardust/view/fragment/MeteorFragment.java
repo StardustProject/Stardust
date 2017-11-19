@@ -44,8 +44,8 @@ public class MeteorFragment extends Fragment {
 //        initMetor();
         //编造的当前用户，之后应传入当前登录的用户
         UserBean userBean = new UserBean();
-        userBean.setUserId(3);
-        userBean.setToken("NWEwZDMzYmIzOTJkZjUuNTA2NzQ4ODQsMTIzNDU2Nzg5LDIwMTctMTEtMjMgMTQ6NDQ6MTE=");
+        userBean.setUserId(12);
+        userBean.setToken("NWEwZWJjYzU3YjliMjguNjY4MDk0MTksYWFhYWFhLDIwMTctMTEtMjQgMTg6NDE6MDk=");
 
         meteorPresenter = new MeteorPresenter();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
