@@ -71,7 +71,7 @@ public class WebViewActivity extends AppCompatActivity {
             eventObject.put("文章ID", ARTICLE_ID);
             eventObject.put("数量", 1);
             //记录事件,以购买为例
-            ZhugeSDK.getInstance().track(getApplicationContext(), "用户事件", eventObject);
+            ZhugeSDK.getInstance().track(getApplicationContext(), "浏览文章", eventObject);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -193,7 +193,7 @@ public class NoteActivity extends AppCompatActivity {
                                 eventObject.put("用户事件", "分享");
                                 eventObject.put("数量", 1);
                                 //记录事件,以购买为例
-                                ZhugeSDK.getInstance().track(getApplicationContext(), "购买商品", eventObject);
+                                ZhugeSDK.getInstance().track(getApplicationContext(), "用户分享", eventObject);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -223,7 +223,7 @@ public class NoteActivity extends AppCompatActivity {
                             eventObject.put("用户事件", "新建记录");
                             eventObject.put("数量", 1);
                             //记录事件,以购买为例
-                            ZhugeSDK.getInstance().track(getApplicationContext(), "用户事件", eventObject);
+                            ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -887,7 +887,7 @@ public class NoteActivity extends AppCompatActivity {
                             eventObject.put("用户事件", "新建记录");
                             eventObject.put("数量", 1);
                             //记录事件,以购买为例
-                            ZhugeSDK.getInstance().track(getApplicationContext(), "用户事件", eventObject);
+                            ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
