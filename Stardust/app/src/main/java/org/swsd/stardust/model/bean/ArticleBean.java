@@ -18,6 +18,14 @@ public class ArticleBean extends DataSupport{
     private String articleUrl;
     private String articleId;
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
     public String getArticleUrl() {
         return articleUrl;
     }
@@ -42,13 +50,6 @@ public class ArticleBean extends DataSupport{
         this.id = id;
     }
 
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
 
     public String getTitle() {
         return title;
