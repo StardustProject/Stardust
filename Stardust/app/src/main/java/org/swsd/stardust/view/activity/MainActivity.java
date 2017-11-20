@@ -11,6 +11,8 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.zhuge.analysis.stat.ZhugeSDK;
+
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.view.fragment.ArticleFragment;
@@ -69,6 +71,10 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //初始化分析跟踪
+        ZhugeSDK.getInstance().openLog();
+        ZhugeSDK.getInstance().setLogLevel(Log.DEBUG);
+        ZhugeSDK.getInstance().init(getApplicationContext());
         bindLayout();
         initView();
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -125,5 +131,11 @@ public class MainActivity extends BaseActivity {
         else if (FRAGMENT_HOLDER == 3){
             navigation.setSelectedItemId(R.id.navigation_user);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZhugeSDK.getInstance().flush(getApplicationContext());
     }
 }
