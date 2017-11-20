@@ -21,6 +21,7 @@ import org.swsd.stardust.presenter.IMeteorPresenter;
 import org.swsd.stardust.presenter.MeteorPresenter;
 import org.swsd.stardust.presenter.adapter.MeteorAdapter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
@@ -51,18 +52,16 @@ public class MeteorFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         //流星更新
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("lanchtime", Context.MODE_PRIVATE);
-        long lastLanchTime = sharedPreferences.getLong("isfisttoday", 0);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("lanchTime", Context.MODE_PRIVATE);
+        int lastLanchTime = sharedPreferences.getInt("isFirstToday", -1);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        if (0 != lastLanchTime) {
-            long now = System.currentTimeMillis();
-
-            //超过时间更新
-            int day = (int) ((now - lastLanchTime)/(24*60*60*1000));
-            if (day > 0) {
+        if (-1 != lastLanchTime) {
+            Calendar calendar = Calendar.getInstance();
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            if (day != lastLanchTime) {
                 meteorList.clear();
                 meteorPresenter.updataMeteor(userBean,getActivity());
-                editor.putLong("isfisttoday", now);
+                editor.putInt("isFirstToday", day);
                 editor.commit();
             }
         }else {
@@ -70,7 +69,9 @@ public class MeteorFragment extends Fragment {
             //第一次点击更新
             meteorList.clear();
             meteorPresenter.updataMeteor(userBean, getActivity());
-            editor.putLong("isfisttoday", System.currentTimeMillis());
+            Calendar calendar = Calendar.getInstance();
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            editor.putInt("isfirsttoday", day);
             editor.commit();
             Log.d("luojingzhao","back");
         }
