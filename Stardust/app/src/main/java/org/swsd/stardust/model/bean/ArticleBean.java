@@ -11,10 +11,36 @@ import org.litepal.crud.DataSupport;
 public class ArticleBean extends DataSupport{
 
     private int id;
-    private long createTime;
+    private String createTime;
     private String title;
     private String author;
     private String content;
+    private String articleUrl;
+    private String articleId;
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getArticleUrl() {
+        return articleUrl;
+    }
+
+    public void setArticleUrl(String articleUrl) {
+        this.articleUrl = articleUrl;
+    }
+
+    public String getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(String articleId) {
+        this.articleId = articleId;
+    }
 
     public int getId() {
         return id;
@@ -24,13 +50,6 @@ public class ArticleBean extends DataSupport{
         this.id = id;
     }
 
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
 
     public String getTitle() {
         return title;
