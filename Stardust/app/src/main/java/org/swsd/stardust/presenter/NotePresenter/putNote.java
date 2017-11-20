@@ -8,10 +8,10 @@ package org.swsd.stardust.presenter.NotePresenter;
  */
 public class putNote {
     private String url;
-    private String share;
+    private boolean share;
     private String content;
 
-    public putNote(String url, String share, String content) {
+    public putNote(String url, boolean share, String content) {
         this.url = url;
         this.share = share;
         this.content = content;
@@ -25,11 +25,11 @@ public class putNote {
         this.url = url;
     }
 
-    public String getShare() {
+    public boolean getShare() {
         return share;
     }
 
-    public void setShare(String share) {
+    public void setShare(boolean share) {
         this.share = share;
     }
 

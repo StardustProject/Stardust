@@ -9,10 +9,10 @@ package org.swsd.stardust.presenter.NotePresenter;
 public class Note {
     private String url;
     private String create_time;
-    private String share;
+    private boolean share;
     private String content;
 
-    public Note(String url, String create_time, String  share, String content){
+    public Note(String url, String create_time, boolean share, String content){
         this.url = url;
         this.create_time =create_time;
         this.share = share;
@@ -34,11 +34,11 @@ public class Note {
         this.create_time = create_time;
     }
 
-    public String isShare() {
+    public boolean isShare() {
         return share;
     }
 
-    public void setShare(String share) {
+    public void setShare(boolean share) {
         this.share = share;
     }
 
