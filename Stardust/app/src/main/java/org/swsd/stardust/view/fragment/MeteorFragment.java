@@ -58,6 +58,8 @@ public class MeteorFragment extends Fragment {
         if (-1 != lastLanchTime) {
             Calendar calendar = Calendar.getInstance();
             int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            //第二天更新
             if (day != lastLanchTime) {
                 meteorList.clear();
                 meteorPresenter.updataMeteor(userBean,getActivity());
@@ -71,7 +73,7 @@ public class MeteorFragment extends Fragment {
             meteorPresenter.updataMeteor(userBean, getActivity());
             Calendar calendar = Calendar.getInstance();
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-            editor.putInt("isfirsttoday", day);
+            editor.putInt("isFirstToday", day);
             editor.commit();
             Log.d("luojingzhao","back");
         }
