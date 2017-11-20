@@ -12,6 +12,15 @@ public class Article {
     private String artilePublishTime;
     private String articleAbstract;
     private String articleUrl;
+    private String articleId;
+
+    public String getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(String articleId) {
+        this.articleId = articleId;
+    }
 
     public String getArticleTitle() {
         return articleTitle;
