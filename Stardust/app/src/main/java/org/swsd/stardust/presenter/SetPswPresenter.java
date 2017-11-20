@@ -40,15 +40,12 @@ public class SetPswPresenter {
         // 判断新密码长度是否符合
         switch (check.checkLength(newPassword)) {
             case 1:
-                correct = false;
                 Toast.makeText(context, "新密码不能为空！", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                correct = false;
                 Toast.makeText(context, "新密码长度不能小于6！", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
-                correct = false;
                 Toast.makeText(context, "新密码长度不能大于20！", Toast.LENGTH_SHORT).show();
                 break;
             case 0:
@@ -60,9 +57,7 @@ public class SetPswPresenter {
         // 如果新密码长度合法
         if (correct == true) {
             // 检查新密码是否存在非法字符
-            if (check.checkUsernameChar(newPassword)) {
-                correct = true;
-            } else {
+            if (!check.checkPasswordChar(newPassword)) {
                 correct = false;
                 Toast.makeText(context, "密码不允许出现非法字符！", Toast.LENGTH_SHORT).show();
             }
@@ -74,17 +69,13 @@ public class SetPswPresenter {
             if (newPassword.toString().equals(oldPassword.toString())) {
                 correct = false;
                 Toast.makeText(context, "新密码不能与原密码相同！", Toast.LENGTH_SHORT).show();
-            } else {
-                correct = true;
             }
         }
 
         // 如果格式检查全部通过
         if (correct == true) {
             // 判断确认密码与新密码是否相同
-            if (newPassword.toString().equals(confirmPassword.toString())) {
-                correct = true;
-            } else {
+            if (!newPassword.toString().equals(confirmPassword.toString())) {
                 correct = false;
                 Toast.makeText(context, "新密码与确认密码不一致！", Toast.LENGTH_SHORT).show();
             }
