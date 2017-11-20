@@ -57,6 +57,7 @@ public class ArticleFragment extends Fragment {
         userBean = userPresenter.toGetUserInfo();
         ArticlePresenter presenter = new ArticlePresenter();
         if (isNotFirst) {
+            Log.d(TAG, "onCreateView: hhhh");
             long now = System.currentTimeMillis();
             //超过时间更新
             int day = (int) ((now - lastLanchTime)/(24*60*60*1000));
@@ -75,11 +76,14 @@ public class ArticleFragment extends Fragment {
             editor.commit();
             Log.d(TAG,"back");
         }
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         mArticleList = presenter.getArticleList();
         adapter = new ArticleAdapter(mArticleList);
+        if(mArticleList.size() < 10){
+            Log.d(TAG, "onCreateView: 文章数小于10 重新加载");
+            presenter.getArticle(userBean,getActivity());
+        }
         for(ArticleBean article:mArticleList){
             Log.d(TAG, "Article id is " + article.getArticleId());
         }
