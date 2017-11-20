@@ -531,7 +531,7 @@ public class NoteActivity extends AppCompatActivity {
                     Date currentDate = new Date(System.currentTimeMillis());
                     String dTime = formatter.format(currentDate);
                     // 上传服务器
-                    sendNote(URL,dTime,"false",content);
+                    sendNote(URL,dTime,false,content);
                     //
                     Connector.getDatabase();
                     NoteBean note = new NoteBean();
@@ -564,7 +564,7 @@ public class NoteActivity extends AppCompatActivity {
         return URL;
     }
 
-    private void sendNote(String url,String createTime,String share, String content){
+    private void sendNote(String url,String createTime,boolean share, String content){
         //创建一个Client对象
         OkHttpClient okHttpClient = new OkHttpClient();
         //json为String类型的json数据
@@ -747,7 +747,7 @@ public class NoteActivity extends AppCompatActivity {
                     Date currentDate = new Date(System.currentTimeMillis());
                     String dTime = formatter.format(currentDate);
                     // 更新服务器
-                    updateNote(URL,dTime,"false",content);
+                    updateNote(URL,dTime,false,content);
                     //更新本地数据
                     noteTemp.setCreateTime(createTime);
                     noteTemp.setContent(htmlCode);
@@ -775,7 +775,7 @@ public class NoteActivity extends AppCompatActivity {
         return URL;
     }
 
-    private void updateNote(String url,String createTime,String share, String content){
+    private void updateNote(String url,String createTime, boolean share, String content){
         //创建一个Client对象
         OkHttpClient okHttpClient = new OkHttpClient();
         //json为String类型的json数据
@@ -891,7 +891,7 @@ public class NoteActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        sendNote(url,dTime,"true",content);
+                        sendNote(url,dTime,true,content);
                         shareNote(url,content);
                         // 新建笔记 服务器，本地
                         Connector.getDatabase();
@@ -929,7 +929,7 @@ public class NoteActivity extends AppCompatActivity {
         OkHttpClient okHttpClient = new OkHttpClient();
         //json为String类型的json数据
         // 使用Gson生成
-        putNote putNote = new putNote(url,"true",content);
+        putNote putNote = new putNote(url,true,content);
         String json = getJsonString(putNote);
         Log.d(TAG, "json is " + json);
         RequestBody requestBody = RequestBody.create(JSON,json);
