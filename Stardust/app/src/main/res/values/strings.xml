@@ -5,7 +5,7 @@
     <string name="title_note">Note</string>
     <string name="title_User">User</string>
     <string name="title_article">Article</string>
-    <string name="title_metor">Metor</string>
+    <string name="title_metor">Meteor</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="username_rule">用户名应为6-20位的字母、数字、下划线、中文组合，且以字母或中文作为第一个字符。</string>
     <string name="password_rule">密码应为6-20位的字母、数字、常见符号组合，不允许出现空格和特殊符号。</string>
