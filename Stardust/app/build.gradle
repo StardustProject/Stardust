@@ -45,6 +45,6 @@ dependencies {
     compile 'cn.carbswang.android:NumberPickerView:1.1.1'
     compile 'com.sun.mail:android-mail:1.6.0'
     compile 'com.sun.mail:android-activation:1.6.0'
-
+    compile 'com.zhuge.analysis:zhugeio:latest.integration'
     testCompile 'junit:junit:4.12'
 }
