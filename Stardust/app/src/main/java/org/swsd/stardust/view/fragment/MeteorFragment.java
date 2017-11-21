@@ -3,7 +3,6 @@ package org.swsd.stardust.view.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,11 +19,10 @@ import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.IMeteorPresenter;
 import org.swsd.stardust.presenter.MeteorPresenter;
 import org.swsd.stardust.presenter.adapter.MeteorAdapter;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 /**
  *     author : 骆景钊
@@ -67,7 +65,6 @@ public class MeteorFragment extends Fragment {
                 editor.commit();
             }
         }else {
-
             //第一次点击更新
             meteorList.clear();
             meteorPresenter.updataMeteor(userBean, getActivity());
