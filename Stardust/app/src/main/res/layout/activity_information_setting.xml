@@ -53,12 +53,14 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="center_vertical|right">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/tv_choose_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|right"
                 android:layout_gravity="center_vertical|right"
                 android:layout_marginRight="50dp"
                 android:text="选择头像"
@@ -84,26 +86,23 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical|left"
             android:text="修改用户名"
             android:textColor="@color/black"
             android:textSize="20dp" />
 
-
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical|right">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tv_setting_username"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
                 android:layout_marginRight="50dp"
-                android:background="@color/white"
-                android:gravity="center|right" />
+                android:gravity="center_vertical|right" />
 
             <ImageView
                 android:id="@+id/iv_setting_setUsername"
@@ -115,7 +114,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
@@ -123,7 +122,8 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_setPassword"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical|left"
@@ -131,19 +131,14 @@
             android:textColor="@color/black"
             android:textSize="20dp" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical|right">
+        <ImageView
+            android:id="@+id/iv_setting_setPassword"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical|right"
+            android:src="@drawable/ic_setting_goto" />
 
-            <ImageView
-                android:id="@+id/iv_setting_setPassword"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical|right"
-                android:src="@drawable/ic_setting_goto" />
-        </FrameLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

@@ -69,9 +69,10 @@ public class FeedBackActivity extends AppCompatActivity {
 
         // 设置“发送”按钮监听事件
         btnSend.setOnClickListener(new View.OnClickListener() {
+            String targetAddress="848804259@qq.com";
             @Override
             public void onClick(View v) {
-                sendEmail("848804259@qq.com");
+                sendEmail(targetAddress);
                 Toast.makeText(FeedBackActivity.this, "正在发送您的反馈，请不要进行任何操作！", Toast.LENGTH_SHORT).show();
             }
         });
@@ -84,7 +85,8 @@ public class FeedBackActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    SendEmail.send(etMessage.getText().toString(), eMailAddress);
+                    SendEmail sendEmail=new SendEmail();
+                    sendEmail.send(etMessage.getText().toString(), eMailAddress);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
