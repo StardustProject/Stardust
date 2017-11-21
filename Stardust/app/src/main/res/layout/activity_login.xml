@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <ImageView
+        android:id="@+id/iv_login_appName"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="120dp"
+        android:src="@drawable/img_app_name" />
+
+    <EditText
+        android:id="@+id/et_login_username"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/bg_edit"
+        android:hint="用户名"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:textCursorDrawable="@drawable/cursor_color" />
+
+    <EditText
+        android:id="@+id/et_login_password"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_edit"
+        android:hint="密码"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:textCursorDrawable="@drawable/cursor_color" />
+
+    <Button
+        android:id="@+id/btn_login_login"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/btn_login"
+        android:text="登录" />
+
+    <Button
+        android:id="@+id/btn_login_register"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_register"
+        android:text="注册"
+        android:textColor="@color/white" />
+
+</LinearLayout>

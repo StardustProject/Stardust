@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <ImageView
+        android:id="@+id/iv_register_appName"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="120dp"
+        android:src="@drawable/img_app_name" />
+
+    <EditText
+        android:id="@+id/et_register_username"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/bg_edit"
+        android:hint="用户名"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:textCursorDrawable="@drawable/cursor_color" />
+
+    <TextView
+        android:id="@+id/tv_register_name_rule"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="@string/username_rule"
+        android:textColor="@color/common_red"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/et_register_password"
+        android:layout_width="282dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_edit"
+        android:hint="输入密码"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:textCursorDrawable="@drawable/cursor_color" />
+
+    <TextView
+        android:id="@+id/tv_register_password_rule"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="@string/password_rule"
+        android:textColor="@color/common_red"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/et_register_confirmPassword"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_edit"
+        android:hint="确认密码"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"
+        android:textCursorDrawable="@drawable/cursor_color" />
+
+    <Button
+        android:id="@+id/btn_register_register"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="55dp"
+        android:background="@drawable/btn_login"
+        android:text="注册" />
+
+</LinearLayout>
