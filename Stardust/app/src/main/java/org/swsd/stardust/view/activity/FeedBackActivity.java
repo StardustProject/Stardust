@@ -5,12 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.zhuge.analysis.stat.ZhugeSDK;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.swsd.stardust.R;
 import org.swsd.stardust.util.SendEmail;
 
@@ -26,7 +31,8 @@ public class FeedBackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //初始化分析跟踪
+        ZhugeSDK.getInstance().init(getApplicationContext());
         setContentView(R.layout.activity_feed_back);
         Toolbar toolbar = (Toolbar) findViewById(R.id.feedback_toolbar);
         setSupportActionBar(toolbar);
@@ -69,11 +75,23 @@ public class FeedBackActivity extends AppCompatActivity {
 
         // 设置“发送”按钮监听事件
         btnSend.setOnClickListener(new View.OnClickListener() {
-            String targetAddress="848804259@qq.com";
             @Override
             public void onClick(View v) {
-                sendEmail(targetAddress);
-                Toast.makeText(FeedBackActivity.this, "正在发送您的反馈，请不要进行任何操作！", Toast.LENGTH_SHORT).show();
+                Log.d("熊立强",etMessage.getText().toString());
+                String feedBack = etMessage.getText().toString();
+                //定义与事件相关的属性信息
+                try {
+                    JSONObject eventObject = new JSONObject();
+                    eventObject.put("用户反馈", "用户反馈");
+                    eventObject.put("反馈内容", feedBack);
+                    //记录事件,以购买为例
+                    ZhugeSDK.getInstance().track(getApplicationContext(), "用户反馈", eventObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(FeedBackActivity.this, "反馈提交成功，感谢您的反馈！", Toast.LENGTH_SHORT).show();
+                Log.d("熊立强","发送成功");
+                finish();
             }
         });
     }
@@ -101,5 +119,11 @@ public class FeedBackActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZhugeSDK.getInstance().flush(getApplicationContext());
     }
 }
