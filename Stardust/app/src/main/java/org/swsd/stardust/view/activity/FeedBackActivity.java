@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +16,6 @@ import com.zhuge.analysis.stat.ZhugeSDK;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.swsd.stardust.R;
-import org.swsd.stardust.util.SendEmail;
 
 /**
  * author  ： 胡俊钦
@@ -77,48 +75,21 @@ public class FeedBackActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("熊立强",etMessage.getText().toString());
                 String feedBack = etMessage.getText().toString();
-                //定义与事件相关的属性信息
+                // 定义与事件相关的属性信息
                 try {
                     JSONObject eventObject = new JSONObject();
                     eventObject.put("用户反馈", "用户反馈");
                     eventObject.put("反馈内容", feedBack);
-                    //记录事件,以购买为例
+                    // 记录事件
                     ZhugeSDK.getInstance().track(getApplicationContext(), "用户反馈", eventObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 Toast.makeText(FeedBackActivity.this, "反馈提交成功，感谢您的反馈！", Toast.LENGTH_SHORT).show();
-                Log.d("熊立强","发送成功");
                 finish();
             }
         });
-    }
-
-    // 发送邮件
-    private void sendEmail(final String eMailAddress) {
-        // 启用一个线程 发送邮件
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    SendEmail sendEmail=new SendEmail();
-                    sendEmail.send(etMessage.getText().toString(), eMailAddress);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(FeedBackActivity.this, "我们已成功收到您的反馈，感谢您的反馈！", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    finish();
-                }
-            }
-        }).start();
     }
 
     @Override

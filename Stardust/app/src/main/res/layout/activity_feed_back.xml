@@ -39,8 +39,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="亲爱的Stardust用户，感谢您来反馈："/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="  1、您只需在下方输入您的反馈信息，然后点击右上角的发送按钮即可完成发送哦。"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="  2、在反馈的时候，请尽量写明您的手机型号和android系统版本号哟。"/>
         <EditText
             android:id="@+id/et_editFeedBack"
             android:layout_width="match_parent"
