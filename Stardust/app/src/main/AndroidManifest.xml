@@ -58,7 +58,12 @@
         </activity>
 
         <activity android:name=".view.activity.MainActivity"
-            android:theme="@style/MyTheme"/>
+            android:theme="@style/MyTheme">
+            <intent-filter>
+                <action android:name="org.swsd.stardust.ACTION_OPEN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".view.activity.NoteActivity"/>
 

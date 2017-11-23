@@ -58,40 +58,45 @@ public class SetAvatarPresenter {
 
     // 将七牛云的头像链接发给服务器
     public void resetAvatar(final Context context, final String imagePath) {
-        try {
-            userBean = DataSupport.findLast(UserBean.class);
-            // 创建OkHttpClient实例
-            OkHttpClient client = new OkHttpClient();
-            // 将用户名设为Json格式
-            String json = getJsonString(imagePath);
-            RequestBody requestBody = RequestBody.create(JSON, json);
-            // 创建Request对象
-            Request request = new Request.Builder().
-                    url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/avatar")
-                    .header("Authorization", userBean.getToken())
-                    .put(requestBody)
-                    .build();
-            // 发送请求并获取服务器返回的数据
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    userBean = DataSupport.findLast(UserBean.class);
+                    // 创建OkHttpClient实例
+                    OkHttpClient client = new OkHttpClient();
+                    // 将用户名设为Json格式
+                    String json = getJsonString(imagePath);
+                    RequestBody requestBody = RequestBody.create(JSON, json);
+                    // 创建Request对象
+                    Request request = new Request.Builder().
+                            url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/avatar")
+                            .header("Authorization", userBean.getToken())
+                            .put(requestBody)
+                            .build();
+                    // 发送请求并获取服务器返回的数据
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
 
-                }
+                        }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    responseData = response.body().string();
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        errorCode = jsonObject.getInt("error_code");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            responseData = response.body().string();
+                            try {
+                                JSONObject jsonObject = new JSONObject(responseData);
+                                errorCode = jsonObject.getInt("error_code");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        }).start();
     }
 
     // 生成Json格式的字符串

@@ -1,12 +1,16 @@
 package org.swsd.stardust.presenter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
+import org.swsd.stardust.view.activity.LoginActivity;
 
 import java.io.IOException;
 
@@ -32,65 +36,82 @@ public class RegisterPresenter {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     String responseData;
     int errorCode = 0;
+    private Context mContext;
+
+    private Handler uiHandler = new Handler(){
+        // 覆写这个方法，接收并处理消息。
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 200:
+                    Toast.makeText(mContext, "注册成功！", Toast.LENGTH_SHORT).show();
+                    Intent goToLogin = new Intent(mContext, LoginActivity.class);
+                    goToLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(goToLogin);
+                    break;
+                case 409:
+                        Toast.makeText(mContext, "此用户名已被注册！", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                        Toast.makeText(mContext, "注册失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
     // 注册前的检查
-    public int checkBeforeRegister(Context context, Editable username, Editable password, Editable confirm) {
+    public void checkBeforeRegister(Context context, Editable username, Editable password, Editable confirm) {
         CommonFunctions fCheck = new CommonFunctions();
         if (fCheck.check(context, username, password)) {
             mStrUsername = username.toString();
             mStrPassword = password.toString();
-
+            mContext=context;
             // 判断确认密码和输入密码是否一致
             if (confirm.toString().equals(mStrPassword)) {
                 // 上传用户名和密码到服务器
                 sendRequestWithOkHttp(mStrUsername, mStrPassword);
-                while (errorCode == 0) {
-
-                }
-                if (errorCode == 200) {
-                    Toast.makeText(context, "注册成功！", Toast.LENGTH_SHORT).show();
-                    return 1;
-                } else if (errorCode == 409) {
-                    Toast.makeText(context, "此用户名已被注册！", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "注册失败，请稍后重试！", Toast.LENGTH_SHORT).show();
-                }
             } else {
-                return 2;
+                Toast.makeText(mContext, "确认密码与输入密码不一致！", Toast.LENGTH_SHORT).show();
             }
         }
-        return 0;
     }
 
     // 向服务器发送请求
     public void sendRequestWithOkHttp(final String username, final String password) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // 创建OkHttpClient实例
+                    OkHttpClient client = new OkHttpClient();
+                    String json = getJsonString(username, password);
+                    RequestBody requestBody = RequestBody.create(JSON, json);
+                    // 创建Request对象
+                    Request request = new Request.Builder()
+                            .url("http://119.29.179.150:81/api/user/registration")
+                            .post(requestBody)
+                            .build();
+                    // 发送请求并获取服务器返回的数据
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
 
-        try {
-            // 创建OkHttpClient实例
-            OkHttpClient client = new OkHttpClient();
-            String json = getJsonString(username, password);
-            RequestBody requestBody = RequestBody.create(JSON, json);
-            // 创建Request对象
-            Request request = new Request.Builder()
-                    .url("http://119.29.179.150:81/api/user/registration")
-                    .post(requestBody)
-                    .build();
-            // 发送请求并获取服务器返回的数据
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
+                        }
 
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            responseData = response.body().string();
+                            parseJson(responseData);
+                            Message msg = new Message();
+                            msg.what = errorCode;
+                            uiHandler.sendMessage(msg);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    responseData = response.body().string();
-                    parseJson(responseData);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        }).start();
     }
 
     // 将用户名密码设为json格式
