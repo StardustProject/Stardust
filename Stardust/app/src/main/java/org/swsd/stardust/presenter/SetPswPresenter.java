@@ -46,6 +46,9 @@ public class SetPswPresenter {
                 case 403:
                     Toast.makeText(mContext, "您输入的旧密码不正确！", Toast.LENGTH_SHORT).show();
                     break;
+                case 401:
+                    Toast.makeText(mContext, "修改密码失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                    break;
                 default:
                     Toast.makeText(mContext, "修改密码失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                     break;

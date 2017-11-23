@@ -52,6 +52,8 @@ public class RegisterPresenter {
                 case 409:
                         Toast.makeText(mContext, "此用户名已被注册！", Toast.LENGTH_SHORT).show();
                     break;
+                case 403:
+                    Toast.makeText(mContext, "注册失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                 default:
                         Toast.makeText(mContext, "注册失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                     break;

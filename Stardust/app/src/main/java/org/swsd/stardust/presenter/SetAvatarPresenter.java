@@ -1,6 +1,8 @@
 package org.swsd.stardust.presenter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -29,10 +31,35 @@ public class SetAvatarPresenter {
     UserBean userBean = new UserBean();
     String responseData;
     int errorCode = 0;
+    UploadToQiNiu upload = new UploadToQiNiu();
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private Context mContext;
+
+    private Handler uiHandler = new Handler() {
+        // 覆写这个方法，接收并处理消息。
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 200:
+                    Toast.makeText(mContext, "更换头像成功！", Toast.LENGTH_SHORT).show();
+                    userBean.setAvatarPath(upload.url);
+                    userBean.updateAll();
+                    break;
+                case 403:
+                    Toast.makeText(mContext, "头像路径太长，请换一张图片！", Toast.LENGTH_SHORT).show();
+                    break;
+                case 401:
+                    Toast.makeText(mContext, "修改用户名失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(mContext, "修改用户名失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
     public void afterChangeAvatar(Context context, String imagePath) {
-        UploadToQiNiu upload = new UploadToQiNiu();
+        mContext=context;
         upload.uploadQiNiu(imagePath);
         while (!upload.uploadFinished) {
 
@@ -40,24 +67,12 @@ public class SetAvatarPresenter {
         if (upload.url == null) {
             Toast.makeText(context, "上传头像失败，请稍后再试！", Toast.LENGTH_SHORT).show();
         } else {
-            resetAvatar(context, upload.url);
-            while (errorCode == 0) {
-
-            }
-            if (errorCode == 200) {
-                Toast.makeText(context, "更换头像成功！", Toast.LENGTH_SHORT).show();
-                userBean.setAvatarPath(upload.url);
-                userBean.updateAll();
-            } else if (errorCode == 403) {
-                Toast.makeText(context, "头像路径太长，请换一张图片！", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context, "更换头像失败，请稍后再试！", Toast.LENGTH_SHORT).show();
-            }
+            resetAvatar(upload.url);
         }
     }
 
     // 将七牛云的头像链接发给服务器
-    public void resetAvatar(final Context context, final String imagePath) {
+    public void resetAvatar(final String imagePath) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -87,6 +102,9 @@ public class SetAvatarPresenter {
                             try {
                                 JSONObject jsonObject = new JSONObject(responseData);
                                 errorCode = jsonObject.getInt("error_code");
+                                Message msg = new Message();
+                                msg.what = errorCode;
+                                uiHandler.sendMessage(msg);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

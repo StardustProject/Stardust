@@ -57,8 +57,13 @@ public class LoginPresenter{
                     goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(goToMain);
                     break;
-                default:
+                case 403:
+                    Toast.makeText(mContext, "用户名不存在！", Toast.LENGTH_SHORT).show();
+                case 401:
                     Toast.makeText(mContext, "用户名或密码错误！", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(mContext, "登录失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -107,6 +112,9 @@ public class LoginPresenter{
                             responseData = response.body().string();
                             // 解析返回的Json
                             parseJson(responseData);
+                            Message msg = new Message();
+                            msg.what = errorCode;
+                            uiHandler.sendMessage(msg);
                         }
                     });
                 } catch (Exception e) {
@@ -209,9 +217,6 @@ public class LoginPresenter{
                         userBean.setAvatarPath(avatarPath);
                         userBean.updateAll();
                     }
-                    Message msg = new Message();
-                    msg.what = errorCode;
-                    uiHandler.sendMessage(msg);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

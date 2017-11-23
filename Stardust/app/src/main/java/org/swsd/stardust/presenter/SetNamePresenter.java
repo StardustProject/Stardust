@@ -54,8 +54,11 @@ public class SetNamePresenter {
                 case 401:
                     Toast.makeText(mContext, "修改用户名失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                     break;
-                default:
+                case 403:
                     Toast.makeText(mContext, "用户名格式不正确！", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(mContext, "修改用户名失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
