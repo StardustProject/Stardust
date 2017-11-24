@@ -1,7 +1,6 @@
 package org.swsd.stardust.view.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -102,25 +101,11 @@ public class RegisterActivity extends BaseActivity {
                 } else {
                     // 若网络可用，则检查用户名密码长度及格式
                     RegisterPresenter register = new RegisterPresenter();
-                    switch (register.checkBeforeRegister(getApplicationContext(), etUsername.getText(),
-                            etPassword.getText(), etConfirmPassword.getText())) {
-                        case 1:
-                            // 注册成功则跳转到登录页面
-                            Intent goToRegister = new Intent(RegisterActivity.this, LoginActivity.class);
-                            startActivity(goToRegister);
-                            finish();
-                            break;
-                        case 2:
-                            Toast.makeText(RegisterActivity.this, "确认密码与输入密码不一致！", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 0:
-                            break;
-                        default:
-
-                    }
-
+                    register.checkBeforeRegister(getApplicationContext(), etUsername.getText(),
+                            etPassword.getText(), etConfirmPassword.getText());
                 }
             }
         });
+
     }
 }

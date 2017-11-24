@@ -72,12 +72,7 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     // 若网络可用,进行格式检查
                     LoginPresenter login = new LoginPresenter();
-                    if (login.checkBeforeLogin(getApplicationContext(), etUsername.getText(), etPassword.getText())) {
-                        // 若匹配，则跳转到主页面
-                        Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(goToMain);
-                        finish();
-                    }
+                    login.checkBeforeLogin(getApplicationContext(), etUsername.getText(), etPassword.getText());
                 }
             }
         });
@@ -99,5 +94,4 @@ public class LoginActivity extends BaseActivity {
     protected void $log(String msg) {
         super.$log(msg);
     }
-
 }
