@@ -107,9 +107,32 @@ public class InfoSettingActivity extends BaseActivity {
             }
         });
 
-        // 设置“修改密码”图标监听事件
+        // 设置“修改用户名”框监听事件
+        TextView tvSetUsername = (TextView) findViewById(R.id.tv_setting_username);
+        tvSetUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 点击图标后转去设置用户名
+                Intent goToSetName = new Intent(InfoSettingActivity.this, SetUsernameActivity.class);
+                startActivity(goToSetName);
+            }
+        });
+
+      /*  // 设置“修改密码”图标监听事件
         ImageView ivSetPassword = (ImageView) findViewById(R.id.iv_setting_setPassword);
         ivSetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 点击图标后转去设置密码
+                Intent goToSetPassword = new Intent(InfoSettingActivity.this, setPasswordActivity.class);
+                startActivity(goToSetPassword);
+
+            }
+        });*/
+
+        // 设置“修改密码”框监听事件
+        TextView tvSetPassword = (TextView) findViewById(R.id.tv_setPassword);
+        tvSetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 点击图标后转去设置密码
@@ -122,6 +145,23 @@ public class InfoSettingActivity extends BaseActivity {
         // 选择头像
         ImageView ivChoosePhoto = (ImageView) findViewById(R.id.iv_setting_change_photo);
         ivChoosePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //查看权限
+                if (ContextCompat.checkSelfPermission(InfoSettingActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(InfoSettingActivity.this, new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    openAlbum();
+                }
+            }
+        });
+
+        // 选择头像
+        TextView tvChoosePhoto = (TextView) findViewById(R.id.tv_choose_photo);
+        tvChoosePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //查看权限

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.swsd.stardust.R;
+import org.swsd.stardust.model.bean.ArticleBean;
 import org.swsd.stardust.view.activity.WebViewActivity;
 
 import java.util.List;
@@ -26,10 +27,10 @@ import java.util.List;
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder>{
     private static final String TAG ="熊立强";
     private Context mContext;
-    private List<Article> mArticleList;
+    private List<ArticleBean> mArticleList;
 
     // 适配器的构造函数
-    public ArticleAdapter(List<Article> articleList){
+    public ArticleAdapter(List<ArticleBean> articleList){
         mArticleList = articleList;
     }
 
@@ -66,7 +67,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 int position = viewHolder.getAdapterPosition();
-                Article article = mArticleList.get(position);
+                ArticleBean article = mArticleList.get(position);
                 Log.d(TAG, "url is " + article.getArticleUrl());
                 Intent intent = new Intent(mContext, WebViewActivity.class);
                 Bundle bundle = new Bundle();
@@ -82,11 +83,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Article article = mArticleList.get(position);
-        holder.tvArticleTitle.setText(article.getArticleTitle());
-        holder.tvArticleAuthor.setText(article.getArticleAuthor());
-        holder.tvArticlePublishTime.setText(article.getArtilePublishTime());
-        holder.tvArticleAbstract.setText(article.getArticleAbstract());
+        ArticleBean article = mArticleList.get(position);
+        holder.tvArticleTitle.setText(article.getTitle());
+        holder.tvArticleAuthor.setText(article.getAuthor());
+        holder.tvArticlePublishTime.setText(article.getCreateTime());
+        holder.tvArticleAbstract.setText(article.getContent());
     }
 
     @Override
