@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
@@ -77,8 +75,6 @@ public class MeteorDetail extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d("luojingzhao",responseData);
-//                String str = "<img src=\"http://ozcxh8wzm.bkt.clouddn.com/FkDqZ4HMKkQD0YxR2Zbo9jTkyvOv\" alt=\"dachshund\">";
                 meteorDetail.loadDataWithBaseURL(null,responseData,"text/html", "utf-8",null);
                 meteorDetail.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             }
