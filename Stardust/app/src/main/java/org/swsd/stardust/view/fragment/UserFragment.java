@@ -28,7 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class UserFragment extends Fragment {
     // 将毫秒化为天数时需要除以的数
-    static Long DIVISOR = 8640000000L;
+    static Long DIVISOR = 86400000L;
 
     @Nullable
     @Override

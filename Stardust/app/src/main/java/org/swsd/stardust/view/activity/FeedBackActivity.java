@@ -11,8 +11,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.zhuge.analysis.stat.ZhugeSDK;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.swsd.stardust.R;
-import org.swsd.stardust.util.SendEmail;
 
 /**
  * author  ： 胡俊钦
@@ -26,7 +29,8 @@ public class FeedBackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //初始化分析跟踪
+        ZhugeSDK.getInstance().init(getApplicationContext());
         setContentView(R.layout.activity_feed_back);
         Toolbar toolbar = (Toolbar) findViewById(R.id.feedback_toolbar);
         setSupportActionBar(toolbar);
@@ -71,33 +75,26 @@ public class FeedBackActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendEmail("848804259@qq.com");
-                Toast.makeText(FeedBackActivity.this, "正在发送您的反馈，请不要进行任何操作！", Toast.LENGTH_SHORT).show();
+                String feedBack = etMessage.getText().toString();
+                // 定义与事件相关的属性信息
+                try {
+                    JSONObject eventObject = new JSONObject();
+                    eventObject.put("用户反馈", "用户反馈");
+                    eventObject.put("反馈内容", feedBack);
+                    // 记录事件
+                    ZhugeSDK.getInstance().track(getApplicationContext(), "用户反馈", eventObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(FeedBackActivity.this, "反馈提交成功，感谢您的反馈！", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
 
-    // 发送邮件
-    private void sendEmail(final String eMailAddress) {
-        // 启用一个线程 发送邮件
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    SendEmail.send(etMessage.getText().toString(), eMailAddress);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(FeedBackActivity.this, "我们已成功收到您的反馈，感谢您的反馈！", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    finish();
-                }
-            }
-        }).start();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZhugeSDK.getInstance().flush(getApplicationContext());
     }
 }

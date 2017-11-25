@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.UserBean;
@@ -78,10 +77,8 @@ public class SetUsernameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SetNamePresenter namePresenter = new SetNamePresenter();
-                if (namePresenter.checkBeforeSetName(getApplicationContext(), etSetName.getText())) {
-                    Toast.makeText(SetUsernameActivity.this, "修改用户名成功", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                namePresenter.checkBeforeSetName(getApplicationContext(), etSetName.getText());
+                finish();
             }
         });
     }

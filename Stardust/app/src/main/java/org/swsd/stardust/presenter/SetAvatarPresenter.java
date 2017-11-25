@@ -1,6 +1,8 @@
 package org.swsd.stardust.presenter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -29,69 +31,97 @@ public class SetAvatarPresenter {
     UserBean userBean = new UserBean();
     String responseData;
     int errorCode = 0;
+    UploadToQiNiu upload = new UploadToQiNiu();
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private Context mContext;
 
-    public void afterChangeAvatar(Context context, String imagePath) {
-        UploadToQiNiu upload = new UploadToQiNiu();
+    private Handler uiHandler = new Handler() {
+        // 覆写这个方法，接收并处理消息。
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 200:
+                    Toast.makeText(mContext, "更换头像成功！", Toast.LENGTH_SHORT).show();
+                    userBean.setAvatarPath(upload.url);
+                    userBean.updateAll();
+                    break;
+                case 403:
+                    Toast.makeText(mContext, "头像路径太长，请换一张图片！", Toast.LENGTH_SHORT).show();
+                    break;
+                case 401:
+                    Toast.makeText(mContext, "修改用户名失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(mContext, "修改用户名失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    public void afterChangeAvatar(final Context context, String imagePath) {
+        mContext = context;
         upload.uploadQiNiu(imagePath);
-        while (!upload.uploadFinished) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (upload.url == null) {
 
-        }
-        if (upload.url == null) {
-            Toast.makeText(context, "上传头像失败，请稍后再试！", Toast.LENGTH_SHORT).show();
-        } else {
-            resetAvatar(context, upload.url);
-            while (errorCode == 0) {
+                }
+                if (upload.url == null) {
+                    Toast.makeText(context, "上传头像失败，请稍后再试！", Toast.LENGTH_SHORT).show();
+                } else {
+                    resetAvatar(upload.url);
+                }
+            }
+        }).start();
 
-            }
-            if (errorCode == 200) {
-                Toast.makeText(context, "更换头像成功！", Toast.LENGTH_SHORT).show();
-                userBean.setAvatarPath(upload.url);
-                userBean.updateAll();
-            } else if (errorCode == 403) {
-                Toast.makeText(context, "头像路径太长，请换一张图片！", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context, "更换头像失败，请稍后再试！", Toast.LENGTH_SHORT).show();
-            }
-        }
+
     }
 
     // 将七牛云的头像链接发给服务器
-    public void resetAvatar(final Context context, final String imagePath) {
-        try {
-            userBean = DataSupport.findLast(UserBean.class);
-            // 创建OkHttpClient实例
-            OkHttpClient client = new OkHttpClient();
-            // 将用户名设为Json格式
-            String json = getJsonString(imagePath);
-            RequestBody requestBody = RequestBody.create(JSON, json);
-            // 创建Request对象
-            Request request = new Request.Builder().
-                    url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/avatar")
-                    .header("Authorization", userBean.getToken())
-                    .put(requestBody)
-                    .build();
-            // 发送请求并获取服务器返回的数据
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
+    private void resetAvatar(final String imagePath) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    userBean = DataSupport.findLast(UserBean.class);
+                    // 创建OkHttpClient实例
+                    OkHttpClient client = new OkHttpClient();
+                    // 将用户名设为Json格式
+                    String json = getJsonString(imagePath);
+                    RequestBody requestBody = RequestBody.create(JSON, json);
+                    // 创建Request对象
+                    Request request = new Request.Builder().
+                            url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/avatar")
+                            .header("Authorization", userBean.getToken())
+                            .put(requestBody)
+                            .build();
+                    // 发送请求并获取服务器返回的数据
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
 
-                }
+                        }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    responseData = response.body().string();
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        errorCode = jsonObject.getInt("error_code");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            responseData = response.body().string();
+                            try {
+                                JSONObject jsonObject = new JSONObject(responseData);
+                                errorCode = jsonObject.getInt("error_code");
+                                Message msg = new Message();
+                                msg.what = errorCode;
+                                uiHandler.sendMessage(msg);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        }).start();
     }
 
     // 生成Json格式的字符串

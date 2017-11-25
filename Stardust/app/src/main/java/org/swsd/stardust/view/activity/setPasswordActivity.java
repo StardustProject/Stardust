@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.UserBean;
@@ -56,7 +55,6 @@ public class setPasswordActivity extends AppCompatActivity {
                 // 编辑框内容改变时，设置“完成”按钮可按
                 btnFinish.setEnabled(true);
                 btnFinish.setBackgroundColor(getResources().getColor(R.color.green));
-
             }
 
             @Override
@@ -79,11 +77,9 @@ public class setPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SetPswPresenter namePresenter = new SetPswPresenter();
-                if (namePresenter.checkBeforeSetPsw(getApplicationContext(),
-                        etOldPassword.getText(), etNewPassword.getText(), etConfirmPassword.getText())) {
-                    Toast.makeText(setPasswordActivity.this, "修改密码成功", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                namePresenter.checkBeforeSetPsw(getApplicationContext(),
+                        etOldPassword.getText(), etNewPassword.getText(), etConfirmPassword.getText());
+                finish();
             }
         });
     }
