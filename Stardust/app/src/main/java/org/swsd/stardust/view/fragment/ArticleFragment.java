@@ -2,6 +2,7 @@ package org.swsd.stardust.view.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.ArticleBean;
@@ -43,6 +45,18 @@ public class ArticleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_article,container,false);
+
+        // 获取顶部状态栏的高度
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen","android");
+        int stateBarHeight = resources.getDimensionPixelSize(resourceId);
+
+        // 用空的TextView预留顶部状态栏高度
+        TextView tvStateBar = view.findViewById(R.id.article_stateBar);
+        android.view.ViewGroup.LayoutParams setHeight =tvStateBar.getLayoutParams();
+        setHeight.height =stateBarHeight;
+        tvStateBar.setLayoutParams(setHeight);
+
         recyclerView = (RecyclerView) view.findViewById(R.id.article_recycler_view);
 
         //流星更新

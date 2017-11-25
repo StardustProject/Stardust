@@ -1,10 +1,10 @@
 package org.swsd.stardust.view.activity;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -35,6 +35,18 @@ public class MeteorDetail extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meteor_detail);
+
+        // 获取顶部状态栏的高度
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int stateBarHeight = resources.getDimensionPixelSize(resourceId);
+
+        // 用空的TextView预留顶部状态栏高度
+        TextView tvStateBar = (TextView) findViewById(R.id.tv_meteor_detail_stateBar);
+        android.view.ViewGroup.LayoutParams setHeight = tvStateBar.getLayoutParams();
+        setHeight.height = stateBarHeight;
+        tvStateBar.setLayoutParams(setHeight);
+
         meteorDetail = (WebView) findViewById(R.id.wv_MeteorDetail_Message);
         Bundle bundle = new Bundle();
         bundle = getIntent().getExtras();
