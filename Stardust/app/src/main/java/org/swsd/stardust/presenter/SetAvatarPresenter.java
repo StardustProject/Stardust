@@ -39,7 +39,7 @@ public class SetAvatarPresenter {
         // 覆写这个方法，接收并处理消息。
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 200:
                     Toast.makeText(mContext, "更换头像成功！", Toast.LENGTH_SHORT).show();
                     userBean.setAvatarPath(upload.url);
@@ -58,21 +58,28 @@ public class SetAvatarPresenter {
         }
     };
 
-    public void afterChangeAvatar(Context context, String imagePath) {
-        mContext=context;
+    public void afterChangeAvatar(final Context context, String imagePath) {
+        mContext = context;
         upload.uploadQiNiu(imagePath);
-        while (!upload.uploadFinished) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (upload.url == null) {
 
-        }
-        if (upload.url == null) {
-            Toast.makeText(context, "上传头像失败，请稍后再试！", Toast.LENGTH_SHORT).show();
-        } else {
-            resetAvatar(upload.url);
-        }
+                }
+                if (upload.url == null) {
+                    Toast.makeText(context, "上传头像失败，请稍后再试！", Toast.LENGTH_SHORT).show();
+                } else {
+                    resetAvatar(upload.url);
+                }
+            }
+        }).start();
+
+
     }
 
     // 将七牛云的头像链接发给服务器
-    public void resetAvatar(final String imagePath) {
+    private void resetAvatar(final String imagePath) {
         new Thread(new Runnable() {
             @Override
             public void run() {
