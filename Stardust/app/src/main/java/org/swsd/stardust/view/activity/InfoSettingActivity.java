@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -85,6 +86,17 @@ public class InfoSettingActivity extends BaseActivity {
         initView();
         // 绑定并加载登录界面布局
         bindLayout();
+
+        // 获取顶部状态栏的高度
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int stateBarHeight = resources.getDimensionPixelSize(resourceId);
+
+        // 用空的TextView预留顶部状态栏高度
+        TextView tvStateBar = (TextView) findViewById(R.id.tv_setting_stateBar);
+        android.view.ViewGroup.LayoutParams setHeight = tvStateBar.getLayoutParams();
+        setHeight.height = stateBarHeight;
+        tvStateBar.setLayoutParams(setHeight);
 
         // 设置“返回”图标监听事件
         ImageView ivGoBack = (ImageView) findViewById(R.id.iv_go_back);

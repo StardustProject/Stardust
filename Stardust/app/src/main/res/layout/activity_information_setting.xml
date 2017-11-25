@@ -7,10 +7,11 @@
     android:background="@color/whiteSmoke"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_setting_stateBar"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@color/black"></LinearLayout>
+        android:layout_height="wrap_content"
+        android:background="@color/black"/>
 
     <FrameLayout
         android:layout_width="match_parent"

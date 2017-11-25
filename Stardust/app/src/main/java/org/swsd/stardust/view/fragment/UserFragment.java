@@ -1,6 +1,7 @@
 package org.swsd.stardust.view.fragment;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,17 @@ public class UserFragment extends Fragment {
 
         // 加载动态布局
         View view = inflater.inflate(R.layout.fragment_user, null);
+
+        // 获取顶部状态栏的高度
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int stateBarHeight = resources.getDimensionPixelSize(resourceId);
+
+        // 用空的TextView预留顶部状态栏高度
+        TextView tvStateBar = view.findViewById(R.id.tv_my_stateBar);
+        android.view.ViewGroup.LayoutParams setHeight = tvStateBar.getLayoutParams();
+        setHeight.height = stateBarHeight;
+        tvStateBar.setLayoutParams(setHeight);
 
         // 设置“齿轮”图标监听事件
         ImageView ivSetting = view.findViewById(R.id.iv_my_setting);
