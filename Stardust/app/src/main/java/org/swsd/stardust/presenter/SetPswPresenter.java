@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
+import org.swsd.stardust.util.UpdateTokenUtil;
 
 import java.io.IOException;
 
@@ -114,6 +115,7 @@ public class SetPswPresenter {
             public void run() {
                 try {
                     userBean = DataSupport.findLast(UserBean.class);
+                    UpdateTokenUtil.updateUserToken(userBean);
                     // 创建OkHttpClient实例
                     OkHttpClient client = new OkHttpClient();
                     // 将密码设为Json格式

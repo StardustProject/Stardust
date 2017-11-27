@@ -65,8 +65,13 @@ public class setPasswordActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // 编辑框内容改变时，设置“完成”按钮可按
-                btnFinish.setEnabled(true);
-                btnFinish.setBackgroundColor(getResources().getColor(R.color.green));
+                if(s.length()>0){
+                    btnFinish.setEnabled(true);
+                    btnFinish.setBackgroundColor(getResources().getColor(R.color.green));
+                }else{
+                    btnFinish.setEnabled(false);
+                    btnFinish.setBackgroundColor(getResources().getColor(R.color.gray));
+                }
             }
 
             @Override

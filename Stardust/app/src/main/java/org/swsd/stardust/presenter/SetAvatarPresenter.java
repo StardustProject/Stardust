@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.UserBean;
+import org.swsd.stardust.util.UpdateTokenUtil;
 import org.swsd.stardust.util.UploadToQiNiu;
 
 import java.io.IOException;
@@ -85,6 +86,7 @@ public class SetAvatarPresenter {
             public void run() {
                 try {
                     userBean = DataSupport.findLast(UserBean.class);
+                    UpdateTokenUtil.updateUserToken(userBean);
                     // 创建OkHttpClient实例
                     OkHttpClient client = new OkHttpClient();
                     // 将用户名设为Json格式
