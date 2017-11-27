@@ -35,7 +35,7 @@ public class SetPswPresenter {
     private Context mContext;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private Handler uiHandler = new Handler() {
+    public Handler uiHandler = new Handler() {
         // 覆写这个方法，接收并处理消息。
         @Override
         public void handleMessage(Message msg) {
