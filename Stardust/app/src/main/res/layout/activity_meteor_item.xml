@@ -35,7 +35,7 @@
             android:orientation="vertical">
                 <ImageView
                     android:id="@+id/iv_Meteor_picture"
-                    android:layout_width="50dp"
+                    android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_gravity="center_horizontal" />
 
