@@ -89,8 +89,6 @@ public class MeteorDetail extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d("luojingzhao",responseData);
-//                String str = "<img src=\"http://ozcxh8wzm.bkt.clouddn.com/FkDqZ4HMKkQD0YxR2Zbo9jTkyvOv\" alt=\"dachshund\">";
                 meteorDetail.loadDataWithBaseURL(null,responseData,"text/html", "utf-8",null);
                 meteorDetail.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             }
@@ -104,7 +102,8 @@ public class MeteorDetail extends BaseActivity {
 
     @Override
     public void initView() {
-
+        // 沉浸式顶部栏，继承基类的方法
+        steepStatusBar();
     }
 
     @Override
