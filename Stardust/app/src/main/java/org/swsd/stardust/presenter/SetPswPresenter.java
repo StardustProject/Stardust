@@ -125,6 +125,9 @@ public class SetPswPresenter {
                 try {
                     userBean = DataSupport.findLast(UserBean.class);
                     UpdateTokenUtil.updateUserToken(userBean);
+                    while(!UpdateTokenUtil.refreshOk&&UpdateTokenUtil.isUpdate){
+
+                    }
                     // 创建OkHttpClient实例
                     OkHttpClient client = new OkHttpClient();
                     // 将密码设为Json格式

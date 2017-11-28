@@ -108,6 +108,9 @@ public class SetNamePresenter {
                try {
                    userBean = DataSupport.findLast(UserBean.class);
                    UpdateTokenUtil.updateUserToken(userBean);
+                   while(!UpdateTokenUtil.refreshOk&&UpdateTokenUtil.isUpdate){
+
+                   }
                    // 创建OkHttpClient实例
                    OkHttpClient client = new OkHttpClient();
                    // 将用户名设为Json格式

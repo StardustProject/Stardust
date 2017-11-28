@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -166,9 +167,9 @@ public class LoginPresenter{
                 expireTime = innerObject.getString("expire_time");
                 userBean.setTokenTime(expireTime);
 
-              /*  // 用户刷新token
+                // 用户刷新token
                 refreshToken = innerObject.getString("refresh_token");
-                userBean.setRefreshToken(refreshToken);*/
+                userBean.setRefreshToken(refreshToken);
 
                 // 注册时间
                 registerTime = innerObject.getString("create_time");
@@ -200,6 +201,9 @@ public class LoginPresenter{
             public void run() {
                 try {
                     UpdateTokenUtil.updateUserToken(userBean);
+                    while(!UpdateTokenUtil.refreshOk&&UpdateTokenUtil.isUpdate){
+
+                    }
                     // 创建OkHttpClient实例
                     OkHttpClient client = new OkHttpClient();
                     // 创建Request对象
@@ -211,6 +215,7 @@ public class LoginPresenter{
                     errorCode = 0;
                     Response response = client.newCall(request).execute();
                     responseData = response.body().string();
+                    Log.d("luojingzhao", responseData);
                     // 解析错误代码
                     JSONObject jsonObject = new JSONObject(responseData);
                     errorCode = jsonObject.getInt("error_code");
