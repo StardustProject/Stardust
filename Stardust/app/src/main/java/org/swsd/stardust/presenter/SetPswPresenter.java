@@ -88,6 +88,15 @@ public class SetPswPresenter {
             }
         }
 
+        // 如果上诉检查通过，检查旧密码是否为空
+        if (correct == true) {
+            // 判断旧密码是否为空
+            if (oldPassword.toString().length()==0) {
+                correct = false;
+                Toast.makeText(context, "旧密码不能为空，请输入旧密码！", Toast.LENGTH_SHORT).show();
+            }
+        }
+
         // 如果上诉检查通过，检查新密码与旧密码是否相同
         if (correct == true) {
             // 判断旧密码与新密码是否相同
