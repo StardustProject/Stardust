@@ -85,13 +85,19 @@ public class UserFragment extends Fragment {
 
         // 显示用户头像
         CircleImageView civMyPhoto = view.findViewById(R.id.ic_my_user);
-        if (userBean.getAvatarPath().equals("")) {
-            // 如果头像路径为空，则使用默认头像
-            Glide.with(this).load(R.drawable.ic_user)
-                    .into(civMyPhoto);
-        } else {
+        if(userBean.getAvatarPath()==null){
+            // 防止token过期获取不到头像而导致程序崩溃
             Glide.with(this).load(userBean.getAvatarPath())
                     .into(civMyPhoto);
+        }else{
+            if (userBean.getAvatarPath().equals("")) {
+                // 如果头像路径为空，则使用默认头像
+                Glide.with(this).load(R.drawable.ic_user)
+                        .into(civMyPhoto);
+            } else {
+                Glide.with(this).load(userBean.getAvatarPath())
+                        .into(civMyPhoto);
+            }
         }
 
         // 显示用户名

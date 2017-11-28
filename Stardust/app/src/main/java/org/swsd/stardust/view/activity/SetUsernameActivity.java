@@ -74,9 +74,8 @@ public class SetUsernameActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // 编辑框内容改变时，设置“保存”按钮可按
-                btnSave.setEnabled(true);
-                btnSave.setBackgroundColor(getResources().getColor(R.color.green));
-
+                    btnSave.setEnabled(true);
+                    btnSave.setBackgroundColor(getResources().getColor(R.color.green));
             }
 
             @Override
