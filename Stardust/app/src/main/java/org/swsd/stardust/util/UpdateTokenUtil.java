@@ -46,11 +46,12 @@ public class UpdateTokenUtil {
                         OkHttpClient client = new OkHttpClient();
                         String json = getJsonSrting(userBean);
                         Log.d("luojingzhao",json);
+                        Log.d("luojingzhao",userBean.getRefreshToken());
                         RequestBody body = RequestBody.create(JSON, json);
                         Request request = new Request.Builder()
-                                .url("http://119.29.179.150:81/api/user/"+userBean.getUserId() +"/access_token")
+                                .url("http://119.29.179.150:81/api/users/"+ userBean.getUserId() + "/access_token")
                                 .addHeader("Content-Type","application/json")
-                                .addHeader("Authorization",userBean.getToken())
+                                .addHeader("Authorization",userBean.getRefreshToken())
                                 .put(body)
                                 .build();
                         Response response = client.newCall(request).execute();
@@ -79,7 +80,7 @@ public class UpdateTokenUtil {
                     Log.d("luojingzhao", json);
                     RequestBody body = RequestBody.create(JSON, json);
                     Request request = new Request.Builder()
-                            .url("http://119.29.179.150:81/api/user/"+userBean.getUserId()+"/qiniu_token")
+                            .url("http://119.29.179.150:81/api/users/"+ userBean.getUserId() + "/qiniu_token")
                             .addHeader("Authorization", userBean.getToken())
                             .build();
                     Response response = client.newCall(request).execute();
@@ -101,11 +102,13 @@ public class UpdateTokenUtil {
             //检验是否成功
             if(ErrorCodeJudgment.errorCodeJudge(responseData) == "Ok"){
                 String user_id = jsonObject.getString("user_id");
+                String access_token = jsonObject.getString("access_token");
                 String refresh_token = jsonObject.getString("refresh_token");
                 String expire_time = jsonObject.getString("expire_time");
                 UserBean userBean = new UserBean();
                 userBean.setId(Integer.parseInt(user_id));
-                userBean.setToken(refresh_token);
+                userBean.setToken(access_token);
+                userBean.setRefreshToken(refresh_token);
                 userBean.setTokenTime(expire_time);
                 userBean.updateAll("id = ?", user_id);
             }
@@ -123,11 +126,11 @@ public class UpdateTokenUtil {
             //检验是否成功
             if(ErrorCodeJudgment.errorCodeJudge(responseData) == "Ok"){
                 String user_id = jsonObject.getString("user_id");
-                String refresh_token = jsonObject.getString("qiniu_token");
+                String qiniu_token = jsonObject.getString("qiniu_token");
                 String expire_time = jsonObject.getString("expire_time");
                 UserBean userBean = new UserBean();
                 userBean.setId(Integer.parseInt(user_id));
-                userBean.setQiniuToken(refresh_token);
+                userBean.setQiniuToken(qiniu_token);
                 userBean.setQiniuTime(expire_time);
                 userBean.updateAll("id = ?", user_id);
             }
