@@ -47,6 +47,7 @@ import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.NotePresenter.Note;
+import org.swsd.stardust.presenter.NotePresenter.NotePresenter;
 import org.swsd.stardust.presenter.NotePresenter.putNote;
 import org.swsd.stardust.presenter.UserPresenter;
 
@@ -413,8 +414,8 @@ public class NoteActivity extends AppCompatActivity {
      * @param path
      */
     private String  uploadQiniu(final String path){
-
-
+        NotePresenter notePresenter = new NotePresenter();
+        notePresenter.refreshToken();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -480,7 +481,8 @@ public class NoteActivity extends AppCompatActivity {
      *  根据路径上传七牛云
      */
     private String  uploadHtml(final String htmlCode){
-
+        NotePresenter notePresenter = new NotePresenter();
+        notePresenter.refreshToken();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -643,12 +645,14 @@ public class NoteActivity extends AppCompatActivity {
             Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
             mEditor.setHtml(noteTemp.getContent());
         }
-    }
+}
 
     /**
      * 删除云端后删除本地数据库
      */
     private void deleteNote(){
+        NotePresenter notePresenter = new NotePresenter();
+        notePresenter.refreshToken();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -696,7 +700,8 @@ public class NoteActivity extends AppCompatActivity {
      *  根据路径更新七牛云html
      */
     private String  updateHtml(final String htmlCode){
-
+        NotePresenter notePresenter = new NotePresenter();
+        notePresenter.refreshToken();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -820,7 +825,8 @@ public class NoteActivity extends AppCompatActivity {
      *  根据路径更新七牛云html
      */
     private String  shareHtml(final String htmlCode){
-
+        NotePresenter notePresenter = new NotePresenter();
+        notePresenter.refreshToken();
         new Thread(new Runnable() {
             @Override
             public void run() {
