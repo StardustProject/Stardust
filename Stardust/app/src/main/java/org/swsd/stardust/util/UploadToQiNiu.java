@@ -1,5 +1,8 @@
 package org.swsd.stardust.util;
 
+import android.os.Handler;
+import android.os.Message;
+
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
@@ -28,43 +31,53 @@ import okhttp3.Request;
  */
 public class UploadToQiNiu {
     public String url;
-    public boolean uploadFinished = false;
-    String upToken;
+    private String upToken;
+    private String mLocalFilePath;
+    public Message msg = new Message();
+
+    private Handler uiHandler = new Handler() {
+        // 覆写这个方法，接收并处理消息。
+        @Override
+        public void handleMessage(final Message msg) {
+            switch (msg.what) {
+                case 1:
+                    // 上传头像到七牛云
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String key = null;
+                            // 七牛机房设置，构造一个带指定Zone对象的配置类
+                            Configuration cfg = new Configuration(Zone.zone0());
+                            UploadManager uploadManager = new UploadManager(cfg);
+                            try {
+                                Response response = uploadManager.put(mLocalFilePath, key, upToken);
+                                //解析上传成功的结果
+                                DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+                                url = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
+
+                            } catch (QiniuException ex) {
+                                Response r = ex.response;
+                                System.err.println(r.toString());
+                                try {
+                                    System.err.println(r.bodyString());
+                                } catch (QiniuException ex2) {
+                                    //ignore
+                                }
+                            }
+                        }
+                    }).start();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     // 上传头像到七牛云
     public void uploadQiNiu(final String path) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String localFilePath = path;
-                String key = null;
-                // 七牛机房设置，构造一个带指定Zone对象的配置类
-                Configuration cfg = new Configuration(Zone.zone0());
-                UploadManager uploadManager = new UploadManager(cfg);
-
-                // 生成上传凭证，然后准备上传
-                getQiniuToken();
-
-                while (upToken == null) {
-
-                }
-                try {
-                    Response response = uploadManager.put(localFilePath, key, upToken);
-                    //解析上传成功的结果
-                    DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-                    url = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
-                } catch (QiniuException ex) {
-                    Response r = ex.response;
-                    System.err.println(r.toString());
-                    try {
-                        System.err.println(r.bodyString());
-                    } catch (QiniuException ex2) {
-                        //ignore
-                    }
-                }
-                uploadFinished = true;
-            }
-        }).start();
+        mLocalFilePath = path;
+        // 生成上传凭证，然后准备上传
+        getQiniuToken();
     }
 
     int errorCode = 0;
@@ -93,10 +106,12 @@ public class UploadToQiNiu {
                             try {
                                 JSONObject jsonObject = new JSONObject(responseData);
                                 errorCode = jsonObject.getInt("error_code");
-                                // 如果返回的错误代码为200，将用户信息存入数据库
+                                // 如果返回的错误代码为200
                                 if (errorCode == 200) {
                                     JSONObject innerObject = jsonObject.getJSONObject("data");
                                     upToken = innerObject.getString("qiniu_token");
+                                    msg.what = 1;
+                                    uiHandler.sendMessage(msg);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -110,5 +125,6 @@ public class UploadToQiNiu {
         }).start();
     }
 }
+
 
 

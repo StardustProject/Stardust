@@ -1,5 +1,6 @@
 package org.swsd.stardust.view.activity;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.UserBean;
@@ -30,6 +31,17 @@ public class SetUsernameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_set_username);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // 获取顶部状态栏的高度
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int stateBarHeight = resources.getDimensionPixelSize(resourceId);
+
+        // 用空的TextView预留顶部状态栏高度
+        TextView tvStateBar = (TextView) findViewById(R.id.tv_setUserName_stateBar);
+        android.view.ViewGroup.LayoutParams setHeight = tvStateBar.getLayoutParams();
+        setHeight.height = stateBarHeight;
+        tvStateBar.setLayoutParams(setHeight);
 
         // 设置“返回”图标监听事件
         ImageView ivBack = (ImageView) findViewById(R.id.iv_back);
@@ -62,9 +74,8 @@ public class SetUsernameActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // 编辑框内容改变时，设置“保存”按钮可按
-                btnSave.setEnabled(true);
-                btnSave.setBackgroundColor(getResources().getColor(R.color.green));
-
+                    btnSave.setEnabled(true);
+                    btnSave.setBackgroundColor(getResources().getColor(R.color.green));
             }
 
             @Override
@@ -78,10 +89,8 @@ public class SetUsernameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SetNamePresenter namePresenter = new SetNamePresenter();
-                if (namePresenter.checkBeforeSetName(getApplicationContext(), etSetName.getText())) {
-                    Toast.makeText(SetUsernameActivity.this, "修改用户名成功", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                namePresenter.checkBeforeSetName(getApplicationContext(), etSetName.getText());
+                finish();
             }
         });
     }

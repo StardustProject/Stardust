@@ -1,5 +1,6 @@
 package org.swsd.stardust.view.activity;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.UserBean;
@@ -31,6 +31,17 @@ public class setPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_set_password);
         Toolbar toolbar = (Toolbar) findViewById(R.id.pwdToolbar);
         setSupportActionBar(toolbar);
+
+        // 获取顶部状态栏的高度
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int stateBarHeight = resources.getDimensionPixelSize(resourceId);
+
+        // 用空的TextView预留顶部状态栏高度
+        TextView tvStateBar = (TextView) findViewById(R.id.tv_setPassword_stateBar);
+        android.view.ViewGroup.LayoutParams setHeight = tvStateBar.getLayoutParams();
+        setHeight.height = stateBarHeight;
+        tvStateBar.setLayoutParams(setHeight);
 
         // 从数据库获取用户名并显示在页面上
         UserBean userBean;
@@ -54,9 +65,13 @@ public class setPasswordActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // 编辑框内容改变时，设置“完成”按钮可按
-                btnFinish.setEnabled(true);
-                btnFinish.setBackgroundColor(getResources().getColor(R.color.green));
-
+                if(s.length()>0){
+                    btnFinish.setEnabled(true);
+                    btnFinish.setBackgroundColor(getResources().getColor(R.color.green));
+                }else{
+                    btnFinish.setEnabled(false);
+                    btnFinish.setBackgroundColor(getResources().getColor(R.color.gray));
+                }
             }
 
             @Override
@@ -79,11 +94,9 @@ public class setPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SetPswPresenter namePresenter = new SetPswPresenter();
-                if (namePresenter.checkBeforeSetPsw(getApplicationContext(),
-                        etOldPassword.getText(), etNewPassword.getText(), etConfirmPassword.getText())) {
-                    Toast.makeText(setPasswordActivity.this, "修改密码成功", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                namePresenter.checkBeforeSetPsw(getApplicationContext(),
+                        etOldPassword.getText(), etNewPassword.getText(), etConfirmPassword.getText());
+                finish();
             }
         });
     }
