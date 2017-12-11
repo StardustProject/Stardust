@@ -102,7 +102,8 @@ public class WebViewActivity extends AppCompatActivity {
         webView.loadUrl(url);
         webView.canGoBack();
         webView.canGoForward();
-
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setBlockNetworkImage(false);
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onReceivedTitle(WebView view, String title) {

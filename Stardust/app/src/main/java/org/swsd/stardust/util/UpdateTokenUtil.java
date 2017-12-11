@@ -29,10 +29,11 @@ public class UpdateTokenUtil {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "luojingzhao";
+    public static boolean refreshOk=false;
+    public static boolean isUpdate=false;
 
     //更新用户的Token
     public static void updateUserToken(UserBean user){
-
         final UserBean userBean = user;
         long nowTime = System.currentTimeMillis();
         java.text.SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -43,6 +44,7 @@ public class UpdateTokenUtil {
                 @Override
                 public void run() {
                     try {
+                        isUpdate=true;
                         OkHttpClient client = new OkHttpClient();
                         String json = getJsonSrting(userBean);
                         Log.d("luojingzhao",json);
@@ -98,7 +100,6 @@ public class UpdateTokenUtil {
     private static void updateDatabase(String responseData){
         try {
             JSONObject jsonObject = new JSONObject(responseData);
-
             //检验是否成功
             if(ErrorCodeJudgment.errorCodeJudge(responseData) == "Ok"){
                 String user_id = jsonObject.getString("user_id");
@@ -110,7 +111,8 @@ public class UpdateTokenUtil {
                 userBean.setToken(access_token);
                 userBean.setRefreshToken(refresh_token);
                 userBean.setTokenTime(expire_time);
-                userBean.updateAll("id = ?", user_id);
+                userBean.updateAll("userId = ?", user_id);
+                refreshOk=true;
             }
 
         } catch (JSONException e) {
