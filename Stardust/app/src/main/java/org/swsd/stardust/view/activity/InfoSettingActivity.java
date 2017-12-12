@@ -2,9 +2,13 @@ package org.swsd.stardust.view.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -29,7 +33,7 @@ import org.swsd.stardust.presenter.UserPresenter;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * author     :  胡俊钦
+ * author     :  胡俊钦，林炜鸿
  * time       :  2017/11/07
  * description:  个人信息设置模块
  * version:   :  1.0
@@ -39,6 +43,28 @@ public class InfoSettingActivity extends BaseActivity {
     private static final int CHOOSE_PHOTO = 2;
     UserBean userBean;
     UserPresenter userPresenter = new UserPresenter();
+
+    private BroadcastReceiver bcReload = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 从数据库获取用户信息
+            userBean = userPresenter.toGetUserInfo();
+            // 显示用户名
+            TextView tvMyUser = (TextView) findViewById(R.id.tv_setting_username);
+            tvMyUser.setText(userBean.getUserName());
+
+            //根据图片路径显示头像
+            CircleImageView circleImageView = (CircleImageView) findViewById(R.id.civ_setting_photo);
+            if (userBean.getAvatarPath().equals("")) {
+                // 如果头像路径为空，则使用默认头像
+                Glide.with(InfoSettingActivity.this).load(R.drawable.ic_setting_photo)
+                        .into(circleImageView);
+            } else {
+                Glide.with(InfoSettingActivity.this).load(userBean.getAvatarPath())
+                        .into(circleImageView);
+            }
+        }
+    };
 
     @Override
     public int bindLayout() {
@@ -55,6 +81,12 @@ public class InfoSettingActivity extends BaseActivity {
     @Override
     public void initData() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(bcReload);
     }
 
     @Override
@@ -85,6 +117,18 @@ public class InfoSettingActivity extends BaseActivity {
         initView();
         // 绑定并加载登录界面布局
         bindLayout();
+        // 注册刷新页面的广播接收器
+        registerReceiver(bcReload, new IntentFilter("reload the setting page"));
+        // 获取顶部状态栏的高度
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int stateBarHeight = resources.getDimensionPixelSize(resourceId);
+
+        // 用空的TextView预留顶部状态栏高度
+        TextView tvStateBar = (TextView) findViewById(R.id.tv_setting_stateBar);
+        android.view.ViewGroup.LayoutParams setHeight = tvStateBar.getLayoutParams();
+        setHeight.height = stateBarHeight;
+        tvStateBar.setLayoutParams(setHeight);
 
         // 设置“返回”图标监听事件
         ImageView ivGoBack = (ImageView) findViewById(R.id.iv_go_back);

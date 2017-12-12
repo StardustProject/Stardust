@@ -5,6 +5,12 @@
     android:orientation="vertical"
     android:background="#F5F5F5">
 
+    <TextView
+        android:id="@+id/tv_meteor_stateBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toorbal"
         android:layout_width="match_parent"

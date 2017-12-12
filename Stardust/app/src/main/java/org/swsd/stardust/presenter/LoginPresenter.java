@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
+import org.swsd.stardust.util.UpdateTokenUtil;
 import org.swsd.stardust.view.activity.MainActivity;
 
 import java.io.IOException;
@@ -42,6 +44,7 @@ public class LoginPresenter{
     String avatarPath;
     String registerTime;
     String expireTime;
+    String refreshToken;
     UserBean userBean = new UserBean();
     boolean ready = false;
     private Context mContext;
@@ -147,25 +150,26 @@ public class LoginPresenter{
                 DataSupport.deleteAll(UserBean.class);
 
                 JSONObject innerObject = jsonObject.getJSONObject("data");
+
                 // 用户id
                 userId = innerObject.getInt("user_id");
                 userBean.setUserId(userId);
+
                 // 用户名
                 userName = innerObject.getString("account");
                 userBean.setUserName(userName);
+
                 // 用户token
                 token = innerObject.getString("access_token");
                 userBean.setToken(token);
+
                 // token过期时间
                 expireTime = innerObject.getString("expire_time");
-              /*  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date expireTimeDate=new Date();
-                try{
-                    expireTimeDate= sdf.parse(expireTime);
-                }catch (ParseException e){
-                    e.printStackTrace();
-                }
-                userBean.setExpireTime(expireTimeDate.getTime());*/
+                userBean.setTokenTime(expireTime);
+
+                // 用户刷新token
+                refreshToken = innerObject.getString("refresh_token");
+                userBean.setRefreshToken(refreshToken);
 
                 // 注册时间
                 registerTime = innerObject.getString("create_time");
@@ -196,6 +200,10 @@ public class LoginPresenter{
             @Override
             public void run() {
                 try {
+                    UpdateTokenUtil.updateUserToken(userBean);
+                    while(!UpdateTokenUtil.refreshOk&&UpdateTokenUtil.isUpdate){
+
+                    }
                     // 创建OkHttpClient实例
                     OkHttpClient client = new OkHttpClient();
                     // 创建Request对象
@@ -207,6 +215,7 @@ public class LoginPresenter{
                     errorCode = 0;
                     Response response = client.newCall(request).execute();
                     responseData = response.body().string();
+                    Log.d("luojingzhao", responseData);
                     // 解析错误代码
                     JSONObject jsonObject = new JSONObject(responseData);
                     errorCode = jsonObject.getInt("error_code");

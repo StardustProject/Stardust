@@ -15,6 +15,7 @@ import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.ArticleBean;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.UserPresenter;
+import org.swsd.stardust.util.UpdateTokenUtil;
 import org.swsd.stardust.view.fragment.ArticleFragment;
 
 import java.io.IOException;
@@ -33,6 +34,14 @@ import okhttp3.Response;
  * version: 2.0
  */
 public class ArticlePresenter implements IArticlePresenter{
+    @Override
+    public void refreshToken() {
+        // 更新token
+        UserBean userBean;
+        UserPresenter userPresenter = new UserPresenter();
+        userBean = userPresenter.toGetUserInfo();
+        UpdateTokenUtil.updateUserToken(userBean);
+    }
 
     private static final String TAG = "熊立强 ArticlePresenter";
     private static String ARTICLE_ID;
@@ -45,6 +54,7 @@ public class ArticlePresenter implements IArticlePresenter{
 
     @Override
     public void getArticle(final UserBean userBean, final Activity mActivity) {
+        refreshToken();
         //向服务器发送请求，并且存入数据库
         new Thread(new Runnable() {
             @Override
@@ -119,6 +129,7 @@ public class ArticlePresenter implements IArticlePresenter{
     private void parseArticle(final String url){
         try {
             Document doc = Jsoup.connect(url).get();
+            Log.d("熊立强", "parseArticle:  connect success");
             Elements elements = doc.select("h2[class=rich_media_title]");
             ArticleBean temp = new ArticleBean();
             temp.setArticleId(ARTICLE_ID);

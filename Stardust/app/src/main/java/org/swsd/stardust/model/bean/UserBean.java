@@ -23,6 +23,7 @@ public class UserBean extends DataSupport{
     private String recentMood;
     private String token;
     private String tokenTime;
+    private String refreshToken;
     private String qiniuToken;
     private String qiniuTime;
 
@@ -99,6 +100,14 @@ public class UserBean extends DataSupport{
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getRefreshToken(){
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
     }
 
     public String getTokenTime(){

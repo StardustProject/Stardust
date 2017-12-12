@@ -1,6 +1,7 @@
 package org.swsd.stardust.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
+import org.swsd.stardust.util.UpdateTokenUtil;
 
 import java.io.IOException;
 
@@ -24,7 +26,7 @@ import okhttp3.Response;
 
 
 /**
- * author  ： 胡俊钦
+ * author  ： 胡俊钦，林炜鸿
  * time    ： 2017/11/17
  * desc    ： 修改用户名Presenter
  * version ： 1.0
@@ -46,6 +48,8 @@ public class SetNamePresenter {
                 case 200:
                     userBean.setUserName(userName.toString());
                     userBean.updateAll("userId=?", "" + userBean.getUserId());
+                    // 发送广播提醒设置页面修改成功
+                    mContext.sendBroadcast(new Intent("reload the setting page"));
                     Toast.makeText(mContext, "修改用户名成功", Toast.LENGTH_SHORT).show();
                     break;
                 case 409:
@@ -106,6 +110,10 @@ public class SetNamePresenter {
            public void run() {
                try {
                    userBean = DataSupport.findLast(UserBean.class);
+                   UpdateTokenUtil.updateUserToken(userBean);
+                   while(!UpdateTokenUtil.refreshOk&&UpdateTokenUtil.isUpdate){
+
+                   }
                    // 创建OkHttpClient实例
                    OkHttpClient client = new OkHttpClient();
                    // 将用户名设为Json格式

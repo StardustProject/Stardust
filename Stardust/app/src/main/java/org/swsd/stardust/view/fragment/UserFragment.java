@@ -1,6 +1,7 @@
 package org.swsd.stardust.view.fragment;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,17 @@ public class UserFragment extends Fragment {
 
         // 加载动态布局
         View view = inflater.inflate(R.layout.fragment_user, null);
+
+        // 获取顶部状态栏的高度
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int stateBarHeight = resources.getDimensionPixelSize(resourceId);
+
+        // 用空的TextView预留顶部状态栏高度
+        TextView tvStateBar = view.findViewById(R.id.tv_my_stateBar);
+        android.view.ViewGroup.LayoutParams setHeight = tvStateBar.getLayoutParams();
+        setHeight.height = stateBarHeight;
+        tvStateBar.setLayoutParams(setHeight);
 
         // 设置“齿轮”图标监听事件
         ImageView ivSetting = view.findViewById(R.id.iv_my_setting);
@@ -73,13 +85,19 @@ public class UserFragment extends Fragment {
 
         // 显示用户头像
         CircleImageView civMyPhoto = view.findViewById(R.id.ic_my_user);
-        if (userBean.getAvatarPath().equals("")) {
-            // 如果头像路径为空，则使用默认头像
-            Glide.with(this).load(R.drawable.ic_user)
-                    .into(civMyPhoto);
-        } else {
+        if(userBean.getAvatarPath()==null){
+            // 防止token过期获取不到头像而导致程序崩溃
             Glide.with(this).load(userBean.getAvatarPath())
                     .into(civMyPhoto);
+        }else{
+            if (userBean.getAvatarPath().equals("")) {
+                // 如果头像路径为空，则使用默认头像
+                Glide.with(this).load(R.drawable.ic_user)
+                        .into(civMyPhoto);
+            } else {
+                Glide.with(this).load(userBean.getAvatarPath())
+                        .into(civMyPhoto);
+            }
         }
 
         // 显示用户名
