@@ -126,7 +126,28 @@ public class NoteActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "返回按钮，退出编辑");
+                Log.d(TAG, "Save 正在保存");
+                if(!isEmpty){
+                    if(isNew){
+                        //定义与事件相关的属性信息
+                        try {
+                            JSONObject eventObject = new JSONObject();
+                            eventObject.put("用户事件", "新建记录");
+                            eventObject.put("数量", 1);
+                            //记录事件,以购买为例
+                            ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        saveNote();
+                    }
+                    else {
+                        updateNote();
+                    }
+                }
+                else {
+                    Toast.makeText(NoteActivity.this, "未输入文字不保存", Toast.LENGTH_SHORT).show();
+                }
                 finish();
             }
         });
