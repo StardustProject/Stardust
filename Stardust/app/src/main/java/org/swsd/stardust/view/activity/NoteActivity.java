@@ -72,6 +72,8 @@ public class NoteActivity extends AppCompatActivity {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static final int SAVE_NOTE = 1;
     public static final int DELETE_NOTE = 2;
+    public static final int SHARE_NOTE = 3;
+    public static final int CANCEL_SHARE_NOTE = 4;
     private static RichEditor mEditor;
     private boolean isEdited = false;
     private boolean isEmpty = true;
@@ -83,18 +85,28 @@ public class NoteActivity extends AppCompatActivity {
     private static int UserId;
     private static long createTime = new Date().getTime();
     private static boolean isNew = false;
+    private static boolean isShare = false;
     private static NoteBean noteTemp;
     private static String NOTE_ID;
+    private Toolbar toolbar;
     private Handler handler  = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case SAVE_NOTE :
-                    finish();
+                    Log.d(TAG, "handleMessage: 保存成功");
                     break;
                 case DELETE_NOTE:
                     Log.d(TAG, "handleMessage: " + "删除成功" );
                     finish();
+                    break;
+                case SHARE_NOTE:
+                    // TODO: 2017/12/12 分享成功修改状态 变成取消分享状态
+                    Log.d(TAG, "handleMessage: ");
+
+                    break;
+                case CANCEL_SHARE_NOTE:
+                    // TODO: 2017/12/12 取消分享成功桩体,变成分享按钮
                 default:
                     break;
             }
@@ -107,7 +119,7 @@ public class NoteActivity extends AppCompatActivity {
         mEditor = (RichEditor)findViewById(R.id.md_editor);
         initBundle();
         createTime = new Date().getTime();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.note_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.note_toolbar);
         toolbar.setTitle(" ");
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.mipmap.go_back);
@@ -174,11 +186,21 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_note,menu);
+        MenuItem share = menu.findItem(R.id.note_share);
+        MenuItem cancelShare = menu.findItem(R.id.note_cancel_share);
+        if(!isShare) {
+            share.setVisible(true);
+            cancelShare.setVisible(false);
+        }
+        else {
+            share.setVisible(false);
+            cancelShare.setVisible(true);
+        }
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()){
             case R.id.note_share:{
                 Log.d(TAG, "Share 正在分享");
@@ -199,6 +221,8 @@ public class NoteActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             shareHtml(mEditor.getHtml());
+                            isShare = true;
+                            invalidateOptionsMenu();
                         }
                     });
                     dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
@@ -260,6 +284,42 @@ public class NoteActivity extends AppCompatActivity {
                     }
                 });
                 dialog.show();
+            }
+            case R.id.note_cancel_share:{
+
+                // // TODO: 2017/12/12 取消分享按钮功能 日记已经在服务器有状态，直接修改即可
+                AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
+                dialog.setTitle("确定取消分享此记录吗？");
+                dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //定义与事件相关的属性信息
+                        try {
+                            JSONObject eventObject = new JSONObject();
+                            eventObject.put("用户事件", "取消分享");
+                            eventObject.put("数量", 1);
+                            //记录事件,以购买为例
+                            ZhugeSDK.getInstance().track(getApplicationContext(), "用户取消分享", eventObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        cancelShareNote(URL);
+                        isShare = false;
+                        invalidateOptionsMenu();
+                    }
+                });
+                dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.show();
+                item.setVisible(false);
+                /* Menu menu = null;
+                getMenuInflater().inflate(R.menu.menu_note, menu);
+                MenuItem menuItem = menu.findItem(R.id.note_share);
+                menuItem.setVisible(true);*/
+                return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
@@ -543,6 +603,7 @@ public class NoteActivity extends AppCompatActivity {
                     note.setShareStatus(false);
                     note.setUserId(userBean.getUserId());
                     note.save();
+                    noteTemp = note;
                     Log.d(TAG, "note 保存成功" );
                     //Toast.makeText(NoteActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                     // 结束上传
@@ -630,6 +691,7 @@ public class NoteActivity extends AppCompatActivity {
         if(getIntent().getExtras() == null){
             Log.d(TAG, "initBundle: 是新建里的" );
             isNew = true;
+            isShare = false;
         }
         else{
             isNew = false;
@@ -641,6 +703,7 @@ public class NoteActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle = getIntent().getExtras();
             noteTemp = (NoteBean)bundle.getSerializable("note");
+            isShare = noteTemp.isShareStatus();
             NOTE_ID = String.valueOf(noteTemp.getNoteId());
             Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
             mEditor.setHtml(noteTemp.getContent());
@@ -908,8 +971,11 @@ public class NoteActivity extends AppCompatActivity {
                         note.setShareStatus(true);
                         note.setUserId(userBean.getUserId());
                         note.save();
+                        //保存当前编辑的数据
+                        noteTemp = note;
                     }
                     Log.d(TAG, "note 分享成功" );
+                    // TODO: 2017/12/12  新建笔记&旧的笔记成功的分享 
                     // 结束上传
                     Message message = new Message();
                     message.what = SAVE_NOTE;
@@ -970,4 +1036,91 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *  取消分享
+     * @param url
+     */
+    private void cancelShareNote(final String url) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //创建一个Client对象
+                OkHttpClient okHttpClient = new OkHttpClient();
+                //json为String类型的json数据
+                // 使用Gson生成
+                String content = null;
+                try {
+                    Document doc = Jsoup.connect(url).get();
+                    content = doc.text();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                putNote putNote = new putNote(url, false, content);
+                String json = getJsonString(putNote);
+                Log.d(TAG, "json is " + json);
+                RequestBody requestBody = RequestBody.create(JSON, json);
+                // 获取当前用户id
+                UserBean userBean;
+                UserPresenter userPresenter = new UserPresenter();
+                userBean = userPresenter.toGetUserInfo();
+                Log.d(TAG, "userBean" + userBean.getToken());
+                Log.d(TAG, "userBean" + userBean.getUserId());
+                // "http://www.cxpzz.com/learnlaravel5/public/index.php/api/users/" + userBean.getUserId() +"/notes"
+                Request request = new Request.Builder()
+                        .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/notes/" + NOTE_ID)
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Authorization", userBean.getToken())
+                        .put(requestBody)
+                        .build();
+                try {
+                    okhttp3.Response response = okHttpClient.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.d(TAG, "cacel shareNote: response" + responseData);
+                    JSONObject jsonObject = new JSONObject(responseData);
+                    Log.d(TAG, "shareNote: errorCode is " + jsonObject.getInt("error_code"));
+                    if (jsonObject.getInt("error_code") == 200) {
+                        Log.d(TAG, "shareNote: noteJson" + jsonObject.getString("note"));
+/*                JSONObject getNoteId = new JSONObject(jsonObject.getString("note"));
+                NoteId = getNoteId.getInt("id");
+                Log.d(TAG, "sendNote: Noteid " + NoteId);
+                // 之后保存数据库*/
+                        noteTemp.setShareStatus(false);
+                        noteTemp.save();
+                        Message msg = new Message();
+                        msg.what = CANCEL_SHARE_NOTE;
+                        handler.sendMessage(msg);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "Save 正在保存");
+        if(!isEmpty){
+            if(isNew){
+                //定义与事件相关的属性信息
+                try {
+                    JSONObject eventObject = new JSONObject();
+                    eventObject.put("用户事件", "新建记录");
+                    eventObject.put("数量", 1);
+                    //记录事件,以购买为例
+                    ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                saveNote();
+            }
+            else {
+                updateNote();
+            }
+        }
+        else {
+            Toast.makeText(this, "未输入文字不保存", Toast.LENGTH_SHORT).show();
+        }
+        super.onBackPressed();
+    }
 }
