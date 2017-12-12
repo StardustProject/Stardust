@@ -1,6 +1,7 @@
 package org.swsd.stardust.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * author  ： 胡俊钦
+ * author  ： 胡俊钦，林炜鸿
  * time    ： 2017/11/17
  * desc    ： 修改头像presenter
  * version ： 1.0
@@ -45,6 +46,8 @@ public class SetAvatarPresenter {
                     Toast.makeText(mContext, "更换头像成功！", Toast.LENGTH_SHORT).show();
                     userBean.setAvatarPath(upload.url);
                     userBean.updateAll();
+                    // 发送广播提醒设置页面修改成功
+                    mContext.sendBroadcast(new Intent("reload the setting page"));
                     break;
                 case 403:
                     Toast.makeText(mContext, "头像路径太长，请换一张图片！", Toast.LENGTH_SHORT).show();
