@@ -6,18 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
-import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.HomePresenter;
 import org.swsd.stardust.presenter.IHomePresenter;
 import org.swsd.stardust.presenter.adapter.HomeAdapter;
@@ -33,7 +28,7 @@ import cn.carbswang.android.numberpickerview.library.NumberPickerView;
  *    description:  编写主页View层
  *    version:   :  1.0
  */
-public class HomeFragment extends Fragment implements IHomeView,View.OnClickListener,NumberPickerView.OnValueChangeListener,NumberPickerView.OnScrollListener{
+public class HomeFragment extends Fragment implements IHomeView,View.OnClickListener,NumberPickerView.OnValueChangeListener{
 
     private View mView;
     private RecyclerView mRvLightspot;
@@ -49,6 +44,8 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     private String[] mStrDateOfBigMonth;
     private String[] mStrLeapFeb;
     private String[] mStrComFeb;
+
+
     IHomePresenter mHomePresenter;
 
     private static final String TAG = "HomeFragment";
@@ -71,14 +68,59 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         initNumberPickerString();
         initDate();
 
+
         //设置响应事件
         mBtnCheckdate.setOnClickListener(this);
         mNpYear.setOnValueChangedListener(this);
-        mNpYear.setOnScrollListener(this);
         mNpMonth.setOnValueChangedListener(this);
-        mNpMonth.setOnScrollListener(this);
         mNpDay.setOnValueChangedListener(this);
-        mNpDay.setOnScrollListener(this);
+
+        mNpYear.setOnValueChangeListenerInScrolling(new NumberPickerView.OnValueChangeListenerInScrolling() {
+            @Override
+            public void onValueChangeInScrolling(NumberPickerView picker, int oldVal, int newVal) {
+                mBtnCheckdate.setAlpha(1.0f);
+                if (mHomePresenter.isLeapYear(Integer.parseInt(mNpYear.getContentByCurrValue()))){
+                    mNpDay.refreshByNewDisplayedValues(mStrLeapFeb);
+                }else{
+                    mNpDay.refreshByNewDisplayedValues(mStrComFeb);
+                }
+
+            }
+
+        });
+
+        mNpMonth.setOnValueChangeListenerInScrolling(new NumberPickerView.OnValueChangeListenerInScrolling() {
+            @Override
+            public void onValueChangeInScrolling(NumberPickerView picker, int oldVal, int newVal) {
+                mBtnCheckdate.setAlpha(1.0f);
+                switch (Integer.parseInt(mNpMonth.getContentByCurrValue())){
+                    case 2:
+                        if (mHomePresenter.isLeapYear(Integer.parseInt(mNpYear.getContentByCurrValue()))){
+                            mNpDay.refreshByNewDisplayedValues(mStrLeapFeb);
+                        }else{
+                            mNpDay.refreshByNewDisplayedValues(mStrComFeb);
+                        }
+                        break;
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        mNpDay.refreshByNewDisplayedValues(mStrDateOfBigMonth);
+                        break;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        mNpDay.refreshByNewDisplayedValues(mStrDateOfSmallMonth);
+                        break;
+                    default:
+                }
+
+            }
+        });
 
 
         mNoteList = mHomePresenter.getNoteList();
@@ -106,35 +148,13 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
                         Integer.parseInt(mNpYear.getContentByCurrValue()),
                         Integer.parseInt(mNpMonth.getContentByCurrValue()), Integer.parseInt(mNpDay.getContentByCurrValue()));
                 break;
+
         }
     }
 
     @Override
     public void onValueChange(NumberPickerView picker, int oldVal, int newVal) {
         mBtnCheckdate.setAlpha(1.0f);
-    }
-
-    @Override
-    public void onScrollStateChange(NumberPickerView view, int scrollState) {
-        switch (scrollState){
-            case SCROLL_STATE_IDLE:
-                int year = Integer.parseInt(mNpYear.getContentByCurrValue());
-                int month = Integer.parseInt(mNpMonth.getContentByCurrValue());
-                int day = Integer.parseInt(mNpDay.getContentByCurrValue());
-                if (mHomePresenter.isLeapYear(year) && month == 2){
-                    mNpDay.refreshByNewDisplayedValues(mStrLeapFeb);
-                }else if (!mHomePresenter.isLeapYear(year) && month == 2){
-                    mNpDay.refreshByNewDisplayedValues(mStrComFeb);
-                }else if (mHomePresenter.isBigMonth(month)){
-                    mNpDay.refreshByNewDisplayedValues(mStrDateOfBigMonth);
-                }else{
-                    mNpDay.refreshByNewDisplayedValues(mStrDateOfSmallMonth);
-                }
-                mNpDay.setValue(day - 1);
-                break;
-            default:
-
-        }
     }
 
 
@@ -173,21 +193,23 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     void initDate(){
         //获取日期
         Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        mHomePresenter.setNoteYear(year);
-        mHomePresenter.setNoteMonth(month);
-        mHomePresenter.setNoteDay(day);
+        int mPreYear = calendar.get(Calendar.YEAR);
+        int mPreMonth = calendar.get(Calendar.MONTH);
+        int mPreDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mHomePresenter.setNoteYear(mPreYear);
+        mHomePresenter.setNoteMonth(mPreMonth);
+        mHomePresenter.setNoteDay(mPreDay);
+
 
         mNpYear.refreshByNewDisplayedValues(mStrYear);
-        mNpYear.setValue(year - 1970);
+        mNpYear.setValue(mPreYear - 1970);
 
         mNpMonth.refreshByNewDisplayedValues(mStrMonth);
-        mNpMonth.setValue(month);
+        mNpMonth.setValue(mPreMonth);
 
         mNpDay.refreshByNewDisplayedValues(mStrDateOfBigMonth);
-        mNpDay.setValue(day - 1);
+        mNpDay.setValue(mPreDay);
+
     }
 
 }
