@@ -95,11 +95,28 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
             public void onValueChangeInScrolling(NumberPickerView picker, int oldVal, int newVal) {
                 mBtnCheckdate.setAlpha(1.0f);
                 if (mHomePresenter.isLeapYear(Integer.parseInt(mNpYear.getContentByCurrValue()))){
-                    mNpDay.refreshByNewDisplayedValues(mStrLeapFeb);
+                    if(Integer.parseInt(mNpMonth.getContentByCurrValue()) == 2){
+                        mNpDay.refreshByNewDisplayedValues(mStrLeapFeb);
+                    }else if (mHomePresenter.isBigMonth(Integer.parseInt(mNpMonth.getContentByCurrValue()))){
+                        mNpDay.refreshByNewDisplayedValues(mStrDateOfBigMonth);
+                    }else{
+                        mNpDay.refreshByNewDisplayedValues(mStrDateOfSmallMonth);
+                    }
+
                 }else{
-                    mNpDay.refreshByNewDisplayedValues(mStrComFeb);
+                    if(Integer.parseInt(mNpMonth.getContentByCurrValue()) == 2){
+                        mNpDay.refreshByNewDisplayedValues(mStrComFeb);
+                    }else if (mHomePresenter.isBigMonth(Integer.parseInt(mNpMonth.getContentByCurrValue()))){
+                        mNpDay.refreshByNewDisplayedValues(mStrDateOfBigMonth);
+                    }else{
+                        mNpDay.refreshByNewDisplayedValues(mStrDateOfSmallMonth);
+                    }
                 }
-                mNpDay.setValue(mPreDay - 1);
+                if (mPreDay - 1 > mNpDay.getMaxValue()){
+                        mNpDay.setValue(mNpDay.getMaxValue());
+                }else{
+                    mNpDay.setValue(mPreDay - 1);
+                }
             }
 
         });
