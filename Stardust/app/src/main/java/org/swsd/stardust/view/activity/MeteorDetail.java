@@ -31,9 +31,10 @@ import okhttp3.Response;
 public class MeteorDetail extends BaseActivity {
     WebView meteorDetail;
     ImageView backImageView;
+    TextView informTextView;
     MeteorBean meteor;
     String responseData;
-    private Dialog mDialog;
+    Dialog mDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,6 +65,16 @@ public class MeteorDetail extends BaseActivity {
         meteorDetail.getSettings().setJavaScriptEnabled(true);
         meteorDetail.setWebViewClient(new WebViewClient());
         sendRequestWithOkHttp(meteor.getURL());
+
+        //举报响应
+        informTextView = (TextView) findViewById(R.id.tv_MeteorDetail_inform);
+        informTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
+
 
         backImageView = (ImageView) findViewById(R.id.iv_MeteorDetail_back);
         backImageView.setOnClickListener(new View.OnClickListener() {

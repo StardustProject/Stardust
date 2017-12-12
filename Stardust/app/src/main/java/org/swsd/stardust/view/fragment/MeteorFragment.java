@@ -1,5 +1,6 @@
 package org.swsd.stardust.view.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -38,6 +39,7 @@ public class MeteorFragment extends Fragment {
     public static List<MeteorBean> meteorList = new ArrayList<>();
     public static MeteorAdapter meteorAdapter;
     RecyclerView recyclerView;
+    Dialog mDialog;
 
     @Nullable
     @Override
@@ -99,6 +101,7 @@ public class MeteorFragment extends Fragment {
         meteorAdapter = new MeteorAdapter(getContext(), meteorList);
         Log.d("luojingzhao","success");
         recyclerView.setAdapter(meteorAdapter);
+
         return view;
     }
 
