@@ -58,7 +58,7 @@ public class MeteorFragment extends Fragment {
 
 //        initMetor();
         //假设为第一个用户，之后应传入当前登录的用户
-        UserBean userBean = DataSupport.findFirst(UserBean.class);
+        UserBean userBean = DataSupport.findLast(UserBean.class);
 
         meteorPresenter = new MeteorPresenter();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
