@@ -1,6 +1,8 @@
 package org.swsd.stardust.view.activity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,13 +30,14 @@ import okhttp3.Response;
  * version:   :  1.0
  */
 
-public class MeteorDetail extends BaseActivity {
+public class MeteorDetail extends BaseActivity{
     WebView meteorDetail;
     ImageView backImageView;
     TextView informTextView;
     MeteorBean meteor;
     String responseData;
     Dialog mDialog;
+    AlertDialog.Builder dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,11 +70,27 @@ public class MeteorDetail extends BaseActivity {
         sendRequestWithOkHttp(meteor.getURL());
 
         //举报响应
+        dialog = new AlertDialog.Builder(this);
         informTextView = (TextView) findViewById(R.id.tv_MeteorDetail_inform);
         informTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                Log.d("luojingzhao","onclick");
+                dialog.setMessage("确定举报该内容吗？");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                dialog.show();
             }
         });
 
@@ -133,4 +152,5 @@ public class MeteorDetail extends BaseActivity {
     @Override
     public void initData() {
     }
+
 }
