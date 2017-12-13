@@ -14,17 +14,17 @@ import java.io.Serializable;
 
 public class MeteorBean extends DataSupport implements Serializable {
 
-    private int noteId;
+    private int meteorId;
     private String URL;
     private String meteorContent;
     private boolean isPureMedia;
 
-    public int getNoteId() {
-        return noteId;
+    public int getMeteorId() {
+        return meteorId;
     }
 
-    public void setNoteId(int noteId) {
-        this.noteId = noteId;
+    public void setMeteorId(int meteorId) {
+        this.meteorId = meteorId;
     }
 
     public String getURL(){
