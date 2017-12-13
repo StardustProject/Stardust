@@ -2,9 +2,11 @@ package org.swsd.stardust.view.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -18,13 +20,16 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
+import org.swsd.stardust.base.ActivityCollector;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.SetAvatarPresenter;
@@ -183,6 +188,41 @@ public class InfoSettingActivity extends BaseActivity {
                 Intent goToSetPassword = new Intent(InfoSettingActivity.this, setPasswordActivity.class);
                 startActivity(goToSetPassword);
 
+            }
+        });
+
+        // 设置“退出登录”按钮监听事件
+        Button btnLogout = (Button) findViewById(R.id.btn_logout);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 点击按钮退出登录
+                // 显示一个警告框，防止误触
+                final AlertDialog.Builder logoutDialog
+                        = new AlertDialog.Builder(InfoSettingActivity.this);
+                            // 设置警告框信息
+                logoutDialog.setMessage("确定要退出吗？"+"\n"+"这将清除所有本地记录。")
+                            .setPositiveButton("确定", // 设置确认按钮
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            // 点击确定按钮，清除本地用户记录并转到登录页面
+                                            new UserPresenter().toLogout();
+                                            ActivityCollector.finishAll();
+                                            Intent goToRegister =
+                                                    new Intent(InfoSettingActivity.this,
+                                                    LoginActivity.class);
+                                            startActivity(goToRegister);
+                                        }
+                                    })
+                            .setNegativeButton("取消", // 设置取消按钮
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    })
+                            .show();
             }
         });
 

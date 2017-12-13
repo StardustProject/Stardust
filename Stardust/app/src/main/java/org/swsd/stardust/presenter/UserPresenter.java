@@ -7,7 +7,7 @@ import org.swsd.stardust.model.bean.UserBean;
 import java.util.Date;
 
 /**
- * author  ： 胡俊钦
+ * author  ： 胡俊钦，林炜鸿
  * time    ： 2017/11/14
  * desc    ： 用户的presenter层
  * version ： 1.0
@@ -42,5 +42,10 @@ public class UserPresenter extends DataSupport {
         int num;
         num = DataSupport.count(NoteBean.class);
         return num;
+    }
+
+    public void toLogout() {
+        DataSupport.deleteAll(UserBean.class);
+        DataSupport.deleteAll(NoteBean.class);
     }
 }
