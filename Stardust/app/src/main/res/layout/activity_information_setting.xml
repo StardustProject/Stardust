@@ -142,4 +142,15 @@
 
     </FrameLayout>
 
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:text="退出登录"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="20dp" />
+
 </LinearLayout>
