@@ -1,11 +1,12 @@
 package org.swsd.stardust.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import org.litepal.crud.DataSupport;
 import org.swsd.stardust.base.ActivityCollector;
+import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.view.activity.LoginActivity;
 
 /**
@@ -20,6 +21,7 @@ public class HandleDisappearFile {
         if(errorCode == "1"){
             Toast.makeText(context,"找不到相应文件，您已被强制退出", Toast.LENGTH_SHORT).show();
             ActivityCollector.finishAll();
+            DataSupport.deleteAll(UserBean.class);
             Intent intent = new Intent(context, LoginActivity.class);
             context.startActivity(intent);
         }

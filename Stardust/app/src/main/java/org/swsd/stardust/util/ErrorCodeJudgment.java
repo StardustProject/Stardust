@@ -1,10 +1,7 @@
 package org.swsd.stardust.util;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.swsd.stardust.model.bean.UserBean;
 
 /**
  * author     :  骆景钊
@@ -14,6 +11,8 @@ import org.swsd.stardust.model.bean.UserBean;
  */
 
 public class ErrorCodeJudgment {
+
+    public static String networkJudge = "200";
 
     //传入一个json格式的字符串，返回一个字符串
     public static String errorCodeJudge(String responseData) {
@@ -66,5 +65,10 @@ public class ErrorCodeJudgment {
             e.printStackTrace();
         }
         return judgeStr;
+    }
+
+    //网络状态判断
+    public static void networkJudgment(String ErrorCode){
+        networkJudge = ErrorCode;
     }
 }

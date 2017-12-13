@@ -65,6 +65,7 @@
         <activity android:name=".view.activity.MeteorDetail"/>
 
         <activity android:name=".view.activity.WebViewActivity"/>
+
         <meta-data android:value="b561073b2da04d2ab028e2c5c64128e3" android:name = "ZHUGE_APPKEY"/>
         <meta-data android:value="360应用市场" android:name = "ZHUGE_CHANNEL"/>
     </application>
