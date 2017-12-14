@@ -73,18 +73,23 @@ public class MailActivity extends BaseActivity {
         });
 
         // 重新从服务器加载数据
-        initData();
+        getData();
 
         // 初始化 RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.mail_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.mail_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         MailAdapter adapter = new MailAdapter(mailBeanList);
         recyclerView.setAdapter(adapter);
     }
 
-    private void initData() {
+    private void getData() {
         // TODO: 等一个presenter
+        MailBean mailBean = new MailBean();
+        mailBean.setSender("System");
+        mailBean.setContent("This is a message from system");
+        mailBean.setCreateTime("2017.12.14");
+        mailBeanList.add(mailBean);
         return;
     }
 }
