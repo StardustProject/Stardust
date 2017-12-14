@@ -46,6 +46,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class InfoSettingActivity extends BaseActivity {
 
     private static final int CHOOSE_PHOTO = 2;
+    public static final String ACTION_RELOAD = "reload the setting page";
     UserBean userBean;
     UserPresenter userPresenter = new UserPresenter();
 
@@ -123,7 +124,7 @@ public class InfoSettingActivity extends BaseActivity {
         // 绑定并加载登录界面布局
         bindLayout();
         // 注册刷新页面的广播接收器
-        registerReceiver(bcReload, new IntentFilter("reload the setting page"));
+        registerReceiver(bcReload, new IntentFilter(ACTION_RELOAD));
         // 获取顶部状态栏的高度
         Resources resources = getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
@@ -192,8 +193,8 @@ public class InfoSettingActivity extends BaseActivity {
         });
 
         // 设置“退出登录”按钮监听事件
-        Button btnLogout = (Button) findViewById(R.id.btn_logout);
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        TextView tvLogout = (TextView) findViewById(R.id.tv_logout);
+        tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 点击按钮退出登录

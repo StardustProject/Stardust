@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.UserPresenter;
+import org.swsd.stardust.view.activity.MailActivity;
 
 import java.util.Date;
 
@@ -63,6 +64,16 @@ public class UserFragment extends Fragment {
         // 显示用户信息
         showUserInfo(view);
 
+        // 设置站内信监听
+        TextView tvMail = view.findViewById(R.id.tv_my_mail);
+        tvMail.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // 点击按钮后跳转到显示站内信页面
+                Intent goToMail = new Intent(UserFragment.super.getContext(), MailActivity.class);
+                startActivity(goToMail);
+            }
+        });
         // 设置用户反馈监听
         TextView tvFeedBack = view.findViewById(R.id.tv_my_feedback);
         tvFeedBack.setOnClickListener(new View.OnClickListener() {

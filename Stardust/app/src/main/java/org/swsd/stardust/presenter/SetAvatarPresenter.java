@@ -12,6 +12,7 @@ import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.util.UpdateTokenUtil;
 import org.swsd.stardust.util.UploadToQiNiu;
+import org.swsd.stardust.view.activity.InfoSettingActivity;
 
 import java.io.IOException;
 
@@ -47,7 +48,7 @@ public class SetAvatarPresenter {
                     userBean.setAvatarPath(upload.url);
                     userBean.updateAll();
                     // 发送广播提醒设置页面修改成功
-                    mContext.sendBroadcast(new Intent("reload the setting page"));
+                    mContext.sendBroadcast(new Intent(InfoSettingActivity.ACTION_RELOAD));
                     break;
                 case 403:
                     Toast.makeText(mContext, "头像路径太长，请换一张图片！", Toast.LENGTH_SHORT).show();
