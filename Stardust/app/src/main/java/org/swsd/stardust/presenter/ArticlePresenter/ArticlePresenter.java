@@ -61,6 +61,7 @@ public class ArticlePresenter implements IArticlePresenter{
             public void run() {
                 //清空之前的数据库
                 DataSupport.deleteAll(ArticleBean.class);
+                Log.d(TAG, "文章数据库清空完成");
                 Log.d(TAG, "userBean" + userBean.getToken());
                 Log.d(TAG, "userBean" + userBean.getUserId());
                 OkHttpClient client = new OkHttpClient();
