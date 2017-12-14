@@ -1,5 +1,6 @@
 package org.swsd.stardust.view.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -38,6 +39,7 @@ public class MeteorFragment extends Fragment {
     public static List<MeteorBean> meteorList = new ArrayList<>();
     public static MeteorAdapter meteorAdapter;
     RecyclerView recyclerView;
+    Dialog mDialog;
 
     @Nullable
     @Override
@@ -58,7 +60,7 @@ public class MeteorFragment extends Fragment {
 
 //        initMetor();
         //假设为第一个用户，之后应传入当前登录的用户
-        UserBean userBean = DataSupport.findFirst(UserBean.class);
+        UserBean userBean = DataSupport.findLast(UserBean.class);
 
         meteorPresenter = new MeteorPresenter();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -99,6 +101,7 @@ public class MeteorFragment extends Fragment {
         meteorAdapter = new MeteorAdapter(getContext(), meteorList);
         Log.d("luojingzhao","success");
         recyclerView.setAdapter(meteorAdapter);
+
         return view;
     }
 
