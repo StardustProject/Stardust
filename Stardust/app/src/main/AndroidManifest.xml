@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+
 
 
     <application
@@ -74,6 +76,9 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".view.activity.WebViewActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".view.guideActivity.GuideActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data android:value="b561073b2da04d2ab028e2c5c64128e3" android:name = "ZHUGE_APPKEY"/>

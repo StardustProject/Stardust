@@ -15,7 +15,7 @@
         android:id="@+id/toorbal"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#F5F5F5"
+        android:background="#0F1E33"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -26,10 +26,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:src="@mipmap/metor_title" />
+
+                android:src="@mipmap/meteor_title" />
 
         </LinearLayout>
 
@@ -38,6 +36,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
+        android:background="#0F1E33"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="55dp"/>
