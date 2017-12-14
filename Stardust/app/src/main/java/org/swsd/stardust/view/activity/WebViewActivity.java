@@ -60,8 +60,6 @@ public class WebViewActivity extends AppCompatActivity {
                 case REMOVE_ADS:
                     //prograssBar.setVisibility(View.GONE);
                     webView.loadDataWithBaseURL(null,html,"text/html","utf-8",null);
-                    Date currentDate = new Date(System.currentTimeMillis());
-                    Log.d(TAG, "handleMessage: timeStart" + currentDate.getTime());
                     break;
                 default:
                     break;
@@ -74,6 +72,15 @@ public class WebViewActivity extends AppCompatActivity {
         if(keyCode == KEYCODE_BACK && webView.canGoBack()){
             webView.goBack();
             return true;
+        }
+        else if(keyCode == KEYCODE_BACK){
+            Date currentDate = new Date(System.currentTimeMillis());
+            endTime = currentDate.getTime();
+            Log.d(TAG, "onKeyDown: endTime:" + endTime);
+            long readTime = endTime - startTime;
+            Log.d(TAG, "onKeyDown: readTime" + readTime);
+            // TODO: 2017/12/14 阅读时间上传服务器 
+            return super.onKeyDown(keyCode,event);
         }
         else {
             return super.onKeyDown(keyCode,event);
@@ -127,6 +134,9 @@ public class WebViewActivity extends AppCompatActivity {
             }
             @Override
             public void onPageFinished(WebView view, String url) {
+                Date currentDate = new Date(System.currentTimeMillis());
+                startTime = currentDate.getTime();
+                Log.d(TAG, "handleMessage: timeStart" + currentDate.getTime());
                 //Toast.makeText(WebViewActivity.this, "结束加载" + resourceCount, Toast.LENGTH_SHORT).show();
             }
             // 作用：在加载页面资源时会调用，每一个资源（比如图片）的加载都会调用一次。

@@ -93,9 +93,11 @@ public class MeteorPresenter implements IMeteorPresenter{
                 JSONObject Meteor = null;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     Meteor = jsonArray.getJSONObject(i);
+                    String meteorId = Meteor.getString("id");
                     String meteorContent = Meteor.getString("content");
                     String url = Meteor.getString("url");
                     MeteorBean meteorBean = new MeteorBean();
+                    meteorBean.setMeteorId(Integer.valueOf(meteorId));
                     meteorBean.setURL(url);
                     if(meteorContent == null){
                         meteorBean.setIsPureMedia(true);

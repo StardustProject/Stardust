@@ -308,7 +308,7 @@ public class NoteActivity extends AppCompatActivity {
             }
             case R.id.note_cancel_share: {
 
-                // // TODO: 2017/12/12 取消分享按钮功能 日记已经在服务器有状态，直接修改即可
+                // 2017/12/12 取消分享按钮功能 日记已经在服务器有状态，直接修改即可
                 AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
                 dialog.setTitle("确定取消分享此记录吗？");
                 dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
@@ -352,7 +352,7 @@ public class NoteActivity extends AppCompatActivity {
      */
     private void saveNote() {
         String noteHtml = mEditor.getHtml();
-        // TODO: 2017/11/16 保存内容到本地，上传七牛云，上传服务器url
+        // 2017/11/16 保存内容到本地，上传七牛云，上传服务器url
         String htmlCode = mEditor.getHtml();
         Log.d(TAG, "saveNote: " + htmlCode);
         // 上传html  上传html到七牛云和服务器在上传完之后保存本地数据库，之后关闭Activity
@@ -365,7 +365,7 @@ public class NoteActivity extends AppCompatActivity {
      * @return
      */
     private String getSystemImage() {
-        // TODO: 2017/11/16  调用系统相册返回路径
+        //  2017/11/16  调用系统相册返回路径
         //查看权限
         if (ContextCompat.checkSelfPermission(NoteActivity.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
@@ -997,7 +997,7 @@ public class NoteActivity extends AppCompatActivity {
                         noteTemp = note;
                     }
                     Log.d(TAG, "note 分享成功");
-                    // TODO: 2017/12/12  新建笔记&旧的笔记成功的分享 
+                    // 2017/12/12  新建笔记&旧的笔记成功的分享
                     // 结束上传
                     Message message = new Message();
                     message.what = SAVE_NOTE;
