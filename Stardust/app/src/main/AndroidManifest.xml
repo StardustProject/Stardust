@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.activity.LoginActivity"
-            android:theme="@style/MyTheme">
+            android:theme="@style/MyTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,10 +30,12 @@
         </activity>
         <activity
             android:name=".view.activity.RegisterActivity"
-            android:theme="@style/MyTheme" />
+            android:theme="@style/MyTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.activity.InfoSettingActivity"
-            android:theme="@style/MyTheme">
+            android:theme="@style/MyTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="org.swsd.stardust.ACTION_START" />
 
@@ -42,15 +45,18 @@
         <activity
             android:name=".view.activity.SetUsernameActivity"
             android:label="修改用户名"
-            android:theme="@style/MyTheme" />
+            android:theme="@style/MyTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.activity.setPasswordActivity"
             android:label="修改密码"
-            android:theme="@style/MyTheme" />
+            android:theme="@style/MyTheme"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".view.activity.FeedBackActivity"
             android:label="发送反馈"
-            android:theme="@style/MyTheme">
+            android:theme="@style/MyTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="org.swsd.stardust.ACTION_FEEDBACK" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -58,13 +64,17 @@
         </activity>
 
         <activity android:name=".view.activity.MainActivity"
-            android:theme="@style/MyTheme"/>
+            android:theme="@style/MyTheme"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".view.activity.NoteActivity"/>
+        <activity android:name=".view.activity.NoteActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".view.activity.MeteorDetail"/>
+        <activity android:name=".view.activity.MeteorDetail"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".view.activity.WebViewActivity"/>
+        <activity android:name=".view.activity.WebViewActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data android:value="b561073b2da04d2ab028e2c5c64128e3" android:name = "ZHUGE_APPKEY"/>
         <meta-data android:value="360应用市场" android:name = "ZHUGE_CHANNEL"/>

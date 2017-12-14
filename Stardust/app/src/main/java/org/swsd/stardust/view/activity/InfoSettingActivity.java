@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.ActivityCollector;
 import org.swsd.stardust.base.BaseActivity;

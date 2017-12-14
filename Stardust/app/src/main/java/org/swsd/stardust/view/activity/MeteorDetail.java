@@ -14,6 +14,9 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.like.LikeButton;
+import com.like.OnLikeListener;
+
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.model.bean.MeteorBean;
@@ -38,6 +41,7 @@ public class MeteorDetail extends BaseActivity{
     String responseData;
     Dialog mDialog;
     AlertDialog.Builder dialog;
+    LikeButton likeButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,6 +98,18 @@ public class MeteorDetail extends BaseActivity{
             }
         });
 
+        likeButton = (LikeButton) findViewById(R.id.star_button);
+        likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked() {
+
+            }
+
+            @Override
+            public void unLiked() {
+
+            }
+        });
 
         backImageView = (ImageView) findViewById(R.id.iv_MeteorDetail_back);
         backImageView.setOnClickListener(new View.OnClickListener() {

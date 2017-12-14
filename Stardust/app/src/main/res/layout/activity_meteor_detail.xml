@@ -51,10 +51,28 @@
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
-    <WebView
-        android:id="@+id/wv_MeteorDetail_Message"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/wv_MeteorDetail_Message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.like.LikeButton
+            app:icon_type="star"
+            app:icon_size="25dp"
+            android:id="@+id/star_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="40dp"/>
+
+    </FrameLayout>
+
+
 
 
 </LinearLayout>
