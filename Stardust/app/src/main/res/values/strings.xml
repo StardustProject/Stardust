@@ -11,9 +11,8 @@
     <string name="password_rule">密码应为6-20位的字母、数字、常见符号组合，不允许出现空格和特殊符号。</string>
     <string name="note_save">保存</string>
     <string name="note_share">分享</string>
+    <string name="note_cancel_share">取消分享</string>
     <string name="note_delete">删除</string>
-
-
 
     <string-array name="month">
         <item>1</item>
