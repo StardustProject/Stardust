@@ -56,11 +56,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="100dp"
             android:layout_height="70dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:background="@color/white">
             <ImageView
                 android:src="@drawable/ic_my_days"
@@ -74,7 +74,7 @@
             android:id="@+id/tv_my_days"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:background="@color/white"
             android:gravity="center_vertical|left"
             android:textSize="15dp" />
@@ -82,11 +82,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="100dp"
             android:layout_height="70dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:background="@color/white">
             <ImageView
                 android:src="@drawable/ic_my_stars"
@@ -100,18 +100,46 @@
             android:id="@+id/tv_my_stars"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:background="@color/white"
             android:textSize="15dp"
             android:gravity="center_vertical|left"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="100dp"
             android:layout_height="70dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/white">
+            <ImageView
+                android:src="@drawable/ic_notice"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_my_mail"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:text="站内信"
+            android:textSize="15dp"
+            android:gravity="center_vertical|left"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="15dp"
             android:background="@color/white">
             <ImageView
                 android:src="@mipmap/feedback"
@@ -125,7 +153,7 @@
             android:id="@+id/tv_my_feedback"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:background="@color/white"
             android:text="点我发送反馈"
             android:textSize="15dp"
