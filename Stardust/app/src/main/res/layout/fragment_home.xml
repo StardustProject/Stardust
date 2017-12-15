@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:background="@drawable/bg_home">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -36,13 +37,44 @@
         </LinearLayout>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_home_lightspot"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="10"
-        android:overScrollMode="never"
-        android:scrollbars="none"/>
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8">
+            <ImageView
+                android:id="@+id/iv_home_skarry"
+                android:layout_width="@dimen/home_iv_starry_size"
+                android:layout_height="@dimen/home_iv_starry_size"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/bg_home_skarry"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_home_lightspot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+        </LinearLayout>
+    </LinearLayout>
+    
 
     <LinearLayout
         android:layout_width="match_parent"
