@@ -65,6 +65,7 @@ public class LoginActivity extends BaseActivity {
             Intent goToMain = new Intent(getApplicationContext(), MainActivity.class);
             goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplicationContext().startActivity(goToMain);
+            finish();
         }
 
         super.onCreate(savedInstanceState);
