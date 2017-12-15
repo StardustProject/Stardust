@@ -98,7 +98,6 @@ public class LoginActivity extends BaseActivity {
                     // 若网络可用,进行格式检查
                     LoginPresenter login = new LoginPresenter();
                     login.checkBeforeLogin(getApplicationContext(), etUsername.getText(), etPassword.getText());
-                    finish();
                 }
             }
         });
@@ -114,13 +113,6 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // 登录完成之后关闭登录页面
-        finish();
     }
 
     @Override

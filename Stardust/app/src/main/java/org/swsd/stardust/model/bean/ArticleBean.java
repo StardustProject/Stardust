@@ -20,6 +20,17 @@ public class ArticleBean extends DataSupport implements Serializable{
     private String articleUrl;
     private String articleCover;
 
+    public ArticleBean(){}
+    public ArticleBean(ArticleCollectedBean articleCollectedBean){
+        createTime = articleCollectedBean.getCreateTime();
+        title = articleCollectedBean.getTitle();
+        author = articleCollectedBean.getAuthor();
+        content = articleCollectedBean.getContent();
+        articleUrl = articleCollectedBean.getArticleUrl();
+        articleId = articleCollectedBean.getArticleId();
+        articleCover = articleCollectedBean.getArticleCover();
+    }
+
     public String getArticleCover() {
         return articleCover;
     }
