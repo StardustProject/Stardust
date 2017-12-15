@@ -7,9 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.DocumentsContract;
@@ -57,6 +59,8 @@ import org.swsd.stardust.presenter.NotePresenter.putNote;
 import org.swsd.stardust.presenter.UserPresenter;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -95,6 +99,8 @@ public class NoteActivity extends AppCompatActivity {
     private static NoteBean noteTemp;
     private static String NOTE_ID;
     private android.support.v7.widget.Toolbar toolbar;
+    private MediaRecorder mr = null;
+    private boolean isStart = false;
     private WebView webView;
     protected Icarus icarus;
     private String imageUrl;
@@ -120,15 +126,15 @@ public class NoteActivity extends AppCompatActivity {
                     break;
                 case UPLOADED_IMAGE:
                     String imagTag =
-                            "<img alt=\"图片加载中\" src=\""+imageUrl+"\">\n" +
-                            "<br>";
+                            "<img alt=\"图片加载中\" src=\"" + imageUrl + "\">\n" +
+                                    "<br>";
                     icarus.insertHtml(imagTag);
                     //icarus.insertHtml("<img alt=\"图片加载中\" src="+imageUrl+">");
                     //icarus.insertHtml("<a>hhhhhh</a>");
                     break;
                 case UPLOADED_AUDIO:
                     String audioTag =
-                            "<audio controls=\"controls\" src=\""+audioUrl+"\">\n" +
+                            "<audio controls=\"controls\" src=\"" + audioUrl + "\">\n" +
                                     "您的浏览器不支持 audio 标签。\n" +
                                     "</audio>";
                     icarus.insertHtml(audioTag);
@@ -191,11 +197,27 @@ public class NoteActivity extends AppCompatActivity {
         textViewToolbar.addButton(boldButton);*/
         icarus.render();
         initBundle();
-        final ImageView insertImage = (ImageView)findViewById(R.id.action_insert_image);
+        final ImageView insertImage = (ImageView) findViewById(R.id.action_insert_image);
         insertImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getSystemImage();
+            }
+        });
+
+        final ImageView insertAudio = (ImageView) findViewById(R.id.action_insert_audio);
+        insertAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isStart) {
+                    startRecord();
+                    insertAudio.setImageResource(R.drawable.txt_color);
+                    isStart = true;
+                } else {
+                    stopRecord();
+                    insertAudio.setImageResource(R.drawable.media_audio);
+                    isStart = false;
+                }
             }
         });
     }
@@ -230,10 +252,9 @@ public class NoteActivity extends AppCompatActivity {
                     @Override
                     public void run(String params) {
                         Log.d(TAG, "content:" + params);
-                        if(params.length() == 14){
+                        if (params.length() == 14) {
                             isEmpty = true;
-                        }
-                        else{
+                        } else {
                             htmlContent = params;
                             htmlContent = formatContent(htmlContent);
                             isEmpty = false;
@@ -311,17 +332,16 @@ public class NoteActivity extends AppCompatActivity {
                 return true;
             }
             case R.id.note_save: {
-                    if (icarus == null) {
-                        return true;
-                    }
+                if (icarus == null) {
+                    return true;
+                }
                 icarus.getContent(new Callback() {
                     @Override
                     public void run(String params) {
                         Log.d(TAG, "content:" + params);
-                        if(params.length() == 14){
+                        if (params.length() == 14) {
                             isEmpty = true;
-                        }
-                        else{
+                        } else {
                             htmlContent = params;
                             htmlContent = formatContent(htmlContent);
                             Log.d(TAG, "记录内容是" + htmlContent);
@@ -373,7 +393,7 @@ public class NoteActivity extends AppCompatActivity {
                     }
                 });
                 dialog.show();
-                return  true;
+                return true;
             }
             default:
                 return super.onOptionsItemSelected(item);
@@ -1184,13 +1204,53 @@ public class NoteActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private String formatContent(String html){
+    private String formatContent(String html) {
         StringBuffer sb = new StringBuffer(html);
         String result = null;
-        sb.delete(0,12);
-        sb.delete(sb.length()-2,sb.length());
+        sb.delete(0, 12);
+        sb.delete(sb.length() - 2, sb.length());
         Log.d(TAG, "格式化" + sb.toString());
         result = sb.toString();
         return result;
+    }
+
+    //开始录制
+    private void startRecord() {
+        if (mr == null) {
+            File dir = new File(Environment.getExternalStorageDirectory(), "sounds");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File soundFile = new File(dir, System.currentTimeMillis() + "audio.amr");
+            if (!soundFile.exists()) {
+                try {
+                    soundFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            mr = new MediaRecorder();
+            mr.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
+            mr.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);   //设置输出格式
+            mr.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);   //设置编码格式
+            mr.setOutputFile(soundFile.getAbsolutePath());
+            try {
+                mr.prepare();
+                mr.start();  //开始录制
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    //停止录制，资源释放
+    private void stopRecord() {
+        if (mr != null) {
+            mr.stop();
+            mr.release();
+            mr = null;
+        }
     }
 }

@@ -9,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.ArticleBean;
@@ -42,6 +45,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         TextView tvArticleAuthor;
         TextView tvArticlePublishTime;
         TextView tvArticleAbstract;
+        ImageView ivArticleCover;
         public ViewHolder (View view){
             super(view);
             cardView = (CardView) view;
@@ -49,6 +53,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             tvArticleAuthor = (TextView) view.findViewById(R.id.article_author);
             tvArticlePublishTime = (TextView) view.findViewById(R.id.article_publish_time);
             tvArticleAbstract = (TextView) view.findViewById(R.id.article_abstract);
+            ivArticleCover = view.findViewById(R.id.article_cover);
         }
 
     }
@@ -88,6 +93,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         holder.tvArticleAuthor.setText(article.getAuthor());
         holder.tvArticlePublishTime.setText(article.getCreateTime());
         holder.tvArticleAbstract.setText(article.getContent());
+        Glide.with(mContext).load(article.getArticleCover()).into(holder.ivArticleCover);
     }
 
     @Override

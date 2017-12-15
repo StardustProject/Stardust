@@ -10,6 +10,14 @@ import org.litepal.crud.DataSupport;
  */
 public class ArticleCollectedBean extends DataSupport {
     private int id;
+    private String createTime;
+    private String title;
+    private String author;
+    private String content;
+    private String articleUrl;
+    private String articleId;
+    private String articleCover;
+    private boolean isLiked;
 
     public int getId() {
         return id;
@@ -17,6 +25,38 @@ public class ArticleCollectedBean extends DataSupport {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getArticleUrl() {
@@ -43,7 +83,11 @@ public class ArticleCollectedBean extends DataSupport {
         isLiked = liked;
     }
 
-    private String articleUrl;
-    private String articleId;
-    private boolean isLiked;
+    public String getArticleCover() {
+        return articleCover;
+    }
+
+    public void setArticleCover(String articleCover) {
+        this.articleCover = articleCover;
+    }
 }
