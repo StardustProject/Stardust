@@ -7,4 +7,6 @@
     <dimen name="home_btn_horizontal_margin_left">25dp</dimen>
     <dimen name="home_btn_horizontal_margin_right">30dp</dimen>
     <dimen name="home_iv_vertical_margin">30dp</dimen>
+    <dimen name="home_iv_lightspot_size">55dp</dimen>
+    <dimen name="home_iv_starry_size">250dp</dimen>
 </resources>

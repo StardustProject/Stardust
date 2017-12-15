@@ -24,4 +24,5 @@ public class SecondFragment extends Fragment {
         View view = inflater.inflate(R.layout.guide_fragment_second, container, false);
         return view;
     }
+
 }

@@ -9,9 +9,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.model.bean.MailBean;
+import org.swsd.stardust.presenter.MailPresenter;
 import org.swsd.stardust.presenter.adapter.MailAdapter;
 
 import java.util.ArrayList;
@@ -84,12 +86,10 @@ public class MailActivity extends BaseActivity {
     }
 
     private void getData() {
-        // TODO: 等一个presenter
-        MailBean mailBean = new MailBean();
-        mailBean.setSender("System");
-        mailBean.setContent("This is a message from system");
-        mailBean.setCreateTime("2017.12.14");
-        mailBeanList.add(mailBean);
+        MailPresenter mailPresenter = new MailPresenter();
+        // 获取最新消息
+        mailPresenter.toGetMail(this, MailPresenter.LATEST_MAIL);
+        mailBeanList = DataSupport.findAll(MailBean.class);
         return;
     }
 }
