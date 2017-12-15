@@ -2,6 +2,7 @@ package org.swsd.stardust.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.presenter.LoginPresenter;
 import org.swsd.stardust.util.LoginActivityJudgment;
+import org.swsd.stardust.view.guideActivity.GuideActivity;
 
 /**
  * author     :  胡俊钦
@@ -46,6 +48,17 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("Guide", Context.MODE_PRIVATE);
+        int firstUsed = sharedPreferences.getInt("isFirst", -1);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if(firstUsed == -1){
+            editor.putInt("isFirst", 1);
+            editor.commit();
+            Intent goToGuide = new Intent(getApplicationContext(), GuideActivity.class);
+            getApplicationContext().startActivity(goToGuide);
+            finish();
+        }
 
         //判断是否需要登录
         if(!LoginActivityJudgment.loginActivityJudgment()){
@@ -83,6 +96,7 @@ public class LoginActivity extends BaseActivity {
                     // 若网络可用,进行格式检查
                     LoginPresenter login = new LoginPresenter();
                     login.checkBeforeLogin(getApplicationContext(), etUsername.getText(), etPassword.getText());
+                    finish();
                 }
             }
         });
