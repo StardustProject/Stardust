@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -15,6 +14,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.json.JSONException;
@@ -23,18 +24,29 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.litepal.tablemanager.Connector;
 import org.swsd.stardust.R;
+import org.swsd.stardust.model.bean.ArticleBean;
+import org.swsd.stardust.model.bean.ArticleCollectedBean;
+import org.swsd.stardust.model.bean.UserBean;
+import org.swsd.stardust.presenter.UserPresenter;
 
 import java.io.IOException;
 import java.util.Date;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 import static android.view.KeyEvent.KEYCODE_BACK;
 
 /**
- *     author : 熊立强
- *     time :  2017/11/17
- *     description : 查看文章界面
- *     version : 1.0
+ * author : 熊立强
+ * time :  2017/11/17
+ * description : 查看文章界面
+ * version : 1.0
  */
 public class WebViewActivity extends AppCompatActivity {
 
@@ -44,22 +56,25 @@ public class WebViewActivity extends AppCompatActivity {
     private ProgressBar prograssBar;
     private int resourceCount = 0;
     private static String ARTICLE_ID;
-    private FloatingActionButton fabLike;
     private Boolean isLiked = false;
     private String html;
     private static final int REMOVE_ADS = 1;
     private long startTime;
     private long endTime;
+    private ArticleBean articleBean;
+    private ArticleCollectedBean collection;
+    private LikeButton likeButton;
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     /**
-     *     按下返回键实现后退网页功能
+     * 按下返回键实现后退网页功能
      */
-    Handler handler = new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case REMOVE_ADS:
                     //prograssBar.setVisibility(View.GONE);
-                    webView.loadDataWithBaseURL(null,html,"text/html","utf-8",null);
+                    webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
                     break;
                 default:
                     break;
@@ -69,21 +84,19 @@ public class WebViewActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KEYCODE_BACK && webView.canGoBack()){
+        if (keyCode == KEYCODE_BACK && webView.canGoBack()) {
             webView.goBack();
             return true;
-        }
-        else if(keyCode == KEYCODE_BACK){
+        } else if (keyCode == KEYCODE_BACK) {
             Date currentDate = new Date(System.currentTimeMillis());
             endTime = currentDate.getTime();
             Log.d(TAG, "onKeyDown: endTime:" + endTime);
             long readTime = endTime - startTime;
             Log.d(TAG, "onKeyDown: readTime" + readTime);
             // TODO: 2017/12/14 阅读时间上传服务器 
-            return super.onKeyDown(keyCode,event);
-        }
-        else {
-            return super.onKeyDown(keyCode,event);
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
         }
     }
 
@@ -97,21 +110,21 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
-        webView = (WebView)findViewById(R.id.web_view);
-        prograssBar = (ProgressBar)findViewById(R.id.loading_progress);
+        Connector.getDatabase();
+        webView = (WebView) findViewById(R.id.web_view);
+        prograssBar = (ProgressBar) findViewById(R.id.loading_progress);
         initBudle();
-        fabLike = (FloatingActionButton) findViewById(R.id.fab_like);
-        fabLike.setOnClickListener(new View.OnClickListener() {
+        likeButton =(LikeButton) findViewById(R.id.like_button);
+        likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
-            public void onClick(View v) {
-                if(isLiked){
-                    fabLike.setImageResource(R.mipmap.like);
-                    isLiked = false;
-                }
-                else{
-                    fabLike.setImageResource(R.mipmap.like_fill);
-                    isLiked = true;
-                }
+            public void liked() {
+                isLiked = true;
+                collectArticle();
+            }
+
+            @Override
+            public void unLiked() {
+                isLiked = false;
             }
         });
         //初始化分析跟踪
@@ -127,11 +140,12 @@ public class WebViewActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 //Toast.makeText(WebViewActivity.this, "加载中", Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 Date currentDate = new Date(System.currentTimeMillis());
@@ -139,6 +153,7 @@ public class WebViewActivity extends AppCompatActivity {
                 Log.d(TAG, "handleMessage: timeStart" + currentDate.getTime());
                 //Toast.makeText(WebViewActivity.this, "结束加载" + resourceCount, Toast.LENGTH_SHORT).show();
             }
+
             // 作用：在加载页面资源时会调用，每一个资源（比如图片）的加载都会调用一次。
             @Override
             public void onLoadResource(WebView view, String url) {
@@ -160,17 +175,18 @@ public class WebViewActivity extends AppCompatActivity {
         webView.getSettings().setBlockNetworkImage(false);
         //不可滑动
         webView.setFitsSystemWindows(true);
-        webView.setWebChromeClient(new WebChromeClient(){
+        webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 //Toast.makeText(WebViewActivity.this, title, Toast.LENGTH_SHORT).show();
             }
+
             // 读取进度
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if(newProgress <= 100) {
+                if (newProgress <= 100) {
                     prograssBar.setProgress(newProgress);
-                    if (newProgress == 100){
+                    if (newProgress == 100) {
                         prograssBar.setVisibility(View.GONE);
                     }
                 }
@@ -179,9 +195,9 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     /**
-     *  清除内存
+     * 清除内存
      */
-    private void clean(){
+    private void clean() {
         webView.clearCache(true);
         webView.clearHistory();
         webView.clearFormData();
@@ -190,17 +206,21 @@ public class WebViewActivity extends AppCompatActivity {
     /**
      * 初始化数据
      */
-    private void initBudle(){
+    private void initBudle() {
         Bundle bundle = new Bundle();
         bundle = getIntent().getExtras();
         url = bundle.getString("url");
         ARTICLE_ID = bundle.getString("articleID");
+        articleBean = (ArticleBean) bundle.getSerializable("articleBean");
+        collection = new ArticleCollectedBean(articleBean);
+        collection.setLiked(true);
+        Log.d(TAG, "initBudle: article id " + articleBean.getArticleId());
         removeADs(url);
         Log.d(TAG, "initBudle: url is " + url);
         Log.d(TAG, "initBudle: id is " + ARTICLE_ID);
     }
 
-    private void removeADs(final String url){
+    private void removeADs(final String url) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -232,19 +252,52 @@ public class WebViewActivity extends AppCompatActivity {
             }
         }
         Elements ele_p = doc_Dis.getElementsByTag("p");
-        if(ele_p.size() != 0){
-            for (Element e_p : ele_p){
-                e_p.attr("text-align","center");
+        if (ele_p.size() != 0) {
+            for (Element e_p : ele_p) {
+                e_p.attr("text-align", "center");
             }
         }
 
         Elements ele_a = doc_Dis.getElementsByTag("a");
-        if(ele_a.size() != 0){
-            for (Element e_a : ele_a){
+        if (ele_a.size() != 0) {
+            for (Element e_a : ele_a) {
                 e_a.remove();//删除标签
                 //e_a.removeAttr("href");
             }
         }
         return doc_Dis.toString();
+    }
+
+    private void collectArticle() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 获取当前用户id
+                UserBean userBean;
+                UserPresenter userPresenter = new UserPresenter();
+                userBean = userPresenter.toGetUserInfo();
+                Log.d(TAG, "userBean" + userBean.getToken());
+                Log.d(TAG, "userBean" + userBean.getUserId());
+                String collect = "";
+                RequestBody requestBody =  RequestBody.create(JSON,collect);
+                // 解析url
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/articles/" + ARTICLE_ID + "/favorite")
+                            .addHeader("Content-Type", "application/json")
+                            .addHeader("Authorization", userBean.getToken())
+                            .put(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    Log.d(TAG, "putResponse +" + response.body().string());
+                    // 上传文章并保存
+                    collection.save();
+                    Log.d(TAG, " 收藏成功");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }
