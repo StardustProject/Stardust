@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.ufreedom.uikit.FloatingText;
+import com.ufreedom.uikit.effect.ScaleFloatingAnimator;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
@@ -119,10 +120,11 @@ public class MeteorDetail extends BaseActivity{
                 showField = String.valueOf(meteor.getUpvoteQuantity()+1);
                 floatingText = new FloatingText.FloatingTextBuilder(MeteorDetail.this)
                         .textColor(Color.RED) // 漂浮字体的颜色
-                        .textSize(100)   // 浮字体的大小
+                        .textSize(80)   // 浮字体的大小
                         .textContent(showField) // 浮字体的内容
                         .offsetX(0) // FloatingText 相对其所贴附View的水平位移偏移量
-                        .offsetY(-40) // FloatingText 相对其所贴附View的垂直位移偏移量
+                        .offsetY(100) // FloatingText 相对其所贴附View的垂直位移偏移量
+                        .floatingAnimatorEffect(new ScaleFloatingAnimator()) // 漂浮动画
                         .build();
 
                 floatingText.attach2Window();
@@ -141,10 +143,11 @@ public class MeteorDetail extends BaseActivity{
                     showField = String.valueOf(meteor.getUpvoteQuantity()+1);
                     floatingText = new FloatingText.FloatingTextBuilder(MeteorDetail.this)
                             .textColor(Color.RED) // 漂浮字体的颜色
-                            .textSize(100)   // 浮字体的大小
+                            .textSize(80)   // 浮字体的大小
                             .textContent(showField) // 浮字体的内容
                             .offsetX(0) // FloatingText 相对其所贴附View的水平位移偏移量
-                            .offsetY(-40) // FloatingText 相对其所贴附View的垂直位移偏移量
+                            .offsetY(100) // FloatingText 相对其所贴附View的垂直位移偏移量
+                            .floatingAnimatorEffect(new ScaleFloatingAnimator()) // 漂浮动画
                             .build();
 
                     floatingText.attach2Window();
