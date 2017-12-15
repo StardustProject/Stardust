@@ -7,10 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.DocumentsContract;
@@ -24,8 +25,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.github.mr5.icarus.Callback;
+import com.github.mr5.icarus.Icarus;
+import com.github.mr5.icarus.TextViewToolbar;
+import com.github.mr5.icarus.entity.Options;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
@@ -52,10 +59,12 @@ import org.swsd.stardust.presenter.NotePresenter.putNote;
 import org.swsd.stardust.presenter.UserPresenter;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
-import jp.wasabeef.richeditor.RichEditor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -74,7 +83,8 @@ public class NoteActivity extends AppCompatActivity {
     public static final int DELETE_NOTE = 2;
     public static final int SHARE_NOTE = 3;
     public static final int CANCEL_SHARE_NOTE = 4;
-    private static RichEditor mEditor;
+    public static final int UPLOADED_IMAGE = 5;
+    public static final int UPLOADED_AUDIO = 6;
     private boolean isEdited = false;
     private boolean isEmpty = true;
     private static final String TAG = "熊立强";
@@ -83,12 +93,19 @@ public class NoteActivity extends AppCompatActivity {
     private static String URL = null;
     private static int NoteId;
     private static int UserId;
-    private static long createTime = new Date().getTime();
+    private static long createTime;
     private static boolean isNew = false;
     private static boolean isShare = false;
     private static NoteBean noteTemp;
     private static String NOTE_ID;
-    private Toolbar toolbar;
+    private android.support.v7.widget.Toolbar toolbar;
+    private MediaRecorder mr = null;
+    private boolean isStart = false;
+    private WebView webView;
+    protected Icarus icarus;
+    private String imageUrl;
+    private String audioUrl;
+    private String htmlContent;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -103,10 +120,25 @@ public class NoteActivity extends AppCompatActivity {
                 case SHARE_NOTE:
                     // TODO: 2017/12/12 分享成功修改状态 变成取消分享状态
                     Log.d(TAG, "handleMessage: ");
-
                     break;
                 case CANCEL_SHARE_NOTE:
                     // TODO: 2017/12/12 取消分享成功桩体,变成分享按钮
+                    break;
+                case UPLOADED_IMAGE:
+                    String imagTag =
+                            "<img alt=\"图片加载中\" src=\"" + imageUrl + "\">\n" +
+                                    "<br>";
+                    icarus.insertHtml(imagTag);
+                    //icarus.insertHtml("<img alt=\"图片加载中\" src="+imageUrl+">");
+                    //icarus.insertHtml("<a>hhhhhh</a>");
+                    break;
+                case UPLOADED_AUDIO:
+                    String audioTag =
+                            "<audio controls=\"controls\" src=\"" + audioUrl + "\">\n" +
+                                    "您的浏览器不支持 audio 标签。\n" +
+                                    "</audio>";
+                    icarus.insertHtml(audioTag);
+                    break;
                 default:
                     break;
             }
@@ -117,8 +149,6 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
-        mEditor = (RichEditor) findViewById(R.id.md_editor);
-        initBundle();
         createTime = new Date().getTime();
         toolbar = (Toolbar) findViewById(R.id.note_toolbar);
         toolbar.setTitle(" ");
@@ -150,57 +180,46 @@ public class NoteActivity extends AppCompatActivity {
                 finish();
             }
         });
-        //mEditor.setEditorHeight(200);
-        mEditor.setEditorFontSize(22);
-        mEditor.setEditorFontColor(Color.BLACK);
-        //mEditor.setEditorBackgroundColor(R.color.common_red);
-        mEditor.setBackgroundColor(getResources().getColor(R.color.white));
-        //mEditor.setBackgroundResource(R.drawable.bg);
-        mEditor.setPadding(10, 10, 10, 10);
-        //mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        mEditor.setPlaceholder("请输入文字...");
-        //mEditor.setInputEnabled(false);
-        mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
-            @Override
-            public void onTextChange(String text) {
-                isEdited = true;
-                isEmpty = mEditor.getHtml().isEmpty();
-                Log.d(TAG, "onTextChange: is empty" + mEditor.getHtml().isEmpty());
-                Log.d(TAG, "onTextChange: " + isEdited);
-            }
-        });
 
-        findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.undo();
-            }
-        });
-
-        findViewById(R.id.action_redo).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.redo();
-            }
-        });
-
-
-        findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
+        webView = (WebView) findViewById(R.id.editor);
+        // I offered a toolbar to manage editor buttons which implements TextView that with icon fonts.
+        // It's just a collection, not an Android View implementation.
+        // TextViewToolbar will listen click events on all buttons that added to it.
+        // You can implement your own `Toolbar`, to prevent these default behaviors.
+        TextViewToolbar textViewToolbar = new TextViewToolbar();
+        Options options = new Options();
+        options.setPlaceholder("请输入文字");
+        icarus = new Icarus(textViewToolbar, options, webView);
+        options.addAllowedAttributes("a", Arrays.asList("class", "src", "alt", "data-type"));
+        options.addAllowedAttributes("body", Arrays.asList("src"));
+        /*TextView boldButton = new TextViewButton();
+        boldButton.setName(Button.NAME_BOLD);
+        textViewToolbar.addButton(boldButton);*/
+        icarus.render();
+        initBundle();
+        final ImageView insertImage = (ImageView) findViewById(R.id.action_insert_image);
+        insertImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getSystemImage();
-                Log.d(TAG, "onClick: " + imagePath);
             }
         });
 
-        findViewById(R.id.action_insert_audio).setOnClickListener(new View.OnClickListener() {
+        final ImageView insertAudio = (ImageView) findViewById(R.id.action_insert_audio);
+        insertAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(NoteActivity.this, "正在开发中", Toast.LENGTH_SHORT).show();
+                if (!isStart) {
+                    startRecord();
+                    insertAudio.setImageResource(R.drawable.txt_color);
+                    isStart = true;
+                } else {
+                    stopRecord();
+                    insertAudio.setImageResource(R.drawable.media_audio);
+                    isStart = false;
+                }
             }
         });
-
-
     }
 
     /**
@@ -229,82 +248,52 @@ public class NoteActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.note_share: {
                 Log.d(TAG, "Share 正在分享");
-                if (!isEmpty) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
-                    dialog.setTitle("确定将此记录匿名分享为流星吗？");
-                    dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //定义与事件相关的属性信息
-                            try {
-                                JSONObject eventObject = new JSONObject();
-                                eventObject.put("用户事件", "分享");
-                                eventObject.put("数量", 1);
-                                //记录事件,以购买为例
-                                ZhugeSDK.getInstance().track(getApplicationContext(), "用户分享", eventObject);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            shareHtml(mEditor.getHtml());
-                            isShare = true;
-                            invalidateOptionsMenu();
-                        }
-                    });
-                    dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-                    dialog.show();
-                } else {
-                    Toast.makeText(this, "请输入文字", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            }
-
-            case R.id.note_save: {
-                Log.d(TAG, "Save 正在保存");
-                if (!isEmpty) {
-                    if (isNew) {
-                        //定义与事件相关的属性信息
-                        try {
-                            JSONObject eventObject = new JSONObject();
-                            eventObject.put("用户事件", "新建记录");
-                            eventObject.put("数量", 1);
-                            //记录事件,以购买为例
-                            ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        saveNote();
-                    } else {
-                        updateNote();
-                    }
-                } else {
-                    Toast.makeText(this, "请输入文字", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            }
-            case R.id.note_delete: {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
-                dialog.setTitle("是否删除?");
-                dialog.setMessage("删除将无法恢复，请谨慎操作！");
-                dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                icarus.getContent(new Callback() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!isNew) {
-                            deleteNote();
+                    public void run(String params) {
+                        Log.d(TAG, "content:" + params);
+                        if (params.length() == 14) {
+                            isEmpty = true;
                         } else {
-                            finish();
+                            htmlContent = params;
+                            htmlContent = formatContent(htmlContent);
+                            isEmpty = false;
+                        }
+                        if (!isEmpty) {
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
+                            dialog.setTitle("确定将此记录匿名分享为流星吗？");
+                            dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //定义与事件相关的属性信息
+                                    try {
+                                        JSONObject eventObject = new JSONObject();
+                                        eventObject.put("用户事件", "分享");
+                                        eventObject.put("数量", 1);
+                                        //记录事件,以购买为例
+                                        ZhugeSDK.getInstance().track(getApplicationContext(), "用户分享", eventObject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    // TODO: 2017/12/14  传入html字符串
+                                    shareHtml(htmlContent);
+                                    isShare = true;
+                                    invalidateOptionsMenu();
+                                }
+                            });
+                            dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            dialog.show();
+                        } else {
+                            Toast.makeText(NoteActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-                dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                dialog.show();
+
+                return true;
             }
             case R.id.note_cancel_share: {
 
@@ -342,6 +331,70 @@ public class NoteActivity extends AppCompatActivity {
                 menuItem.setVisible(true);*/
                 return true;
             }
+            case R.id.note_save: {
+                if (icarus == null) {
+                    return true;
+                }
+                icarus.getContent(new Callback() {
+                    @Override
+                    public void run(String params) {
+                        Log.d(TAG, "content:" + params);
+                        if (params.length() == 14) {
+                            isEmpty = true;
+                        } else {
+                            htmlContent = params;
+                            htmlContent = formatContent(htmlContent);
+                            Log.d(TAG, "记录内容是" + htmlContent);
+                            isEmpty = false;
+                        }
+                        Log.d(TAG, "Save 正在保存");
+                        if (!isEmpty) {
+                            toolbar.setClickable(false);
+                            if (isNew) {
+                                //定义与事件相关的属性信息
+                                try {
+                                    JSONObject eventObject = new JSONObject();
+                                    eventObject.put("用户事件", "新建记录");
+                                    eventObject.put("数量", 1);
+                                    //记录事件,以购买为例
+                                    ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                saveNote();
+                            } else {
+                                updateNote();
+                            }
+                            finish();
+                        } else {
+                            Toast.makeText(NoteActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                return true;
+            }
+            case R.id.note_delete: {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
+                dialog.setTitle("是否删除?");
+                dialog.setMessage("删除将无法恢复，请谨慎操作！");
+                dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!isNew) {
+                            deleteNote();
+                        } else {
+                            finish();
+                        }
+                    }
+                });
+                dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.show();
+                return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -351,9 +404,9 @@ public class NoteActivity extends AppCompatActivity {
      * 保存笔记函数
      */
     private void saveNote() {
-        String noteHtml = mEditor.getHtml();
         // 2017/11/16 保存内容到本地，上传七牛云，上传服务器url
-        String htmlCode = mEditor.getHtml();
+        // TODO: 2017/12/14  传入html 
+        String htmlCode = htmlContent;
         Log.d(TAG, "saveNote: " + htmlCode);
         // 上传html  上传html到七牛云和服务器在上传完之后保存本地数据库，之后关闭Activity
         uploadHtml(htmlCode);
@@ -529,9 +582,13 @@ public class NoteActivity extends AppCompatActivity {
                     DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                     Log.d(TAG, "成功上传" + putRet.key);
                     Log.d(TAG, "成功上传" + putRet.hash);
-                    String url = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
-                    Log.d(TAG, "url is " + url);
-                    insertEditor(url);
+                    imageUrl = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
+                    Log.d(TAG, "url is " + imageUrl);
+                    // 上传过后的url需要插入编辑器
+                    Message msg = new Message();
+                    msg.what = UPLOADED_IMAGE;
+
+                    handler.sendMessage(msg);
                 } catch (QiniuException ex) {
                     Response r = ex.response;
                     System.err.println(r.toString());
@@ -544,21 +601,6 @@ public class NoteActivity extends AppCompatActivity {
             }
         }).start();
         return URL;
-    }
-
-    /**
-     * Editor插入图片
-     *
-     * @param response
-     */
-    private void insertEditor(final String response) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(NoteActivity.this, "图片正在载入中", Toast.LENGTH_SHORT).show();
-                mEditor.insertImage(response, "dachshund");
-            }
-        });
     }
 
     /**
@@ -729,7 +771,8 @@ public class NoteActivity extends AppCompatActivity {
             isShare = noteTemp.isShareStatus();
             NOTE_ID = String.valueOf(noteTemp.getNoteId());
             Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
-            mEditor.setHtml(noteTemp.getContent());
+            // TODO: 2017/12/14 不是新建的装载内容
+            icarus.setContent(noteTemp.getContent());
         }
     }
 
@@ -778,7 +821,8 @@ public class NoteActivity extends AppCompatActivity {
      * 更新云端数据库，然后更新本地数据库
      */
     private void updateNote() {
-        String htmlCode = mEditor.getHtml();
+        // TODO: 2017/12/14  更新时提供本地html代码 
+        String htmlCode = htmlContent;
         updateHtml(htmlCode);
     }
 
@@ -1072,7 +1116,7 @@ public class NoteActivity extends AppCompatActivity {
                 OkHttpClient okHttpClient = new OkHttpClient();
                 //json为String类型的json数据
                 // 使用Gson生成
-                String content = null;
+                String content = noteTemp.getContent();
                 try {
                     Document doc = Jsoup.connect(url).get();
                     content = doc.text();
@@ -1124,25 +1168,89 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Log.d(TAG, "Save 正在保存");
-        if (!isEmpty) {
-            if (isNew) {
-                //定义与事件相关的属性信息
+        icarus.getContent(new Callback() {
+            @Override
+            public void run(String params) {
+                Log.d(TAG, "content:" + params);
+                if (params.length() == 14) {
+                    isEmpty = true;
+                } else {
+                    htmlContent = params;
+                    htmlContent = formatContent(htmlContent);
+                    isEmpty = false;
+                }
+                if (!isEmpty) {
+                    if (isNew) {
+                        //定义与事件相关的属性信息
+                        try {
+                            JSONObject eventObject = new JSONObject();
+                            eventObject.put("用户事件", "新建记录");
+                            eventObject.put("数量", 1);
+                            //记录事件,以购买为例
+                            ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        saveNote();
+                    } else {
+                        updateNote();
+                    }
+                } else {
+                    Toast.makeText(NoteActivity.this, "未输入文字不保存", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        super.onBackPressed();
+    }
+
+    private String formatContent(String html) {
+        StringBuffer sb = new StringBuffer(html);
+        String result = null;
+        sb.delete(0, 12);
+        sb.delete(sb.length() - 2, sb.length());
+        Log.d(TAG, "格式化" + sb.toString());
+        result = sb.toString();
+        return result;
+    }
+
+    //开始录制
+    private void startRecord() {
+        if (mr == null) {
+            File dir = new File(Environment.getExternalStorageDirectory(), "sounds");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File soundFile = new File(dir, System.currentTimeMillis() + "audio.amr");
+            if (!soundFile.exists()) {
                 try {
-                    JSONObject eventObject = new JSONObject();
-                    eventObject.put("用户事件", "新建记录");
-                    eventObject.put("数量", 1);
-                    //记录事件,以购买为例
-                    ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
-                } catch (JSONException e) {
+                    soundFile.createNewFile();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-                saveNote();
-            } else {
-                updateNote();
+
             }
-        } else {
-            Toast.makeText(this, "未输入文字不保存", Toast.LENGTH_SHORT).show();
+            mr = new MediaRecorder();
+            mr.setAudioSource(MediaRecorder.AudioSource.MIC);  //音频输入源
+            mr.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);   //设置输出格式
+            mr.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);   //设置编码格式
+            mr.setOutputFile(soundFile.getAbsolutePath());
+            try {
+                mr.prepare();
+                mr.start();  //开始录制
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
-        super.onBackPressed();
+    }
+
+    //停止录制，资源释放
+    private void stopRecord() {
+        if (mr != null) {
+            mr.stop();
+            mr.release();
+            mr = null;
+        }
     }
 }

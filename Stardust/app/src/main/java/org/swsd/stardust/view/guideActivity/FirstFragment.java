@@ -24,4 +24,5 @@ public class FirstFragment extends Fragment {
         View view = inflater.inflate(R.layout.guide_fragment_first, container, false);
         return view;
     }
+
 }

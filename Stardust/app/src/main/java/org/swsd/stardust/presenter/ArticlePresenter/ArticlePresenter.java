@@ -154,6 +154,15 @@ public class ArticlePresenter implements IArticlePresenter{
             temp.setArticleUrl(url);
             Log.d(TAG, "getArticle is " + temp.getArticleUrl());
             Log.d(TAG, "getArticle is " + temp.getTitle());
+
+            // 获取文章封面
+            Element element = doc.getElementById("js_article");
+            String coverUrl = "";
+            Elements imgs = element.select("img[src]");
+            Element e = imgs.get(3);
+            coverUrl = e.attr("src");
+            Log.d(TAG, "imgSRC" + coverUrl);
+            temp.setArticleCover(coverUrl);
             //解析完成，保存数据库
             temp.save();
             ArticleFragment.mArticleList.add(temp);
@@ -215,6 +224,13 @@ public class ArticlePresenter implements IArticlePresenter{
             temp.setArticleUrl(url);
             temp.setAuthor(putArticle.getAuthor());
             temp.setCreateTime(putArticle.getPublish_time());
+
+            // 获取文章封面
+            String coverUrl = "";
+            Elements imgs = doc.select("img[src]");
+            Element e = imgs.get(2);
+            coverUrl = e.attr("src");
+            Log.d(TAG, "imgSRC" + coverUrl);
             temp.save();
             ArticleFragment.mArticleList.add(temp);
             Log.d(TAG, "putArticle: 上传文章完成");

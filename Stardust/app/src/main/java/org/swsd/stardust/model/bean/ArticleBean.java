@@ -2,13 +2,15 @@ package org.swsd.stardust.model.bean;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * author     :  张昭锡
  * time       :  2017/11/02
  * description:  数据库中Article表的JavaBean文件
  * version:   :  1.0
  */
-public class ArticleBean extends DataSupport{
+public class ArticleBean extends DataSupport implements Serializable{
 
     private int id;
     private String createTime;
@@ -16,6 +18,16 @@ public class ArticleBean extends DataSupport{
     private String author;
     private String content;
     private String articleUrl;
+    private String articleCover;
+
+    public String getArticleCover() {
+        return articleCover;
+    }
+
+    public void setArticleCover(String articleCover) {
+        this.articleCover = articleCover;
+    }
+
     private String articleId;
 
     public String getCreateTime() {
