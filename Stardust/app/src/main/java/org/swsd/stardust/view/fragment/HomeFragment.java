@@ -4,15 +4,20 @@ package org.swsd.stardust.view.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
@@ -79,7 +84,6 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         initNumberPickerString();
         initDate();
 
-
         //设置响应事件
         mBtnCheckdate.setOnClickListener(this);
         mNpYear.setOnValueChangedListener(this);
@@ -88,6 +92,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         mNpMonth.setOnScrollListener(this);
         mNpDay.setOnValueChangedListener(this);
         mNpDay.setOnScrollListener(this);
+
 
         //监听年份状态
         mNpYear.setOnValueChangeListenerInScrolling(new NumberPickerView.OnValueChangeListenerInScrolling() {
@@ -161,13 +166,21 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         });
 
 
+
         mNoteList = mHomePresenter.getNoteList();
 
         //设置瀑布流为4列
         StaggeredGridLayoutManager layoutManager = new
-                StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL);
+                StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL){
+                    @Override
+                    public boolean canScrollHorizontally() {
+                        return false;
+                    }
+                };
 
         mRvLightspot.setLayoutManager(layoutManager);
+
+        mRvLightspot.setNestedScrollingEnabled(false);
 
         //创建主页适配器
         adapter = new HomeAdapter(getContext(), mNoteList);
@@ -268,7 +281,6 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     }
 
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -280,7 +292,9 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
-    }//    @Override
+    }
+
+    //    @Override
 //    public void onSaveInstanceState(Bundle outState) {
 //        Log.d(TAG, "onSaveInstanceState: zzz  in");
 //        super.onSaveInstanceState(outState);
@@ -334,4 +348,6 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         super.onDetach();
         Log.d(TAG, "onDetach: ");
     }
+
+
 }
