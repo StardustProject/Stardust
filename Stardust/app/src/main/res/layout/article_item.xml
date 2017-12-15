@@ -6,11 +6,13 @@
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
     android:elevation="5dp"
-    app:cardCornerRadius="4dp">
+    app:cardCornerRadius="4dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#182434"
         android:orientation="vertical">
 
         <TextView
@@ -21,6 +23,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
             android:maxLines="2"
+            android:textColor="#ffffff"
             android:text="title"
             android:textSize="19sp" />
 
@@ -72,7 +75,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="Hello"
-            android:textColor="@color/dimGray"
+            android:textColor="@color/whiteSmoke"
             android:textSize="15sp" />
     </LinearLayout>
 

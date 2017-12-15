@@ -75,6 +75,7 @@ public class WebViewActivity extends AppCompatActivity {
                 case REMOVE_ADS:
                     //prograssBar.setVisibility(View.GONE);
                     webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+                    webView.setBackgroundColor(0);
                     break;
                 default:
                     break;

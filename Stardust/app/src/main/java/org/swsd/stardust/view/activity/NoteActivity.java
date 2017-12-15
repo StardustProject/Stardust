@@ -190,8 +190,9 @@ public class NoteActivity extends AppCompatActivity {
         Options options = new Options();
         options.setPlaceholder("请输入文字");
         icarus = new Icarus(textViewToolbar, options, webView);
-        options.addAllowedAttributes("a", Arrays.asList("class", "src", "alt", "data-type"));
-        options.addAllowedAttributes("body", Arrays.asList("src"));
+        options.addAllowedAttributes("img", Arrays.asList("data-type", "data-id", "class", "src", "alt", "width", "height", "data-non-image"));
+        options.addAllowedAttributes("iframe", Arrays.asList("data-type", "data-id", "class", "src", "width", "height"));
+        options.addAllowedAttributes("a", Arrays.asList("data-type", "data-id", "class", "href", "target", "title"));
         /*TextView boldButton = new TextViewButton();
         boldButton.setName(Button.NAME_BOLD);
         textViewToolbar.addButton(boldButton);*/
@@ -772,7 +773,10 @@ public class NoteActivity extends AppCompatActivity {
             NOTE_ID = String.valueOf(noteTemp.getNoteId());
             Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
             // TODO: 2017/12/14 不是新建的装载内容
-            icarus.setContent(noteTemp.getContent());
+            String content = noteTemp.getContent();
+            content = "<p><img alt=\"图片加载中\" src=\"http://ozcxh8wzm.bkt.clouddn.com/FsZuYkX9MP11Y0QP_6Gs5GyFj8kh\"><br>能不能结婚</p>";
+            Log.d(TAG, "装载的数据" + noteTemp.getContent());
+            icarus.setContent(content);
         }
     }
 
