@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#0F1E33">
 
     <TextView
         android:id="@+id/tv_mail_statBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black" />
+        android:background="#0F1E33" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="站内信"
-            android:textColor="@color/black"
+            android:textColor="#C4C4C4"
             android:textSize="20dp" />
 
         <ImageView
@@ -34,6 +35,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mail_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="#0F1E33"/>
 
 </LinearLayout>

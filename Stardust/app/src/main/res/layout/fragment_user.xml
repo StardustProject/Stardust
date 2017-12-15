@@ -6,19 +6,19 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteSmoke">
+    android:background="#0F1E33">
 
     <TextView
         android:id="@+id/tv_my_stateBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"/>
+        android:background="#0F1E33"/>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/white"
+        android:background="#182434"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -28,8 +28,8 @@
             android:layout_gravity="center"
             app:civ_border_width="1dp"
             app:civ_border_overlay="true"
-            app:civ_border_color="@color/silver"
-            app:civ_fill_color="@color/whiteSmoke" />
+            app:civ_border_color="#0F1E33"
+            app:civ_fill_color="#182434" />
 
         <TextView
             android:id="@+id/tv_my_user"
@@ -41,7 +41,7 @@
             android:layout_below="@+id/ic_my_user"
             android:text="User"
             android:textSize="15dp"
-            android:textColor="@color/dimGray" />
+            android:textColor="#C4C4C4" />
 
         <ImageView
             android:id="@+id/iv_my_setting"
@@ -61,7 +61,7 @@
             android:layout_width="100dp"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
-            android:background="@color/white">
+            android:background="#182434">
             <ImageView
                 android:src="@drawable/ic_my_days"
                 android:layout_width="25dp"
@@ -75,9 +75,10 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
-            android:background="@color/white"
+            android:background="#182434"
             android:gravity="center_vertical|left"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:textColor="#C4C4C4"/>
     </LinearLayout>
 
     <LinearLayout
@@ -87,7 +88,7 @@
             android:layout_width="100dp"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
-            android:background="@color/white">
+            android:background="#182434">
             <ImageView
                 android:src="@drawable/ic_my_stars"
                 android:layout_width="35dp"
@@ -101,9 +102,10 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
-            android:background="@color/white"
+            android:background="#182434"
             android:textSize="15dp"
-            android:gravity="center_vertical|left"/>
+            android:gravity="center_vertical|left"
+            android:textColor="#C4C4C4"/>
     </LinearLayout>
 
     <LinearLayout
@@ -113,7 +115,7 @@
             android:layout_width="100dp"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
-            android:background="@color/white">
+            android:background="#182434">
             <ImageView
                 android:src="@drawable/ic_notice"
                 android:layout_width="25dp"
@@ -127,10 +129,11 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
-            android:background="@color/white"
+            android:background="#182434"
             android:text="站内信"
             android:textSize="15dp"
-            android:gravity="center_vertical|left"/>
+            android:gravity="center_vertical|left"
+            android:textColor="#C4C4C4"/>
     </LinearLayout>
 
     <LinearLayout
@@ -140,7 +143,7 @@
             android:layout_width="100dp"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
-            android:background="@color/white">
+            android:background="#182434">
             <ImageView
                 android:src="@mipmap/feedback"
                 android:layout_width="25dp"
@@ -154,9 +157,10 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
-            android:background="@color/white"
+            android:background="#182434"
             android:text="点我发送反馈"
             android:textSize="15dp"
-            android:gravity="center_vertical|left"/>
+            android:gravity="center_vertical|left"
+            android:textColor="#C4C4C4"/>
     </LinearLayout>
 </LinearLayout>
