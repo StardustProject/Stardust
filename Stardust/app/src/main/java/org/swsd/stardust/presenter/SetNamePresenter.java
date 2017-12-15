@@ -13,6 +13,7 @@ import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
 import org.swsd.stardust.util.UpdateTokenUtil;
+import org.swsd.stardust.view.activity.InfoSettingActivity;
 
 import java.io.IOException;
 
@@ -49,7 +50,7 @@ public class SetNamePresenter {
                     userBean.setUserName(userName.toString());
                     userBean.updateAll("userId=?", "" + userBean.getUserId());
                     // 发送广播提醒设置页面修改成功
-                    mContext.sendBroadcast(new Intent("reload the setting page"));
+                    mContext.sendBroadcast(new Intent(InfoSettingActivity.ACTION_RELOAD));
                     Toast.makeText(mContext, "修改用户名成功", Toast.LENGTH_SHORT).show();
                     break;
                 case 409:

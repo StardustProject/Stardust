@@ -52,9 +52,11 @@
         <activity
             android:name=".view.activity.setPasswordActivity"
             android:label="修改密码"
-            android:theme="@style/MyTheme"
-            android:screenOrientation="portrait"/>
-
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name=".view.activity.MailActivity"
+            android:label="显示站内信"
+            android:theme="@style/MyTheme" />
         <activity android:name=".view.activity.FeedBackActivity"
             android:label="发送反馈"
             android:theme="@style/MyTheme"
