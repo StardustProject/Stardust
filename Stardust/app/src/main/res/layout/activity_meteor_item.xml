@@ -10,7 +10,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#182434"
+        android:background="#122444"
         >
 
         <TextView
@@ -24,7 +24,7 @@
             android:maxEms="18"
             android:maxLines="10"
             android:ellipsize="end"
-            android:textColor="#ffffff"/>
+            android:textColor="#C4C4C4"/>
 
         <LinearLayout
             android:layout_width="match_parent"
