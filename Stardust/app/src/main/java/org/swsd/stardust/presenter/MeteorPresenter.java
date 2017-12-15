@@ -96,9 +96,12 @@ public class MeteorPresenter implements IMeteorPresenter{
                     String meteorId = Meteor.getString("id");
                     String meteorContent = Meteor.getString("content");
                     String url = Meteor.getString("url");
+                    String meteorUpvoteQuantity = Meteor.getString("upvote_quantity");
                     MeteorBean meteorBean = new MeteorBean();
                     meteorBean.setMeteorId(Integer.valueOf(meteorId));
                     meteorBean.setURL(url);
+                    meteorBean.setUpvoteQuantity(Integer.valueOf(meteorUpvoteQuantity));
+                    meteorBean.setIsLike(false);
                     if(meteorContent == null){
                         meteorBean.setIsPureMedia(true);
                     }else {

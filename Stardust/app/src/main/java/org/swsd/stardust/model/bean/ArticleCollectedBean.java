@@ -18,7 +18,16 @@ public class ArticleCollectedBean extends DataSupport {
     private String articleId;
     private String articleCover;
     private boolean isLiked;
-
+    public ArticleCollectedBean(){}
+    public ArticleCollectedBean(ArticleBean articleBean){
+        createTime = articleBean.getCreateTime();
+        title = articleBean.getTitle();
+        author = articleBean.getAuthor();
+        content = articleBean.getContent();
+        articleUrl = articleBean.getArticleUrl();
+        articleId = articleBean.getArticleId();
+        articleCover = articleBean.getArticleCover();
+    }
     public int getId() {
         return id;
     }

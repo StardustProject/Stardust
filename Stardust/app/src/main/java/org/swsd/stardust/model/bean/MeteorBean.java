@@ -18,6 +18,8 @@ public class MeteorBean extends DataSupport implements Serializable {
     private String URL;
     private String meteorContent;
     private boolean isPureMedia;
+    private int upvoteQuantity;
+    private Boolean isLike;
 
     public int getMeteorId() {
         return meteorId;
@@ -51,4 +53,19 @@ public class MeteorBean extends DataSupport implements Serializable {
         this.isPureMedia = isPureMedia;
     }
 
+    public int getUpvoteQuantity(){
+        return upvoteQuantity;
+    }
+
+    public void setUpvoteQuantity(int upvoteQuantity){
+        this.upvoteQuantity = upvoteQuantity;
+    }
+
+    public Boolean getIsLike(){
+        return isLike;
+    }
+
+    public void setIsLike(Boolean isLike){
+        this.isLike = isLike;
+    }
 }

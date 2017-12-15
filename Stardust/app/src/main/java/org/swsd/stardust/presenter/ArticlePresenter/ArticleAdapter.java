@@ -76,6 +76,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                 Log.d(TAG, "url is " + article.getArticleUrl());
                 Intent intent = new Intent(mContext, WebViewActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putSerializable("articleBean",article);
                 bundle.putString("articleID",article.getArticleId());
                 bundle.putString("url",article.getArticleUrl());
                 intent.putExtras(bundle);

@@ -9,5 +9,6 @@
         <mapping class="org.swsd.stardust.model.bean.UserBean"></mapping>
         <mapping class="org.swsd.stardust.model.bean.MeteorBean"></mapping>
         <mapping class="org.swsd.stardust.model.bean.ArticleCollectedBean"></mapping>
+        <mapping class="org.swsd.stardust.model.bean.MailBean"></mapping>
     </list>
 </litepal>

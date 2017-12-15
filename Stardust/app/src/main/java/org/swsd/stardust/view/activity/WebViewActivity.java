@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -15,6 +14,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.json.JSONException;
@@ -25,6 +26,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.litepal.tablemanager.Connector;
 import org.swsd.stardust.R;
+import org.swsd.stardust.model.bean.ArticleBean;
 import org.swsd.stardust.model.bean.ArticleCollectedBean;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.UserPresenter;
@@ -54,12 +56,14 @@ public class WebViewActivity extends AppCompatActivity {
     private ProgressBar prograssBar;
     private int resourceCount = 0;
     private static String ARTICLE_ID;
-    private FloatingActionButton fabLike;
     private Boolean isLiked = false;
     private String html;
     private static final int REMOVE_ADS = 1;
     private long startTime;
     private long endTime;
+    private ArticleBean articleBean;
+    private ArticleCollectedBean collection;
+    private LikeButton likeButton;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     /**
      * 按下返回键实现后退网页功能
@@ -110,21 +114,19 @@ public class WebViewActivity extends AppCompatActivity {
         webView = (WebView) findViewById(R.id.web_view);
         prograssBar = (ProgressBar) findViewById(R.id.loading_progress);
         initBudle();
-        fabLike = (FloatingActionButton) findViewById(R.id.fab_like);
-        fabLike.setOnClickListener(new View.OnClickListener() {
+        likeButton =(LikeButton) findViewById(R.id.like_button);
+        likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
-            public void onClick(View v) {
-                if (isLiked) {
-                    fabLike.setImageResource(R.mipmap.like);
-                    isLiked = false;
-                } else {
-                    fabLike.setImageResource(R.mipmap.like_fill);
-                    collectArticle();
-                    isLiked = true;
-                }
+            public void liked() {
+                isLiked = true;
+                collectArticle();
+            }
+
+            @Override
+            public void unLiked() {
+                isLiked = false;
             }
         });
-        fabLike.setVisibility(View.INVISIBLE);
         //初始化分析跟踪
         ZhugeSDK.getInstance().init(getApplicationContext());
         //定义与事件相关的属性信息
@@ -149,7 +151,6 @@ public class WebViewActivity extends AppCompatActivity {
                 Date currentDate = new Date(System.currentTimeMillis());
                 startTime = currentDate.getTime();
                 Log.d(TAG, "handleMessage: timeStart" + currentDate.getTime());
-                fabLike.setVisibility(View.VISIBLE);
                 //Toast.makeText(WebViewActivity.this, "结束加载" + resourceCount, Toast.LENGTH_SHORT).show();
             }
 
@@ -210,6 +211,10 @@ public class WebViewActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         url = bundle.getString("url");
         ARTICLE_ID = bundle.getString("articleID");
+        articleBean = (ArticleBean) bundle.getSerializable("articleBean");
+        collection = new ArticleCollectedBean(articleBean);
+        collection.setLiked(true);
+        Log.d(TAG, "initBudle: article id " + articleBean.getArticleId());
         removeADs(url);
         Log.d(TAG, "initBudle: url is " + url);
         Log.d(TAG, "initBudle: id is " + ARTICLE_ID);
@@ -287,11 +292,7 @@ public class WebViewActivity extends AppCompatActivity {
                     Response response = client.newCall(request).execute();
                     Log.d(TAG, "putResponse +" + response.body().string());
                     // 上传文章并保存
-                    ArticleCollectedBean temp = new ArticleCollectedBean();
-                    temp.setArticleId(ARTICLE_ID);
-                    temp.setArticleUrl(url);
-                    temp.setLiked(true);
-                    temp.save();
+                    collection.save();
                     Log.d(TAG, " 收藏成功");
                 } catch (IOException e) {
                     e.printStackTrace();
