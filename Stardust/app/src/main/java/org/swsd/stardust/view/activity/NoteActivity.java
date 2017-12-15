@@ -224,7 +224,92 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.note_share: {
+                Log.d(TAG, "Share 正在分享");
+                icarus.getContent(new Callback() {
+                    @Override
+                    public void run(String params) {
+                        Log.d(TAG, "content:" + params);
+                        if(params.length() == 14){
+                            isEmpty = true;
+                        }
+                        else{
+                            htmlContent = params;
+                            htmlContent = formatContent(htmlContent);
+                            isEmpty = false;
+                        }
+                        if (!isEmpty) {
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
+                            dialog.setTitle("确定将此记录匿名分享为流星吗？");
+                            dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //定义与事件相关的属性信息
+                                    try {
+                                        JSONObject eventObject = new JSONObject();
+                                        eventObject.put("用户事件", "分享");
+                                        eventObject.put("数量", 1);
+                                        //记录事件,以购买为例
+                                        ZhugeSDK.getInstance().track(getApplicationContext(), "用户分享", eventObject);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    // TODO: 2017/12/14  传入html字符串
+                                    shareHtml(htmlContent);
+                                    isShare = true;
+                                    invalidateOptionsMenu();
+                                }
+                            });
+                            dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            dialog.show();
+                        } else {
+                            Toast.makeText(NoteActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
+                return true;
+            }
+            case R.id.note_cancel_share: {
+
+                // 2017/12/12 取消分享按钮功能 日记已经在服务器有状态，直接修改即可
+                AlertDialog.Builder dialog = new AlertDialog.Builder(NoteActivity.this);
+                dialog.setTitle("确定取消分享此记录吗？");
+                dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //定义与事件相关的属性信息
+                        try {
+                            JSONObject eventObject = new JSONObject();
+                            eventObject.put("用户事件", "取消分享");
+                            eventObject.put("数量", 1);
+                            //记录事件,以购买为例
+                            ZhugeSDK.getInstance().track(getApplicationContext(), "用户取消分享", eventObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        cancelShareNote(URL);
+                        isShare = false;
+                        invalidateOptionsMenu();
+                    }
+                });
+                dialog.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.show();
+                item.setVisible(false);
+                /* Menu menu = null;
+                getMenuInflater().inflate(R.menu.menu_note, menu);
+                MenuItem menuItem = menu.findItem(R.id.note_share);
+                menuItem.setVisible(true);*/
+                return true;
+            }
             case R.id.note_save: {
                     if (icarus == null) {
                         return true;
