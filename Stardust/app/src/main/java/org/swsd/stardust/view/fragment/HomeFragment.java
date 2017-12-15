@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     private NumberPickerView mNpMonth;
     private NumberPickerView mNpDay;
     private Button mBtnCheckdate;
-    private HomeAdapter adapter;
+    public static HomeAdapter adapter;
     private List<NoteBean>mNoteList;
     private String[] mStrYear;
     private String[] mStrMonth;

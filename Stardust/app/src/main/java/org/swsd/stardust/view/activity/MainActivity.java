@@ -121,7 +121,6 @@ public class MainActivity extends BaseActivity {
         // 判断恢复逻辑
         if(FRAGMENT_HOLDER == 0){
             navigation.setSelectedItemId(R.id.navigation_home);
-
         }
         else if (FRAGMENT_HOLDER == 1){
             navigation.setSelectedItemId(R.id.navigation_article);
