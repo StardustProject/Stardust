@@ -790,12 +790,25 @@ public class NoteActivity extends AppCompatActivity {
             isShare = noteTemp.isShareStatus();
             NOTE_ID = String.valueOf(noteTemp.getNoteId());
             Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
-            // TODO: 2017/12/14 不是新建的装载内容
+            //  不是新建的装载内容
             String content = noteTemp.getContent();
-            Document doc = Jsoup.parse(content);
+            //解决转义符号的影响
+            Log.d(TAG, "未格式化的数据" + content);
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < content.length() ; i++) {
+                if(content.charAt(i) != '\\'){
+                    sb.append(content.charAt(i));
+                }
+            }
+            int i = sb.indexOf("\\");
+            Log.d(TAG, "initBundle: ii" + i);
+/*            while (i!= 0){
+                sb.replace(i,i+1,"");
+                i = sb.indexOf("\\");
+            }*/
             //content = "<p><img alt=\"图片加载中\" src=\"http://ozcxh8wzm.bkt.clouddn.com/FsZuYkX9MP11Y0QP_6Gs5GyFj8kh\"><br>能不能结婚</p>";
-            Log.d(TAG, "装载的数据" + doc.html());
-            icarus.insertHtml(doc.html());
+            Log.d(TAG, "装载的数据" + sb.toString());
+            icarus.setContent(sb.toString());
         }
     }
 
