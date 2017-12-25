@@ -30,7 +30,6 @@ public class MainActivity extends BaseActivity {
 
     private static int FRAGMENT_HOLDER = 0;
     BottomNavigationView navigation;
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -90,12 +89,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        Log.d("熊立强", "initView: ");
+        Log.d(TAG, "initView: ");
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.hide();
         }
-        replaceFragment(new HomeFragment());
+        //replaceFragment(new HomeFragment());
     }
 
     @Override
@@ -119,7 +118,7 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         Log.d(TAG, "onResume: Main ");
         // 判断恢复逻辑
-        if(FRAGMENT_HOLDER == 0){
+        if(FRAGMENT_HOLDER == 0 ){
             navigation.setSelectedItemId(R.id.navigation_home);
         }
         else if (FRAGMENT_HOLDER == 1){
