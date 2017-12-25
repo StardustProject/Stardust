@@ -2,11 +2,14 @@ package org.swsd.stardust.view.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
@@ -60,6 +63,8 @@ import org.swsd.stardust.presenter.UserPresenter;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -69,6 +74,8 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+
+import static android.webkit.WebView.enableSlowWholeDocumentDraw;
 
 /**
  * author : 熊立强
@@ -106,6 +113,7 @@ public class NoteActivity extends AppCompatActivity {
     private String imageUrl;
     private String audioUrl;
     private String htmlContent;
+    Bitmap bitmap;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -150,6 +158,7 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        enableSlowWholeDocumentDraw();
         setContentView(R.layout.activity_note);
         createTime = new Date().getTime();
         toolbar = (Toolbar) findViewById(R.id.note_toolbar);
@@ -200,6 +209,7 @@ public class NoteActivity extends AppCompatActivity {
         });
 
         webView = (WebView) findViewById(R.id.editor);
+        webView.setDrawingCacheEnabled(true);
         // I offered a toolbar to manage editor buttons which implements TextView that with icon fonts.
         // It's just a collection, not an Android View implementation.
         // TextViewToolbar will listen click events on all buttons that added to it.
@@ -412,6 +422,11 @@ public class NoteActivity extends AppCompatActivity {
                     }
                 });
                 dialog.show();
+                return true;
+            }
+            case R.id.note_image_share: {
+                Log.d(TAG, "长图片分享");
+                longImageShare(this);
                 return true;
             }
             default:
@@ -795,8 +810,8 @@ public class NoteActivity extends AppCompatActivity {
             //解决转义符号的影响
             Log.d(TAG, "未格式化的数据" + content);
             StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < content.length() ; i++) {
-                if(content.charAt(i) != '\\'){
+            for (int i = 0; i < content.length(); i++) {
+                if (content.charAt(i) != '\\') {
                     sb.append(content.charAt(i));
                 }
             }
@@ -1291,5 +1306,54 @@ public class NoteActivity extends AppCompatActivity {
             mr.release();
             mr = null;
         }
+    }
+
+    private void longImageShare(Activity activity) {
+        //bitmap = webView.getDrawingCache().;
+        //获取Picture对象
+/*        Picture picture = webView.capturePicture();
+//得到图片的宽和高（没有reflect图片内容）
+        int width = picture.getWidth();
+        int height = picture.getHeight();
+        if (width > 0 && height > 0) {
+            //创建位图
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            //绘制(会调用native方法，完成图形绘制)
+            picture.draw(canvas);
+
+        }*/
+//获取webview缩放率
+        float scale = webView.getScale();
+//得到缩放后webview内容的高度
+        int webViewHeight = (int) (webView.getContentHeight() * scale);
+        bitmap = Bitmap.createBitmap(webView.getWidth(), webViewHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+//绘制
+        webView.draw(canvas);
+
+        String fileName = null;
+        try {
+            fileName = Environment.getExternalStorageDirectory().getPath() + "/webview_capture4.jpg";
+            FileOutputStream fos = new FileOutputStream(fileName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bitmap != null) {
+                bitmap.recycle();
+            }
+        }
+        Log.d(TAG, "onClicked: 分享图片");
+        Uri uri = Uri.fromFile(new File(fileName));
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("image");  //设置分享内容的类型
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        shareIntent.setType("image/jpeg");
+        startActivity(Intent.createChooser(shareIntent, "分享图片"));
     }
 }
