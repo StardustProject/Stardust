@@ -16,11 +16,12 @@ import com.zhuge.analysis.stat.ZhugeSDK;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.presenter.LoginPresenter;
+import org.swsd.stardust.presenter.UserPresenter;
 import org.swsd.stardust.util.LoginActivityJudgment;
 import org.swsd.stardust.view.guideActivity.GuideActivity;
 
 /**
- * author     :  胡俊钦
+ * author     :  胡俊钦，林炜鸿
  * time       :  2017/11/07
  * description:  登录模块
  * version:   :  1.0
@@ -65,6 +66,7 @@ public class LoginActivity extends BaseActivity {
             Intent goToMain = new Intent(getApplicationContext(), MainActivity.class);
             goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplicationContext().startActivity(goToMain);
+            finish();
         }
 
         super.onCreate(savedInstanceState);
@@ -96,7 +98,6 @@ public class LoginActivity extends BaseActivity {
                     // 若网络可用,进行格式检查
                     LoginPresenter login = new LoginPresenter();
                     login.checkBeforeLogin(getApplicationContext(), etUsername.getText(), etPassword.getText());
-                    finish();
                 }
             }
         });

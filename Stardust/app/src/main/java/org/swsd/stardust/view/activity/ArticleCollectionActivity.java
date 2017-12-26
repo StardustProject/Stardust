@@ -4,7 +4,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,26 +11,31 @@ import android.widget.TextView;
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
-import org.swsd.stardust.model.bean.MailBean;
-import org.swsd.stardust.presenter.MailPresenter;
-import org.swsd.stardust.presenter.adapter.MailAdapter;
+import org.swsd.stardust.model.bean.ArticleBean;
+import org.swsd.stardust.model.bean.ArticleCollectedBean;
+import org.swsd.stardust.presenter.ArticlePresenter.ArticleAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+
 /**
  * author  ： 林炜鸿
- * time    ： 2017/12/13
- * desc    ： 显示站内信的Activity
+ * time    ： 2017/12/16
+ * desc    ： 收藏文章的 Activity
  * version ： 1.0
  */
-public class MailActivity extends BaseActivity {
-    private List<MailBean> mailBeanList = new ArrayList<>();
+public class ArticleCollectionActivity extends BaseActivity {
+    // TODO: 创建布局
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    public RecyclerView recyclerView;
+    public static List<ArticleBean> mArticleList;
+    public static ArticleAdapter adapter;
 
     @Override
     public int bindLayout() {
-        // 加载布局
-        setContentView(R.layout.activity_mail);
+        setContentView(R.layout.activity_article_collection);
         return 0;
     }
 
@@ -43,23 +47,30 @@ public class MailActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
+        List<ArticleCollectedBean> tempList = DataSupport.findAll(ArticleCollectedBean.class);
+        mArticleList = new ArrayList<>();
+        for (ArticleCollectedBean acb : tempList) {
+            mArticleList.add(new ArticleBean(acb));
+        }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // 初始化界面,实现沉浸式顶部栏
         initView();
         // 绑定并加载登录界面布局
         bindLayout();
+
         // 获取顶部状态栏的高度
         Resources resources = getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         int stateBarHeight = resources.getDimensionPixelSize(resourceId);
 
         // 用空的TextView预留顶部状态栏高度
-        TextView tvStateBar = (TextView) findViewById(R.id.tv_mail_statBar);
+
+        TextView tvStateBar = (TextView) findViewById(R.id.tv_article_collection_statBar);
         android.view.ViewGroup.LayoutParams setHeight = tvStateBar.getLayoutParams();
         setHeight.height = stateBarHeight;
         tvStateBar.setLayoutParams(setHeight);
@@ -74,22 +85,14 @@ public class MailActivity extends BaseActivity {
             }
         });
 
-        // 重新从服务器加载数据
-        getData();
+        initData();
 
-        // 初始化 RecyclerView
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.mail_recycler_view);
+        // 初始化收藏文章的 RecyclerView
+        recyclerView = (RecyclerView) findViewById(R.id.article_collection_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        MailAdapter adapter = new MailAdapter(mailBeanList);
+        adapter = new ArticleAdapter(mArticleList);
         recyclerView.setAdapter(adapter);
     }
 
-    private void getData() {
-        MailPresenter mailPresenter = new MailPresenter();
-        // 获取最新消息
-        mailPresenter.toGetMail(this, MailPresenter.LATEST_MAIL);
-        mailBeanList = DataSupport.findAll(MailBean.class);
-        return;
-    }
 }

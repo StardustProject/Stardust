@@ -4,31 +4,36 @@ package org.swsd.stardust.view.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
+import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
+import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.HomePresenter;
 import org.swsd.stardust.presenter.IHomePresenter;
 import org.swsd.stardust.presenter.adapter.HomeAdapter;
+import org.swsd.stardust.util.UpdateTokenUtil;
 
+import java.io.IOException;
+import java.net.ResponseCache;
 import java.util.Calendar;
 import java.util.List;
 
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static org.swsd.stardust.R.mipmap.user;
 
 /**
  *    author     :  张昭锡
@@ -44,7 +49,8 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     private NumberPickerView mNpMonth;
     private NumberPickerView mNpDay;
     private Button mBtnCheckdate;
-    private HomeAdapter adapter;
+    public static HomeAdapter adapter;
+
     private List<NoteBean>mNoteList;
     private String[] mStrYear;
     private String[] mStrMonth;
@@ -61,6 +67,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     private SharedPreferences.Editor editor;
 
     IHomePresenter mHomePresenter;
+
 
     private static final String TAG = "HomeFragment";
 
@@ -80,6 +87,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         mNpDay = (NumberPickerView)mView.findViewById(R.id.np_home_day);
         mBtnCheckdate = (Button)mView.findViewById(R.id.btn_home_checkdate);
 
+
         //日期初始化
         initNumberPickerString();
         initDate();
@@ -92,6 +100,26 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         mNpMonth.setOnScrollListener(this);
         mNpDay.setOnValueChangedListener(this);
         mNpDay.setOnScrollListener(this);
+
+        mNoteList = mHomePresenter.getNoteList();
+
+
+        //设置瀑布流为4列
+        StaggeredGridLayoutManager layoutManager = new
+                StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL){
+                    @Override
+                    public boolean canScrollHorizontally() {
+                        return false;
+                    }
+                };
+
+        mRvLightspot.setLayoutManager(layoutManager);
+
+        mRvLightspot.setNestedScrollingEnabled(false);
+
+        //创建主页适配器
+        adapter = new HomeAdapter(getContext(), mNoteList);
+        mRvLightspot.setAdapter(adapter);
 
 
         //监听年份状态
@@ -165,26 +193,9 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
             }
         });
 
+        mHomePresenter.changeDate(getContext(),adapter,mNoteList,getActivity(),mPreYear,mPreMonth + 1,mPreDay);
 
-
-        mNoteList = mHomePresenter.getNoteList();
-
-        //设置瀑布流为4列
-        StaggeredGridLayoutManager layoutManager = new
-                StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL){
-                    @Override
-                    public boolean canScrollHorizontally() {
-                        return false;
-                    }
-                };
-
-        mRvLightspot.setLayoutManager(layoutManager);
-
-        mRvLightspot.setNestedScrollingEnabled(false);
-
-        //创建主页适配器
-        adapter = new HomeAdapter(getContext(), mNoteList);
-        mRvLightspot.setAdapter(adapter);
+        Log.d(TAG, "onCreateView: zxzhang hahahha");
 
         return mView;
     }
@@ -196,7 +207,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         switch (v.getId()){
             case R.id.btn_home_checkdate:
                 mBtnCheckdate.setAlpha(0.0f);
-                mHomePresenter.changeDate(getContext(),adapter,mNoteList,
+                mHomePresenter.changeDate(getContext(),adapter,mNoteList,getActivity(),
                         Integer.parseInt(mNpYear.getContentByCurrValue()),
                         Integer.parseInt(mNpMonth.getContentByCurrValue()), Integer.parseInt(mNpDay.getContentByCurrValue()));
                 break;
@@ -260,14 +271,17 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         mPreYear = calendar.get(Calendar.YEAR);
         mPreMonth = calendar.get(Calendar.MONTH);
         mPreDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mHomePresenter.setNoteYear(mPreYear);
-        mHomePresenter.setNoteMonth(mPreMonth);
-        mHomePresenter.setNoteDay(mPreDay);
+
 
         //持久化数据读取
         mPreYear = pref.getInt("mPreYear",mPreYear);
         mPreMonth = pref.getInt("mPreMonth",mPreMonth);
         mPreDay = pref.getInt("mPreDay",mPreDay);
+
+        mHomePresenter.setNoteYear(mPreYear);
+        mHomePresenter.setNoteMonth(mPreMonth);
+        mHomePresenter.setNoteDay(mPreDay);
+
 
         mNpYear.refreshByNewDisplayedValues(mStrYear);
         mNpYear.setValue(mPreYear - 1970);
@@ -348,6 +362,8 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         super.onDetach();
         Log.d(TAG, "onDetach: ");
     }
+
+
 
 
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#0F1E33">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0F1E33">
 
     <TextView
-        android:id="@+id/tv_mail_statBar"
+        android:id="@+id/tv_article_collection_statBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#0F1E33" />
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="站内信"
+            android:text="收藏的文章"
             android:textColor="#C4C4C4"
             android:textSize="20dp" />
 
@@ -33,9 +33,8 @@
     </FrameLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/mail_recycler_view"
+        android:id="@+id/article_collection_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#0F1E33"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,9 +14,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.like.LikeButton;
 import com.like.OnLikeListener;
+import com.ufreedom.uikit.FloatingText;
+import com.ufreedom.uikit.effect.ScaleFloatingAnimator;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
@@ -46,6 +50,8 @@ public class MeteorDetail extends BaseActivity{
     LikeButton likeButton;
     Boolean isLikeMeteor;
     Boolean isLike;
+    FloatingText floatingText;
+    String showField;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +97,7 @@ public class MeteorDetail extends BaseActivity{
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SetReportMeteorPresenter setReportMeteorPresenter = new SetReportMeteorPresenter();
                         setReportMeteorPresenter.reportMeteor(meteor);
+                        Toast.makeText(MeteorDetail.this, "举报成功！", Toast.LENGTH_LONG).show();
                     }
                 });
                 dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -109,14 +116,43 @@ public class MeteorDetail extends BaseActivity{
         likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked() {
+
+                showField = String.valueOf(meteor.getUpvoteQuantity()+1);
+                floatingText = new FloatingText.FloatingTextBuilder(MeteorDetail.this)
+                        .textColor(Color.argb ( 255,  238,  180,  34 )) // 漂浮字体的颜色
+                        .textSize(40)   // 浮字体的大小
+                        .textContent("+" + showField) // 浮字体的内容
+                        .offsetX(0) // FloatingText 相对其所贴附View的水平位移偏移量
+                        .offsetY(100) // FloatingText 相对其所贴附View的垂直位移偏移量
+                        .floatingAnimatorEffect(new ScaleFloatingAnimator()) // 漂浮动画
+                        .build();
+
+                floatingText.attach2Window();
+                floatingText.startFloating(likeButton);
+
                 isLikeMeteor = true;
             }
 
             @Override
             public void unLiked() {
+
                 if(isLike){
                     likeButton.setLiked(true);
                     isLikeMeteor = true;
+
+                    showField = String.valueOf(meteor.getUpvoteQuantity()+1);
+                    floatingText = new FloatingText.FloatingTextBuilder(MeteorDetail.this)
+                            .textColor(Color.argb ( 255,  238,  180,  34 )) // 漂浮字体的颜色
+                            .textSize(40)   // 浮字体的大小
+                            .textContent("+" + showField) // 浮字体的内容
+                            .offsetX(0) // FloatingText 相对其所贴附View的水平位移偏移量
+                            .offsetY(100) // FloatingText 相对其所贴附View的垂直位移偏移量
+                            .floatingAnimatorEffect(new ScaleFloatingAnimator()) // 漂浮动画
+                            .build();
+
+                    floatingText.attach2Window();
+                    floatingText.startFloating(likeButton);
+
                 }else{
                     isLikeMeteor = false;
                 }
@@ -132,6 +168,7 @@ public class MeteorDetail extends BaseActivity{
             isLikeMeteor = true;
         }
 
+        //返回键
         backImageView = (ImageView) findViewById(R.id.iv_MeteorDetail_back);
         backImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +183,7 @@ public class MeteorDetail extends BaseActivity{
                 finish();
             }
         });
+
     }
 
     private void sendRequestWithOkHttp(final String url){
@@ -195,6 +233,19 @@ public class MeteorDetail extends BaseActivity{
 
     @Override
     public void initData() {
+    }
+
+    //重写系统返回键
+    @Override
+    public void onBackPressed() {
+        if(isLikeMeteor && !isLike){
+            SetLikeMeteorPresenter setLikeMeteorPresenter = new SetLikeMeteorPresenter();
+            setLikeMeteorPresenter.updataMeteor(meteor);
+            MeteorBean meteorBean = new MeteorBean();
+            meteorBean.setIsLike(true);
+            meteorBean.updateAll("meteorId = ?", String.valueOf(meteor.getMeteorId()));
+        }
+        super.onBackPressed();
     }
 
 }

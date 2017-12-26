@@ -24,4 +24,5 @@ public class FourthFragment extends Fragment {
         View view = inflater.inflate(R.layout.guide_fragment_fourth, container, false);
         return view;
     }
+
 }

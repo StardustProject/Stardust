@@ -17,8 +17,13 @@ import org.swsd.stardust.view.activity.LoginActivity;
 import org.swsd.stardust.view.activity.MainActivity;
 import org.swsd.stardust.view.activity.NoteActivity;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  *    author     :  张昭锡
@@ -77,13 +82,35 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
 
-                int position= holder.getAdapterPosition();
-                NoteBean note = mNoteList.get(position);
-                Intent intent = new Intent(mContext, NoteActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("note",note);
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            int position= holder.getAdapterPosition();
+                            NoteBean note = mNoteList.get(position);
+
+                            String noteUrl = note.getContent();
+                            OkHttpClient client = new OkHttpClient();
+                            Request request = new Request.Builder()
+                                                        .url(noteUrl)
+                                                        .build();
+                            Response response = client.newCall(request).execute();
+                            note.setContent(response.body().string());
+                            note.save();
+
+                            Intent intent = new Intent(mContext, NoteActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("note",note);
+                            intent.putExtras(bundle);
+                            mContext.startActivity(intent);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }).start();
+
             }
         });
 
