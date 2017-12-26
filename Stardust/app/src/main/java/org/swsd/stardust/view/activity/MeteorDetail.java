@@ -136,27 +136,19 @@ public class MeteorDetail extends BaseActivity{
             @Override
             public void unLiked() {
 
-                if(isLike){
-                    likeButton.setLiked(true);
-                    isLikeMeteor = true;
+                showField = String.valueOf(meteor.getUpvoteQuantity()+1);
+                floatingText = new FloatingText.FloatingTextBuilder(MeteorDetail.this)
+                        .textColor(Color.argb ( 255,  238,  180,  34 )) // 漂浮字体的颜色
+                        .textSize(40)   // 浮字体的大小
+                        .offsetX(0) // FloatingText 相对其所贴附View的水平位移偏移量
+                        .offsetY(100) // FloatingText 相对其所贴附View的垂直位移偏移量
+                        .floatingAnimatorEffect(new ScaleFloatingAnimator()) // 漂浮动画
+                        .build();
 
-                    showField = String.valueOf(meteor.getUpvoteQuantity()+1);
-                    floatingText = new FloatingText.FloatingTextBuilder(MeteorDetail.this)
-                            .textColor(Color.argb ( 255,  238,  180,  34 )) // 漂浮字体的颜色
-                            .textSize(40)   // 浮字体的大小
-                            .textContent("+" + showField) // 浮字体的内容
-                            .offsetX(0) // FloatingText 相对其所贴附View的水平位移偏移量
-                            .offsetY(100) // FloatingText 相对其所贴附View的垂直位移偏移量
-                            .floatingAnimatorEffect(new ScaleFloatingAnimator()) // 漂浮动画
-                            .build();
+                floatingText.attach2Window();
+                floatingText.startFloating(likeButton);
 
-                    floatingText.attach2Window();
-                    floatingText.startFloating(likeButton);
-
-                }else{
-                    isLikeMeteor = false;
-                }
-
+                isLikeMeteor = false;
             }
         });
 
@@ -178,6 +170,12 @@ public class MeteorDetail extends BaseActivity{
                     setLikeMeteorPresenter.updataMeteor(meteor);
                     MeteorBean meteorBean = new MeteorBean();
                     meteorBean.setIsLike(true);
+                    meteorBean.updateAll("meteorId = ?", String.valueOf(meteor.getMeteorId()));
+                }else if(!isLikeMeteor && isLike){
+                    SetLikeMeteorPresenter setLikeMeteorPresenter = new SetLikeMeteorPresenter();
+                    setLikeMeteorPresenter.cancelMeteor(meteor);
+                    MeteorBean meteorBean = new MeteorBean();
+                    meteorBean.setIsLike(false);
                     meteorBean.updateAll("meteorId = ?", String.valueOf(meteor.getMeteorId()));
                 }
                 finish();
