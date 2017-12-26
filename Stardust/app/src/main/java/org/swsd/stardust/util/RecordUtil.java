@@ -22,10 +22,11 @@ import java.io.IOException;
 
 public class RecordUtil {
 
-    public  static File recordFile;
+    public static File recordFile;
+    public static MediaRecorder mediaRecorder;
 
     //传入Context和Activity
-    public static File recordUtil(Context context, Activity activity){
+    public static void startRecord(Context context, Activity activity){
 
         //权限申请
         if(ContextCompat.checkSelfPermission(activity, android.Manifest.permission.RECORD_AUDIO)
@@ -48,13 +49,15 @@ public class RecordUtil {
             recordFile = new File("/mnt/sdcard/"+ num +".amr");
             editor.putInt("num", num + 1);
             editor.commit();
-            MediaRecorder mediaRecorder = new MediaRecorder();
+            mediaRecorder = new MediaRecorder();
 
             // 判断，若当前文件已存在，则删除
             if (recordFile.exists()) {
                 Log.d("luojingzhao","delete");
                 recordFile.delete();
             }
+
+            //设置录音文件格式和存储路径
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
@@ -76,11 +79,22 @@ public class RecordUtil {
                 e.printStackTrace();
             }
 
-            //返回录音文件，可以通过转为string类型得到文件路径
-            return recordFile;
         }else{
             //权限没有授予，返回空
             Toast.makeText(context,"权限不足",Toast.LENGTH_SHORT);
+        }
+    }
+
+    public  static File stopRecord(){
+        if (recordFile != null) {
+            mediaRecorder.stop();
+            mediaRecorder.release();
+
+            //结束录音，返回录音文件（可以用字符串得到路径
+            return recordFile;
+        }else{
+
+            //录音文件为空,返回null
             return null;
         }
     }
