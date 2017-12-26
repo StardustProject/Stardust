@@ -1,5 +1,6 @@
 package org.swsd.stardust.presenter;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public interface IHomePresenter {
 
-    void changeDate(Context context,final HomeAdapter adapter,List<NoteBean>noteList,int year,int month,int day);
+    void changeDate(Context context,final HomeAdapter adapter,List<NoteBean>noteList,Activity activity,int year,int month,int day);
     void setNoteYear(int year);
     void setNoteMonth(int month);
     void setNoteDay(int day);
@@ -24,5 +25,5 @@ public interface IHomePresenter {
     List<NoteBean> getNoteList();
     boolean isLeapYear(int year);
     boolean isBigMonth(int month);
-
+    void syncNotesOfDay(int year, int month, int day,List<NoteBean>noteList,HomeAdapter adapter,Activity activity);
 }
