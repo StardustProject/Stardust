@@ -24,6 +24,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.ArticleBean;
@@ -75,6 +76,7 @@ public class WebViewActivity extends AppCompatActivity {
                 case REMOVE_ADS:
                     //prograssBar.setVisibility(View.GONE);
                     webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+                    webView.setBackgroundColor(0);
                     break;
                 default:
                     break;
@@ -113,7 +115,7 @@ public class WebViewActivity extends AppCompatActivity {
         Connector.getDatabase();
         webView = (WebView) findViewById(R.id.web_view);
         prograssBar = (ProgressBar) findViewById(R.id.loading_progress);
-        initBudle();
+
         likeButton =(LikeButton) findViewById(R.id.like_button);
         likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
@@ -125,8 +127,10 @@ public class WebViewActivity extends AppCompatActivity {
             @Override
             public void unLiked() {
                 isLiked = false;
+                cancelCollectArticle();
             }
         });
+        initBudle();
         //初始化分析跟踪
         ZhugeSDK.getInstance().init(getApplicationContext());
         //定义与事件相关的属性信息
@@ -213,11 +217,15 @@ public class WebViewActivity extends AppCompatActivity {
         ARTICLE_ID = bundle.getString("articleID");
         articleBean = (ArticleBean) bundle.getSerializable("articleBean");
         collection = new ArticleCollectedBean(articleBean);
-        collection.setLiked(true);
         Log.d(TAG, "initBudle: article id " + articleBean.getArticleId());
         removeADs(url);
         Log.d(TAG, "initBudle: url is " + url);
         Log.d(TAG, "initBudle: id is " + ARTICLE_ID);
+        int size = DataSupport.where("ArticleId == ?",ARTICLE_ID).find(ArticleCollectedBean.class).size();
+        Log.d(TAG, "initBudle:size " + size);
+        if (size == 1){
+            likeButton.setLiked(true);
+        }
     }
 
     private void removeADs(final String url) {
@@ -268,7 +276,10 @@ public class WebViewActivity extends AppCompatActivity {
         return doc_Dis.toString();
     }
 
-    private void collectArticle() {
+    /**
+     * 收藏文章
+     */
+    private synchronized void collectArticle() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -292,8 +303,46 @@ public class WebViewActivity extends AppCompatActivity {
                     Response response = client.newCall(request).execute();
                     Log.d(TAG, "putResponse +" + response.body().string());
                     // 上传文章并保存
+                    collection.setLiked(true);
                     collection.save();
                     Log.d(TAG, " 收藏成功");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 取消收藏
+     */
+    private synchronized void cancelCollectArticle() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 获取当前用户id
+                UserBean userBean;
+                UserPresenter userPresenter = new UserPresenter();
+                userBean = userPresenter.toGetUserInfo();
+                Log.d(TAG, "userBean" + userBean.getToken());
+                Log.d(TAG, "userBean" + userBean.getUserId());
+                String collect = "";
+                RequestBody requestBody =  RequestBody.create(JSON,collect);
+                // 解析url
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/articles/" + ARTICLE_ID + "/cancelFavorite")
+                            .addHeader("Content-Type", "application/json")
+                            .addHeader("Authorization", userBean.getToken())
+                            .put(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    Log.d(TAG, "putResponse +" + response.body().string());
+                    // 删除云端并删除本地文件
+                    DataSupport.deleteAll(ArticleCollectedBean.class,"ArticleId == ?",collection.getArticleId());
+
+                    Log.d(TAG, " 取消收藏成功");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

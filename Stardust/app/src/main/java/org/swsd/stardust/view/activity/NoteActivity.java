@@ -2,11 +2,14 @@ package org.swsd.stardust.view.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
@@ -60,6 +63,8 @@ import org.swsd.stardust.presenter.UserPresenter;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -69,6 +74,8 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+
+import static android.webkit.WebView.enableSlowWholeDocumentDraw;
 
 /**
  * author : 熊立强
@@ -106,12 +113,15 @@ public class NoteActivity extends AppCompatActivity {
     private String imageUrl;
     private String audioUrl;
     private String htmlContent;
+    Bitmap bitmap;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SAVE_NOTE:
+                    Toast.makeText(NoteActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "handleMessage: 保存成功");
+                    finish();
                     break;
                 case DELETE_NOTE:
                     Log.d(TAG, "handleMessage: " + "删除成功");
@@ -148,6 +158,7 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        enableSlowWholeDocumentDraw();
         setContentView(R.layout.activity_note);
         createTime = new Date().getTime();
         toolbar = (Toolbar) findViewById(R.id.note_toolbar);
@@ -157,31 +168,48 @@ public class NoteActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Save 正在保存");
-                if (!isEmpty) {
-                    if (isNew) {
-                        //定义与事件相关的属性信息
-                        try {
-                            JSONObject eventObject = new JSONObject();
-                            eventObject.put("用户事件", "新建记录");
-                            eventObject.put("数量", 1);
-                            //记录事件,以购买为例
-                            ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                icarus.getContent(new Callback() {
+                    @Override
+                    public void run(String params) {
+                        Log.d(TAG, "content:" + params);
+                        if (params.length() == 14) {
+                            isEmpty = true;
+                        } else {
+                            htmlContent = params;
+                            htmlContent = formatContent(htmlContent);
+                            Log.d(TAG, "记录内容是" + htmlContent);
+                            isEmpty = false;
                         }
-                        saveNote();
-                    } else {
-                        updateNote();
+                        Log.d(TAG, "Save 正在保存");
+                        if (!isEmpty) {
+                            toolbar.setClickable(false);
+                            if (isNew) {
+                                //定义与事件相关的属性信息
+                                try {
+                                    JSONObject eventObject = new JSONObject();
+                                    eventObject.put("用户事件", "新建记录");
+                                    eventObject.put("数量", 1);
+                                    //记录事件,以购买为例
+                                    ZhugeSDK.getInstance().track(getApplicationContext(), "新建记录", eventObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                saveNote();
+                            } else {
+                                updateNote();
+                            }
+                            toolbar.setClickable(false);
+                        } else {
+                            Toast.makeText(NoteActivity.this, "未输入文字不保存", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                     }
-                } else {
-                    Toast.makeText(NoteActivity.this, "未输入文字不保存", Toast.LENGTH_SHORT).show();
-                }
-                finish();
+                });
             }
         });
 
         webView = (WebView) findViewById(R.id.editor);
+        webView.setDrawingCacheEnabled(true);
         // I offered a toolbar to manage editor buttons which implements TextView that with icon fonts.
         // It's just a collection, not an Android View implementation.
         // TextViewToolbar will listen click events on all buttons that added to it.
@@ -190,8 +218,9 @@ public class NoteActivity extends AppCompatActivity {
         Options options = new Options();
         options.setPlaceholder("请输入文字");
         icarus = new Icarus(textViewToolbar, options, webView);
-        options.addAllowedAttributes("a", Arrays.asList("class", "src", "alt", "data-type"));
-        options.addAllowedAttributes("body", Arrays.asList("src"));
+        options.addAllowedAttributes("img", Arrays.asList("data-type", "data-id", "class", "src", "alt", "width", "height", "data-non-image"));
+        options.addAllowedAttributes("iframe", Arrays.asList("data-type", "data-id", "class", "src", "width", "height"));
+        options.addAllowedAttributes("a", Arrays.asList("data-type", "data-id", "class", "href", "target", "title"));
         /*TextView boldButton = new TextViewButton();
         boldButton.setName(Button.NAME_BOLD);
         textViewToolbar.addButton(boldButton);*/
@@ -365,7 +394,7 @@ public class NoteActivity extends AppCompatActivity {
                             } else {
                                 updateNote();
                             }
-                            finish();
+                            toolbar.setClickable(false);
                         } else {
                             Toast.makeText(NoteActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                         }
@@ -393,6 +422,11 @@ public class NoteActivity extends AppCompatActivity {
                     }
                 });
                 dialog.show();
+                return true;
+            }
+            case R.id.note_image_share: {
+                Log.d(TAG, "长图片分享");
+                longImageShare(this);
                 return true;
             }
             default:
@@ -771,8 +805,25 @@ public class NoteActivity extends AppCompatActivity {
             isShare = noteTemp.isShareStatus();
             NOTE_ID = String.valueOf(noteTemp.getNoteId());
             Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
-            // TODO: 2017/12/14 不是新建的装载内容
-            icarus.setContent(noteTemp.getContent());
+            //  不是新建的装载内容
+            String content = noteTemp.getContent();
+            //解决转义符号的影响
+            Log.d(TAG, "未格式化的数据" + content);
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < content.length(); i++) {
+                if (content.charAt(i) != '\\') {
+                    sb.append(content.charAt(i));
+                }
+            }
+            int i = sb.indexOf("\\");
+            Log.d(TAG, "initBundle: ii" + i);
+/*            while (i!= 0){
+                sb.replace(i,i+1,"");
+                i = sb.indexOf("\\");
+            }*/
+            //content = "<p><img alt=\"图片加载中\" src=\"http://ozcxh8wzm.bkt.clouddn.com/FsZuYkX9MP11Y0QP_6Gs5GyFj8kh\"><br>能不能结婚</p>";
+            Log.d(TAG, "装载的数据" + sb.toString());
+            icarus.setContent(sb.toString());
         }
     }
 
@@ -1167,7 +1218,7 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "Save 正在保存");
+
         icarus.getContent(new Callback() {
             @Override
             public void run(String params) {
@@ -1177,9 +1228,12 @@ public class NoteActivity extends AppCompatActivity {
                 } else {
                     htmlContent = params;
                     htmlContent = formatContent(htmlContent);
+                    Log.d(TAG, "记录内容是" + htmlContent);
                     isEmpty = false;
                 }
+                Log.d(TAG, "Save 正在保存");
                 if (!isEmpty) {
+                    toolbar.setClickable(false);
                     if (isNew) {
                         //定义与事件相关的属性信息
                         try {
@@ -1195,13 +1249,13 @@ public class NoteActivity extends AppCompatActivity {
                     } else {
                         updateNote();
                     }
+                    toolbar.setClickable(false);
                 } else {
                     Toast.makeText(NoteActivity.this, "未输入文字不保存", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });
-
-        super.onBackPressed();
     }
 
     private String formatContent(String html) {
@@ -1252,5 +1306,54 @@ public class NoteActivity extends AppCompatActivity {
             mr.release();
             mr = null;
         }
+    }
+
+    private void longImageShare(Activity activity) {
+        //bitmap = webView.getDrawingCache().;
+        //获取Picture对象
+/*        Picture picture = webView.capturePicture();
+//得到图片的宽和高（没有reflect图片内容）
+        int width = picture.getWidth();
+        int height = picture.getHeight();
+        if (width > 0 && height > 0) {
+            //创建位图
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            //绘制(会调用native方法，完成图形绘制)
+            picture.draw(canvas);
+
+        }*/
+//获取webview缩放率
+        float scale = webView.getScale();
+//得到缩放后webview内容的高度
+        int webViewHeight = (int) (webView.getContentHeight() * scale);
+        bitmap = Bitmap.createBitmap(webView.getWidth(), webViewHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+//绘制
+        webView.draw(canvas);
+
+        String fileName = null;
+        try {
+            fileName = Environment.getExternalStorageDirectory().getPath() + "/webview_capture4.jpg";
+            FileOutputStream fos = new FileOutputStream(fileName);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bitmap != null) {
+                bitmap.recycle();
+            }
+        }
+        Log.d(TAG, "onClicked: 分享图片");
+        Uri uri = Uri.fromFile(new File(fileName));
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("image");  //设置分享内容的类型
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        shareIntent.setType("image/jpeg");
+        startActivity(Intent.createChooser(shareIntent, "分享图片"));
     }
 }
