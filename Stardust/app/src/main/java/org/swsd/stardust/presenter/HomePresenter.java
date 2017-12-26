@@ -3,6 +3,7 @@ package org.swsd.stardust.presenter;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Message;
@@ -284,4 +285,8 @@ public class HomePresenter implements IHomePresenter{
         }).start();
     }
 
+    @Override
+    public void deleteHomeSharedFile() {
+
+    }
 }
