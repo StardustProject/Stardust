@@ -14,26 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.NoteBean;
-import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.HomePresenter;
 import org.swsd.stardust.presenter.IHomePresenter;
 import org.swsd.stardust.presenter.adapter.HomeAdapter;
-import org.swsd.stardust.util.UpdateTokenUtil;
 
-import java.io.IOException;
-import java.net.ResponseCache;
 import java.util.Calendar;
 import java.util.List;
 
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import static org.swsd.stardust.R.mipmap.user;
 
 /**
  *    author     :  张昭锡
