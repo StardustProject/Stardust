@@ -27,5 +27,5 @@ public interface IHomePresenter {
     boolean isLeapYear(int year);
     boolean isBigMonth(int month);
     void syncNotesOfDay(int year, int month, int day,List<NoteBean>noteList,HomeAdapter adapter,Activity activity);
-    void deleteHomeSharedFile();
+
 }
