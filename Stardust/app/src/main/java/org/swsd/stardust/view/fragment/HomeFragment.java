@@ -1,6 +1,8 @@
 package org.swsd.stardust.view.fragment;
 
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -104,7 +106,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
 
         mRvLightspot.setLayoutManager(layoutManager);
 
-        mRvLightspot.setNestedScrollingEnabled(false);
+        //mRvLightspot.setNestedScrollingEnabled(false);
 
         //创建主页适配器
         adapter = new HomeAdapter(getContext(), mNoteList);
@@ -182,7 +184,12 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
             }
         });
 
-        mHomePresenter.changeDate(getContext(),adapter,mNoteList,getActivity(),mPreYear,mPreMonth + 1,mPreDay);
+        if (pref.getBoolean("isFirst",true)){
+            mHomePresenter.changeDate(getContext(),adapter,mNoteList,getActivity(),mPreYear,mPreMonth + 1,mPreDay);
+            editor.putBoolean("isFirst",false);
+            editor.apply();
+        }
+
 
         Log.d(TAG, "onCreateView: zxzhang hahahha");
 
@@ -315,6 +322,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     @Override
     public void onStart() {
         super.onStart();
+
         Log.d(TAG, "onStart: ");
     }
 
@@ -344,6 +352,10 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         editor.putInt("mPreMonth",mPreMonth);
         editor.putInt("mPreDay",mPreDay);
         editor.apply();
+        if (isBackground(getContext())){
+            editor.clear();
+            editor.apply();
+        }
     }
 
     @Override
@@ -352,6 +364,25 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         Log.d(TAG, "onDetach: ");
     }
 
+    public boolean isBackground(Context context) {
+        
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.processName.equals(context.getPackageName())) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    Log.d(TAG, "isBackground: No");
+                    return false;
+                }else{
+                    Log.d(TAG, "isBackground: Yes");
+                    return true;
+                }
+            }
+        }
+
+        Log.d(TAG, "isBackground: No");
+        return false;
+    }
 
 
 

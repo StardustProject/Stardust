@@ -3,6 +3,7 @@ package org.swsd.stardust.presenter;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import org.swsd.stardust.model.bean.NoteBean;
 import org.swsd.stardust.presenter.adapter.HomeAdapter;
@@ -26,4 +27,5 @@ public interface IHomePresenter {
     boolean isLeapYear(int year);
     boolean isBigMonth(int month);
     void syncNotesOfDay(int year, int month, int day,List<NoteBean>noteList,HomeAdapter adapter,Activity activity);
+    void deleteHomeSharedFile();
 }
