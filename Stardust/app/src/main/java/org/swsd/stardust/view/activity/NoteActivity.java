@@ -252,7 +252,7 @@ public class NoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(ContextCompat.checkSelfPermission(NoteActivity.this,Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(NoteActivity.this,new String[]{Manifest.permission.RECORD_AUDIO},2);
+                    ActivityCompat.requestPermissions(NoteActivity.this,new String[]{Manifest.permission.RECORD_AUDIO,Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
                 }
                 else{
                     if (!isStart) {
