@@ -17,8 +17,15 @@ import org.swsd.stardust.view.activity.LoginActivity;
 import org.swsd.stardust.view.activity.MainActivity;
 import org.swsd.stardust.view.activity.NoteActivity;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  *    author     :  张昭锡
@@ -77,13 +84,39 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
 
-                int position= holder.getAdapterPosition();
-                NoteBean note = mNoteList.get(position);
-                Intent intent = new Intent(mContext, NoteActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("note",note);
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            int position= holder.getAdapterPosition();
+                            NoteBean note = mNoteList.get(position);
+
+                            String noteUrl = note.getContent();
+                            Log.d(TAG, "run: zxzhang url " + noteUrl);
+                            if (isValidUrl(noteUrl)){
+                                OkHttpClient client = new OkHttpClient();
+                                Request request = new Request.Builder()
+                                                            .url(noteUrl)
+                                                            .build();
+                                Response response = client.newCall(request).execute();
+                                note.setContent(response.body().string());
+                            }
+
+                            note.save();
+
+                            Intent intent = new Intent(mContext, NoteActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("note",note);
+                            intent.putExtras(bundle);
+                            mContext.startActivity(intent);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }).start();
+
             }
         });
 
@@ -152,6 +185,26 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             builder.append(name);
         }
         return builder.toString();
+    }
+
+    /**
+     *    author     :  张昭锡
+     *    time       :  2017/12/27
+     *    description:  判断是否是合法的URL
+     *    version:   :  1.0
+     */
+    public Boolean isValidUrl(String url){
+        String regex = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]" ;
+        Pattern patt = Pattern. compile(regex );
+        Matcher matcher = patt.matcher(url);
+        boolean  isMatch = matcher.matches();
+        if  (!isMatch) {
+            Log.d(TAG, "isValid: zxzhang URL NO");
+            return false;
+        } else {
+            Log.d(TAG, "isValid: zxzhang URL YES");
+            return true;
+        }
     }
 
 }

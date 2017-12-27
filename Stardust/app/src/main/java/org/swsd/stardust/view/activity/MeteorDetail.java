@@ -5,10 +5,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.ufreedom.uikit.FloatingText;
+import com.ufreedom.uikit.effect.ScaleFloatingAnimator;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
@@ -118,11 +121,12 @@ public class MeteorDetail extends BaseActivity{
 
                 showField = String.valueOf(meteor.getUpvoteQuantity()+1);
                 floatingText = new FloatingText.FloatingTextBuilder(MeteorDetail.this)
-                        .textColor(Color.RED) // 漂浮字体的颜色
-                        .textSize(100)   // 浮字体的大小
-                        .textContent(showField) // 浮字体的内容
+                        .textColor(Color.argb ( 255,  238,  180,  34 )) // 漂浮字体的颜色
+                        .textSize(40)   // 浮字体的大小
+                        .textContent("+" + showField) // 浮字体的内容
                         .offsetX(0) // FloatingText 相对其所贴附View的水平位移偏移量
-                        .offsetY(-40) // FloatingText 相对其所贴附View的垂直位移偏移量
+                        .offsetY(100) // FloatingText 相对其所贴附View的垂直位移偏移量
+                        .floatingAnimatorEffect(new ScaleFloatingAnimator()) // 漂浮动画
                         .build();
 
                 floatingText.attach2Window();
@@ -134,26 +138,19 @@ public class MeteorDetail extends BaseActivity{
             @Override
             public void unLiked() {
 
-                if(isLike){
-                    likeButton.setLiked(true);
-                    isLikeMeteor = true;
+                showField = String.valueOf(meteor.getUpvoteQuantity()+1);
+                floatingText = new FloatingText.FloatingTextBuilder(MeteorDetail.this)
+                        .textColor(Color.argb ( 255,  238,  180,  34 )) // 漂浮字体的颜色
+                        .textSize(40)   // 浮字体的大小
+                        .offsetX(0) // FloatingText 相对其所贴附View的水平位移偏移量
+                        .offsetY(100) // FloatingText 相对其所贴附View的垂直位移偏移量
+                        .floatingAnimatorEffect(new ScaleFloatingAnimator()) // 漂浮动画
+                        .build();
 
-                    showField = String.valueOf(meteor.getUpvoteQuantity()+1);
-                    floatingText = new FloatingText.FloatingTextBuilder(MeteorDetail.this)
-                            .textColor(Color.RED) // 漂浮字体的颜色
-                            .textSize(100)   // 浮字体的大小
-                            .textContent(showField) // 浮字体的内容
-                            .offsetX(0) // FloatingText 相对其所贴附View的水平位移偏移量
-                            .offsetY(-40) // FloatingText 相对其所贴附View的垂直位移偏移量
-                            .build();
+                floatingText.attach2Window();
+                floatingText.startFloating(likeButton);
 
-                    floatingText.attach2Window();
-                    floatingText.startFloating(likeButton);
-
-                }else{
-                    isLikeMeteor = false;
-                }
-
+                isLikeMeteor = false;
             }
         });
 
@@ -175,6 +172,12 @@ public class MeteorDetail extends BaseActivity{
                     setLikeMeteorPresenter.updataMeteor(meteor);
                     MeteorBean meteorBean = new MeteorBean();
                     meteorBean.setIsLike(true);
+                    meteorBean.updateAll("meteorId = ?", String.valueOf(meteor.getMeteorId()));
+                }else if(!isLikeMeteor && isLike){
+                    SetLikeMeteorPresenter setLikeMeteorPresenter = new SetLikeMeteorPresenter();
+                    setLikeMeteorPresenter.cancelMeteor(meteor);
+                    MeteorBean meteorBean = new MeteorBean();
+                    meteorBean.setIsLike(false);
                     meteorBean.updateAll("meteorId = ?", String.valueOf(meteor.getMeteorId()));
                 }
                 finish();
@@ -224,8 +227,12 @@ public class MeteorDetail extends BaseActivity{
 
     @Override
     public void initView() {
-        // 沉浸式顶部栏，继承基类的方法
-        steepStatusBar();
+        // 沉浸式顶部栏
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getWindow().addFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
     }
 
     @Override

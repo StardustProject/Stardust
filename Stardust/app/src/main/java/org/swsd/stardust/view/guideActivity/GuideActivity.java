@@ -1,10 +1,14 @@
 package org.swsd.stardust.view.guideActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.WindowManager;
+
 import com.github.paolorotolo.appintro.AppIntro;
+
 import org.swsd.stardust.view.activity.LoginActivity;
 
 /**
@@ -32,8 +36,8 @@ public class GuideActivity extends AppIntro {
         setProgressButtonEnabled(true);
 
         //设置震动反馈
-        setVibrate(true);
-        setVibrateIntensity(30);
+        setVibrate(false);
+//        steepStatusBar();
     }
 
     //点击skip
@@ -58,5 +62,14 @@ public class GuideActivity extends AppIntro {
         Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void steepStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            // 透明状态栏
+            getWindow().addFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
     }
 }

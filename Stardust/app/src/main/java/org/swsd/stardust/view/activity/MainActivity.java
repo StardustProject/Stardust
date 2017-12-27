@@ -15,6 +15,7 @@ import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
+import org.swsd.stardust.presenter.IHomePresenter;
 import org.swsd.stardust.view.fragment.ArticleFragment;
 import org.swsd.stardust.view.fragment.HomeFragment;
 import org.swsd.stardust.view.fragment.MeteorFragment;
@@ -27,6 +28,7 @@ import org.swsd.stardust.view.fragment.UserFragment;
  *     version : 2.0
  */
 public class MainActivity extends BaseActivity {
+
 
     private static int FRAGMENT_HOLDER = 0;
     BottomNavigationView navigation;
@@ -136,5 +138,6 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ZhugeSDK.getInstance().flush(getApplicationContext());
+
     }
 }

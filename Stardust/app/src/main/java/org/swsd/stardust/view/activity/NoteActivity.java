@@ -60,6 +60,7 @@ import org.swsd.stardust.presenter.NotePresenter.Note;
 import org.swsd.stardust.presenter.NotePresenter.NotePresenter;
 import org.swsd.stardust.presenter.NotePresenter.putNote;
 import org.swsd.stardust.presenter.UserPresenter;
+import org.swsd.stardust.util.RecordUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -114,6 +115,7 @@ public class NoteActivity extends AppCompatActivity {
     private String audioUrl;
     private String htmlContent;
     Bitmap bitmap;
+    private ImageView insertAudio;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -145,7 +147,7 @@ public class NoteActivity extends AppCompatActivity {
                 case UPLOADED_AUDIO:
                     String audioTag =
                             "<audio controls=\"controls\" src=\"" + audioUrl + "\">\n" +
-                                    "您的浏览器不支持 audio 标签。\n" +
+                                    "音频\n" +
                                     "</audio>";
                     icarus.insertHtml(audioTag);
                     break;
@@ -217,10 +219,13 @@ public class NoteActivity extends AppCompatActivity {
         TextViewToolbar textViewToolbar = new TextViewToolbar();
         Options options = new Options();
         options.setPlaceholder("请输入文字");
-        icarus = new Icarus(textViewToolbar, options, webView);
+        //options.addAllowedTag("aduio");
+        options.setAllowedTags(Arrays.asList("audio", "span", "img"));
         options.addAllowedAttributes("img", Arrays.asList("data-type", "data-id", "class", "src", "alt", "width", "height", "data-non-image"));
         options.addAllowedAttributes("iframe", Arrays.asList("data-type", "data-id", "class", "src", "width", "height"));
         options.addAllowedAttributes("a", Arrays.asList("data-type", "data-id", "class", "href", "target", "title"));
+        options.addAllowedAttributes("audio", Arrays.asList("data-type", "data-id", "class", "src", "controls", "title"));
+        icarus = new Icarus(textViewToolbar, options, webView);
         /*TextView boldButton = new TextViewButton();
         boldButton.setName(Button.NAME_BOLD);
         textViewToolbar.addButton(boldButton);*/
@@ -234,18 +239,33 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
-        final ImageView insertAudio = (ImageView) findViewById(R.id.action_insert_audio);
+        insertAudio = (ImageView) findViewById(R.id.action_insert_audio);
         insertAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isStart) {
-                    startRecord();
-                    insertAudio.setImageResource(R.drawable.txt_color);
-                    isStart = true;
-                } else {
-                    stopRecord();
-                    insertAudio.setImageResource(R.drawable.media_audio);
-                    isStart = false;
+                if(ContextCompat.checkSelfPermission(NoteActivity.this,Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(NoteActivity.this,new String[]{Manifest.permission.RECORD_AUDIO},2);
+                }
+                else{
+                    if (!isStart) {
+                        RecordUtil.startRecord(getBaseContext(), NoteActivity.this);
+                        insertAudio.setImageResource(R.mipmap.audio_pause);
+                        isStart = true;
+                    } else {
+                        File recordFile = RecordUtil.stopRecord();
+                        Uri uri = Uri.fromFile(recordFile);
+                        Log.d(TAG, "uri ==  " + uri);
+                        String path = recordFile.getPath();
+                        Log.d(TAG, "录音文件路径:" + path);
+                        uploadQiniu(path,UPLOADED_AUDIO);
+/*                    String audioTag =
+                            "<audio controls=\"controls\" src=\"" + path + "\">\n" +
+                                    "您的浏览器不支持 audio 标签。\n" +
+                                    "</audio>";
+                    icarus.insertHtml(audioTag);*/
+                        insertAudio.setImageResource(R.drawable.record);
+                        isStart = false;
+                    }
                 }
             }
         });
@@ -493,6 +513,32 @@ public class NoteActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case 2:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Log.d(TAG, "onRequestPermissionsResult: 允许录音");
+                    if (!isStart) {
+                        RecordUtil.startRecord(getBaseContext(), NoteActivity.this);
+                        insertAudio.setImageResource(R.mipmap.audio_pause);
+                        isStart = true;
+                    } else {
+                        File recordFile = RecordUtil.stopRecord();
+                        Uri uri = Uri.fromFile(recordFile);
+                        Log.d(TAG, "uri ==  " + uri);
+                        String path = recordFile.getPath();
+                        Log.d(TAG, "录音文件路径:" + path);
+                        uploadQiniu(path,UPLOADED_AUDIO);
+/*                    String audioTag =
+                            "<audio controls=\"controls\" src=\"" + path + "\">\n" +
+                                    "您的浏览器不支持 audio 标签。\n" +
+                                    "</audio>";
+                    icarus.insertHtml(audioTag);*/
+                        insertAudio.setImageResource(R.drawable.record);
+                        isStart = false;
+                    }
+                }
+                else {
+                    Toast.makeText(this,"You denied the permission",Toast.LENGTH_SHORT).show();
+                }
             default:
         }
     }
@@ -544,7 +590,7 @@ public class NoteActivity extends AppCompatActivity {
             imagePath = getImagePath(uri, null);
         }
         Log.d("熊立强", "6.0 handler" + imagePath);
-        uploadQiniu(imagePath);
+        uploadQiniu(imagePath, UPLOADED_IMAGE);
         //根据图片路径显示图片
         //displayImage(imagePath);
     }
@@ -553,7 +599,7 @@ public class NoteActivity extends AppCompatActivity {
         Uri uri = data.getData();
         String imagePath = getImagePath(uri, null);
         Log.d("熊立强", "before 6.0 handler" + imagePath);
-        uploadQiniu(imagePath);
+        uploadQiniu(imagePath, UPLOADED_IMAGE);
         //根据图片路径显示图片
         //displayImage(imagePath);
     }
@@ -583,7 +629,8 @@ public class NoteActivity extends AppCompatActivity {
      *
      * @param path
      */
-    private String uploadQiniu(final String path) {
+    private String uploadQiniu(final String path, final int type) {
+        Log.d(TAG, "uploadQiniu: " + path);
         NotePresenter notePresenter = new NotePresenter();
         notePresenter.refreshToken();
         new Thread(new Runnable() {
@@ -616,12 +663,18 @@ public class NoteActivity extends AppCompatActivity {
                     DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
                     Log.d(TAG, "成功上传" + putRet.key);
                     Log.d(TAG, "成功上传" + putRet.hash);
-                    imageUrl = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
-                    Log.d(TAG, "url is " + imageUrl);
+                    if (type == UPLOADED_IMAGE) {
+                        imageUrl = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
+                        Log.d(TAG, "url is " + imageUrl);
+                    }
+                    else if (type == UPLOADED_AUDIO) {
+                        audioUrl = "http://ozcxh8wzm.bkt.clouddn.com/" + putRet.key;
+                        Log.d(TAG, "url is " + audioUrl);
+                    }
+
                     // 上传过后的url需要插入编辑器
                     Message msg = new Message();
-                    msg.what = UPLOADED_IMAGE;
-
+                    msg.what = type;
                     handler.sendMessage(msg);
                 } catch (QiniuException ex) {
                     Response r = ex.response;

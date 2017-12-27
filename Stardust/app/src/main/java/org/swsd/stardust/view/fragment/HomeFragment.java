@@ -1,6 +1,8 @@
 package org.swsd.stardust.view.fragment;
 
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -57,6 +59,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
 
     IHomePresenter mHomePresenter;
 
+
     private static final String TAG = "HomeFragment";
 
     @Nullable
@@ -75,6 +78,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         mNpDay = (NumberPickerView)mView.findViewById(R.id.np_home_day);
         mBtnCheckdate = (Button)mView.findViewById(R.id.btn_home_checkdate);
 
+
         //日期初始化
         initNumberPickerString();
         initDate();
@@ -87,6 +91,26 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         mNpMonth.setOnScrollListener(this);
         mNpDay.setOnValueChangedListener(this);
         mNpDay.setOnScrollListener(this);
+
+        mNoteList = mHomePresenter.getNoteList();
+
+
+        //设置瀑布流为4列
+        StaggeredGridLayoutManager layoutManager = new
+                StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL){
+                    @Override
+                    public boolean canScrollHorizontally() {
+                        return false;
+                    }
+                };
+
+        mRvLightspot.setLayoutManager(layoutManager);
+
+        //mRvLightspot.setNestedScrollingEnabled(false);
+
+        //创建主页适配器
+        adapter = new HomeAdapter(getContext(), mNoteList);
+        mRvLightspot.setAdapter(adapter);
 
 
         //监听年份状态
@@ -160,26 +184,15 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
             }
         });
 
+        if (pref.getBoolean("isFirst",true)){
+            mHomePresenter.changeDate(getContext(),adapter,mNoteList,getActivity(),mPreYear,mPreMonth + 1,mPreDay);
+            editor.putBoolean("isFirst",false);
+            editor.apply();
+        }
 
+        Log.d(TAG, "onCreateView: zxzhang hahahha");
 
-        mNoteList = mHomePresenter.getNoteList();
-
-        //设置瀑布流为4列
-        StaggeredGridLayoutManager layoutManager = new
-                StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL){
-                    @Override
-                    public boolean canScrollHorizontally() {
-                        return false;
-                    }
-                };
-
-        mRvLightspot.setLayoutManager(layoutManager);
-
-        mRvLightspot.setNestedScrollingEnabled(false);
-
-        //创建主页适配器
-        adapter = new HomeAdapter(getContext(), mNoteList);
-        mRvLightspot.setAdapter(adapter);
+        Log.d(TAG, "onCreateView: zxzhang hahahha");
 
         return mView;
     }
@@ -191,7 +204,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         switch (v.getId()){
             case R.id.btn_home_checkdate:
                 mBtnCheckdate.setAlpha(0.0f);
-                mHomePresenter.changeDate(getContext(),adapter,mNoteList,
+                mHomePresenter.changeDate(getContext(),adapter,mNoteList,getActivity(),
                         Integer.parseInt(mNpYear.getContentByCurrValue()),
                         Integer.parseInt(mNpMonth.getContentByCurrValue()), Integer.parseInt(mNpDay.getContentByCurrValue()));
                 break;
@@ -255,14 +268,17 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         mPreYear = calendar.get(Calendar.YEAR);
         mPreMonth = calendar.get(Calendar.MONTH);
         mPreDay = calendar.get(Calendar.DAY_OF_MONTH);
-        mHomePresenter.setNoteYear(mPreYear);
-        mHomePresenter.setNoteMonth(mPreMonth);
-        mHomePresenter.setNoteDay(mPreDay);
+
 
         //持久化数据读取
         mPreYear = pref.getInt("mPreYear",mPreYear);
         mPreMonth = pref.getInt("mPreMonth",mPreMonth);
         mPreDay = pref.getInt("mPreDay",mPreDay);
+
+        mHomePresenter.setNoteYear(mPreYear);
+        mHomePresenter.setNoteMonth(mPreMonth);
+        mHomePresenter.setNoteDay(mPreDay);
+
 
         mNpYear.refreshByNewDisplayedValues(mStrYear);
         mNpYear.setValue(mPreYear - 1970);
@@ -307,6 +323,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
     @Override
     public void onStart() {
         super.onStart();
+
         Log.d(TAG, "onStart: ");
     }
 
@@ -336,6 +353,10 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         editor.putInt("mPreMonth",mPreMonth);
         editor.putInt("mPreDay",mPreDay);
         editor.apply();
+        if (isBackground(getContext())){
+            editor.clear();
+            editor.apply();
+        }
     }
 
     @Override
@@ -343,6 +364,33 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         super.onDetach();
         Log.d(TAG, "onDetach: ");
     }
+
+    /**
+     *    author     :  张昭锡
+     *    time       :  2017/11/13
+     *    description:  判断当前是否处于后台
+     *    version:   :  1.0
+     */
+    public boolean isBackground(Context context) {
+        
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.processName.equals(context.getPackageName())) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    Log.d(TAG, "isBackground: No");
+                    return false;
+                }else{
+                    Log.d(TAG, "isBackground: Yes");
+                    return true;
+                }
+            }
+        }
+
+        Log.d(TAG, "isBackground: No");
+        return false;
+    }
+
 
 
 }

@@ -10,6 +10,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
+import org.swsd.stardust.base.ActivityCollector;
 import org.swsd.stardust.model.bean.MailBean;
 import org.swsd.stardust.model.bean.NoteBean;
 import org.swsd.stardust.model.bean.UserBean;
@@ -106,6 +107,8 @@ public class UserPresenter{
                         Log.d("UserPresenter", "get Response");
                         Intent goToMain = new Intent(mContext, MainActivity.class);
                         goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        // 登录结束后销毁登录页面
+                        ActivityCollector.finishAll();
                         mContext.startActivity(goToMain);
                         break;
                     case 403:

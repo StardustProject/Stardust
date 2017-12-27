@@ -19,6 +19,8 @@
     <!--黑色系颜色-->
     <color name="black">#000000</color>   <!--黑色-->
 
+    <color name="gold">#FFD700</color> <!--金色 -->
+
     <!--自定义-->
     <color name="userPhoto">#271934</color>
     <color name="article_like_fab">#7FFFD4</color>

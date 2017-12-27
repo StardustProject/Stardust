@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
 
 
@@ -58,6 +60,10 @@
             android:name=".view.activity.MailActivity"
             android:label="显示站内信"
             android:theme="@style/MyTheme" />
+        <activity
+            android:name=".view.activity.ArticleCollectionActivity"
+            android:label="文章收藏"
+            android:theme="@style/MyTheme" />
         <activity android:name=".view.activity.FeedBackActivity"
             android:label="发送反馈"
             android:theme="@style/MyTheme"
@@ -82,6 +88,7 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".view.guideActivity.GuideActivity"
+            android:theme="@style/MyTheme"
             android:screenOrientation="portrait"/>
 
         <meta-data android:value="b561073b2da04d2ab028e2c5c64128e3" android:name = "ZHUGE_APPKEY"/>
