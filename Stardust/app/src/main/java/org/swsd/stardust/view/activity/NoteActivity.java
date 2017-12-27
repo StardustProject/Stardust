@@ -865,6 +865,7 @@ public class NoteActivity extends AppCompatActivity {
             bundle = getIntent().getExtras();
             noteTemp = (NoteBean) bundle.getSerializable("note");
             isShare = noteTemp.isShareStatus();
+            createTime = noteTemp.getCreateTime();
             NOTE_ID = String.valueOf(noteTemp.getNoteId());
             Log.d(TAG, "initBundle: " + noteTemp.getNoteId());
             //  不是新建的装载内容
