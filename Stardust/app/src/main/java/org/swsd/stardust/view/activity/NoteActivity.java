@@ -261,16 +261,16 @@ public class NoteActivity extends AppCompatActivity {
                         isStart = true;
                     } else {
                         File recordFile = RecordUtil.stopRecord();
-                        Uri uri = Uri.fromFile(recordFile);
-                        Log.d(TAG, "uri ==  " + uri);
-                        String path = recordFile.getPath();
-                        Log.d(TAG, "录音文件路径:" + path);
-                        uploadQiniu(path,UPLOADED_AUDIO);
-/*                    String audioTag =
-                            "<audio controls=\"controls\" src=\"" + path + "\">\n" +
-                                    "您的浏览器不支持 audio 标签。\n" +
-                                    "</audio>";
-                    icarus.insertHtml(audioTag);*/
+                        if(recordFile != null){
+                            Uri uri = Uri.fromFile(recordFile);
+                            Log.d(TAG, "uri ==  " + uri);
+                            String path = recordFile.getPath();
+                            Log.d(TAG, "录音文件路径:" + path);
+                            uploadQiniu(path,UPLOADED_AUDIO);
+                        }
+                        else {
+                            Log.e(TAG, "录音文件为空");
+                        }
                         insertAudio.setImageResource(R.drawable.record);
                         isStart = false;
                     }
@@ -531,16 +531,16 @@ public class NoteActivity extends AppCompatActivity {
                         isStart = true;
                     } else {
                         File recordFile = RecordUtil.stopRecord();
-                        Uri uri = Uri.fromFile(recordFile);
-                        Log.d(TAG, "uri ==  " + uri);
-                        String path = recordFile.getPath();
-                        Log.d(TAG, "录音文件路径:" + path);
-                        uploadQiniu(path,UPLOADED_AUDIO);
-/*                    String audioTag =
-                            "<audio controls=\"controls\" src=\"" + path + "\">\n" +
-                                    "您的浏览器不支持 audio 标签。\n" +
-                                    "</audio>";
-                    icarus.insertHtml(audioTag);*/
+                        if(recordFile != null){
+                            Uri uri = Uri.fromFile(recordFile);
+                            Log.d(TAG, "uri ==  " + uri);
+                            String path = recordFile.getPath();
+                            Log.d(TAG, "录音文件路径:" + path);
+                            uploadQiniu(path,UPLOADED_AUDIO);
+                        }
+                        else {
+                            Log.e(TAG, "录音文件为空");
+                        }
                         insertAudio.setImageResource(R.drawable.record);
                         isStart = false;
                     }
