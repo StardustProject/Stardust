@@ -16,7 +16,6 @@ import com.zhuge.analysis.stat.ZhugeSDK;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.presenter.LoginPresenter;
-import org.swsd.stardust.presenter.UserPresenter;
 import org.swsd.stardust.util.LoginActivityJudgment;
 import org.swsd.stardust.view.guideActivity.GuideActivity;
 
@@ -57,15 +56,14 @@ public class LoginActivity extends BaseActivity {
             editor.putInt("isFirst", 1);
             editor.commit();
             Intent goToGuide = new Intent(getApplicationContext(), GuideActivity.class);
-            getApplicationContext().startActivity(goToGuide);
+            startActivity(goToGuide);
             finish();
         }
 
         //判断是否需要登录
         if(!LoginActivityJudgment.loginActivityJudgment()){
             Intent goToMain = new Intent(getApplicationContext(), MainActivity.class);
-            goToMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplicationContext().startActivity(goToMain);
+            startActivity(goToMain);
             finish();
         }
 
