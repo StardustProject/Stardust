@@ -114,6 +114,7 @@ public class NoteActivity extends AppCompatActivity {
     private String imageUrl;
     private String audioUrl;
     private String htmlContent;
+    private boolean shareProgress = false;
     Bitmap bitmap;
     private ImageView insertAudio;
     private Handler handler = new Handler() {
@@ -121,17 +122,24 @@ public class NoteActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SAVE_NOTE:
-                    Toast.makeText(NoteActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                    if(!shareProgress){
+                        Toast.makeText(NoteActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(NoteActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+                    }
                     Log.d(TAG, "handleMessage: 保存成功");
                     finish();
                     break;
                 case DELETE_NOTE:
+                    Toast.makeText(NoteActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "handleMessage: " + "删除成功");
                     finish();
                     break;
                 case SHARE_NOTE:
-                    // TODO: 2017/12/12 分享成功修改状态 变成取消分享状态
-                    Log.d(TAG, "handleMessage: ");
+                    //  分享成功修改状态 变成取消分享状态
+                    Log.d(TAG, "handleMessage: 分享成功");
+                    shareProgress = false;
                     break;
                 case CANCEL_SHARE_NOTE:
                     // TODO: 2017/12/12 取消分享成功桩体,变成分享按钮
@@ -296,6 +304,7 @@ public class NoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.note_share: {
+                shareProgress = true;
                 Log.d(TAG, "Share 正在分享");
                 icarus.getContent(new Callback() {
                     @Override
