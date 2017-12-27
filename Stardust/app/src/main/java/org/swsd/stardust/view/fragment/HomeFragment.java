@@ -364,6 +364,12 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
         Log.d(TAG, "onDetach: ");
     }
 
+    /**
+     *    author     :  张昭锡
+     *    time       :  2017/11/13
+     *    description:  判断当前是否处于后台
+     *    version:   :  1.0
+     */
     public boolean isBackground(Context context) {
         
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
