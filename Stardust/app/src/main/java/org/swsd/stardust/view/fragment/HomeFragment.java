@@ -190,6 +190,7 @@ public class HomeFragment extends Fragment implements IHomeView,View.OnClickList
             editor.apply();
         }
 
+        Log.d(TAG, "onCreateView: zxzhang hahahha");
 
         Log.d(TAG, "onCreateView: zxzhang hahahha");
 

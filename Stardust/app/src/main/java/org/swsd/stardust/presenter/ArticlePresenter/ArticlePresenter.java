@@ -66,7 +66,7 @@ public class ArticlePresenter implements IArticlePresenter{
                 Log.d(TAG, "userBean" + userBean.getUserId());
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
-                        .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/articles?all_random=1")
+                        .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/articles?all_random=0")
                         .addHeader("Authorization", userBean.getToken())
                         .build();
                 try {
