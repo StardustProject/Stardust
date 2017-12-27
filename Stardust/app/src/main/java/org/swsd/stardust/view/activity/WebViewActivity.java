@@ -105,6 +105,7 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        putAnalyzer();
         ZhugeSDK.getInstance().flush(getApplicationContext());
     }
 
@@ -349,4 +350,39 @@ public class WebViewActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    /**
+     * 上传需要分析的文章
+     */
+    private void  putAnalyzer (){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 获取当前用户id
+                UserBean userBean;
+                UserPresenter userPresenter = new UserPresenter();
+                userBean = userPresenter.toGetUserInfo();
+                Log.d(TAG, "userBean" + userBean.getToken());
+                Log.d(TAG, "userBean" + userBean.getUserId());
+                String collect = "";
+                RequestBody requestBody =  RequestBody.create(JSON,collect);
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/articles/" + ARTICLE_ID + "/read")
+                            .addHeader("Content-Type", "application/json")
+                            .addHeader("Authorization", userBean.getToken())
+                            .put(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    Log.d(TAG, "putResponse +" + response.body().string());
+                    // 上传文章并保存
+                    Log.d(TAG, " 上传成功");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
 }

@@ -94,7 +94,7 @@ public class ArticleFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         mArticleList = presenter.getArticleList();
         adapter = new ArticleAdapter(mArticleList);
-        if(mArticleList.size() < 10){
+        if(mArticleList.size() < 10 || mArticleList.size() > 11){
             Log.d(TAG, "onCreateView: 文章数小于10 重新加载");
             presenter.getArticle(userBean,getActivity());
         }
