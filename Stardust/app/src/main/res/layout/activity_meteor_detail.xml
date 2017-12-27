@@ -62,13 +62,13 @@
 
         <com.like.LikeButton
             app:icon_type="star"
-            app:icon_size="35dp"
+            app:icon_size="25dp"
             android:id="@+id/star_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="45dp"/>
+            android:layout_marginBottom="25dp"/>
 
     </FrameLayout>
 

@@ -88,6 +88,7 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".view.guideActivity.GuideActivity"
+            android:theme="@style/MyTheme"
             android:screenOrientation="portrait"/>
 
         <meta-data android:value="b561073b2da04d2ab028e2c5c64128e3" android:name = "ZHUGE_APPKEY"/>
