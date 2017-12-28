@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.model.bean.ArticleBean;
 import org.swsd.stardust.model.bean.UserBean;
@@ -41,6 +42,7 @@ public class ArticleFragment extends Fragment {
     public static List<ArticleBean> mArticleList = new ArrayList<>();
     private static boolean isNotFirst;
     public static ArticleAdapter adapter;
+    private boolean isFirstPrograss = false;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,14 +80,21 @@ public class ArticleFragment extends Fragment {
             if (day > 0) {
                 mArticleList.clear();
                 Log.d(TAG, "onCreateView: + 超过时间" );
-                presenter.getArticle(userBean,getActivity());
+                isFirstPrograss = true;
+                // 等于零之时才能更新
+                if(DataSupport.findAll(ArticleBean.class).size() == 0){
+                    presenter.getArticle(userBean,getActivity());
+                }
                 editor.putLong("isfisttoday", now);
                 editor.commit();
             }
         }else{
             //第一次点击更新
             mArticleList.clear();
-            presenter.getArticle(userBean,getActivity());
+            isFirstPrograss = true;
+            if(DataSupport.findAll(ArticleBean.class).size() == 0){
+                presenter.getArticle(userBean,getActivity());
+            }
             editor.putLong("isfisttoday", System.currentTimeMillis());
             editor.commit();
             Log.d(TAG,"back");
@@ -94,9 +103,13 @@ public class ArticleFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         mArticleList = presenter.getArticleList();
         adapter = new ArticleAdapter(mArticleList);
-        if(mArticleList.size() < 10 || mArticleList.size() > 11){
+        if((mArticleList.size() < 10 || mArticleList.size() >= 11) && isFirstPrograss != true){
             Log.d(TAG, "onCreateView: 文章数小于10 重新加载");
             presenter.getArticle(userBean,getActivity());
+        }
+        else {
+            //结束第一次装载过程
+            isFirstPrograss = false;
         }
         for(ArticleBean article:mArticleList){
             Log.d(TAG, "Article id is " + article.getArticleId());

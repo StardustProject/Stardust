@@ -15,7 +15,6 @@ import com.zhuge.analysis.stat.ZhugeSDK;
 
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
-import org.swsd.stardust.presenter.IHomePresenter;
 import org.swsd.stardust.view.fragment.ArticleFragment;
 import org.swsd.stardust.view.fragment.HomeFragment;
 import org.swsd.stardust.view.fragment.MeteorFragment;
@@ -44,8 +43,10 @@ public class MainActivity extends BaseActivity {
                     //navigation.getBackground().setAlpha(0);
                     return true;
                 case R.id.navigation_article:
+                    if (FRAGMENT_HOLDER != 1){
+                        replaceFragment(new ArticleFragment());
+                    }
                     FRAGMENT_HOLDER = 1;
-                    replaceFragment(new ArticleFragment());
                     //navigation.getBackground().setAlpha(0);
                     return true;
                 case R.id.navigation_addtion:
