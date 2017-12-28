@@ -15,6 +15,7 @@ import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.ArticleBean;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.UserPresenter;
+import org.swsd.stardust.util.LoadingUtil;
 import org.swsd.stardust.util.UpdateTokenUtil;
 import org.swsd.stardust.view.fragment.ArticleFragment;
 
@@ -60,6 +61,14 @@ public class ArticlePresenter implements IArticlePresenter{
         Thread thread = new Thread(new Runnable() {
             @Override
             public synchronized void run() {
+                //回主线程更新UI
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LoadingUtil.createLoadingDialog(mActivity,"加载中");
+                    }
+                });
+
                 //清空之前的数据库
                 DataSupport.deleteAll(ArticleBean.class);
                 Log.d(TAG, "文章数据库清空完成");
@@ -107,6 +116,14 @@ public class ArticlePresenter implements IArticlePresenter{
                     // // TODO: 2017/11/18 解析json 获得url，根据url填充适配器
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                finally {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LoadingUtil.closeDialog();
+                        }
+                    });
                 }
             }
 /*                    //更新数据库信息
@@ -231,8 +248,8 @@ public class ArticlePresenter implements IArticlePresenter{
 
             // 获取文章封面
             String coverUrl = "";
-            Elements imgs = doc.select("img[src]");
-            Element e = imgs.get(2);
+            Elements imgs = doc.getElementById("js_content").select("img[src]");
+            Element e = imgs.get(1);
             coverUrl = e.attr("src");
             Log.d(TAG, "imgSRC" + coverUrl);
             temp.save();
