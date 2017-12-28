@@ -18,6 +18,7 @@ import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.presenter.LoginPresenter;
 import org.swsd.stardust.presenter.UserPresenter;
+import org.swsd.stardust.util.LoadingUtil;
 import org.swsd.stardust.util.LoginActivityJudgment;
 import org.swsd.stardust.util.UpdateTokenUtil;
 import org.swsd.stardust.view.guideActivity.GuideActivity;
