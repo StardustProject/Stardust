@@ -1,8 +1,10 @@
 package org.swsd.stardust.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -11,6 +13,8 @@ import org.json.JSONObject;
 import org.swsd.stardust.model.bean.MailBean;
 import org.swsd.stardust.model.bean.UserBean;
 import org.swsd.stardust.util.UpdateTokenUtil;
+import org.swsd.stardust.view.activity.InfoSettingActivity;
+import org.swsd.stardust.view.activity.MailActivity;
 
 import java.io.IOException;
 
@@ -45,9 +49,7 @@ public class MailPresenter {
         userBean = userPresenter.toGetUserInfo();
         this.mContext = mContext;
         this.action = action;
-        // TODO: 等待服务器接口更新
-        //Toast.makeText(mContext, "缺少MailBean数据库", Toast.LENGTH_SHORT).show();
-        //sendRequestWithOkHttp();
+        sendRequestWithOkHttp();
     }
 
     // 向服务器发送获取消息的请求
@@ -61,6 +63,7 @@ public class MailPresenter {
                     case 200:
                         // 获取成功，刷新数据库
                         updateDatabase();
+                        Log.d("MailPresenter@uiHandler", "Success");
                         break;
                     case 401:
                         Toast.makeText(mContext, "用户名或密码错误", Toast.LENGTH_SHORT).show();
@@ -77,7 +80,7 @@ public class MailPresenter {
                 try {
                     OkHttpClient okHttpClient = new OkHttpClient();
                     // 获取被举报和点赞的流星的消息
-                    final Request request = new Request.Builder()
+                    Request request = new Request.Builder()
                             .url("http://119.29.179.150:81/api/users/" + userBean.getUserId() + "/messages"
                                     + "?all=" + action)
                             .addHeader("Authorization", userBean.getToken())
@@ -92,7 +95,7 @@ public class MailPresenter {
                         public void onResponse(Call call, Response response) throws IOException {
                             // 将 Request Body 转为 json
                             try {
-                                jsResponse = new JSONObject(request.body().toString());
+                                jsResponse = new JSONObject(response.body().string());
                                 Message msg = new Message();
                                 msg.what = jsResponse.getInt("error_code");
                                 uiHandler.sendMessage(msg);
@@ -124,6 +127,7 @@ public class MailPresenter {
                     mailBean.save();
                 }
             }
+            mContext.sendBroadcast(new Intent(MailActivity.ACTION_RELOAD));
         } catch (JSONException e) {
             e.printStackTrace();
         }
