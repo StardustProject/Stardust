@@ -16,6 +16,7 @@ import com.zhuge.analysis.stat.ZhugeSDK;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.presenter.LoginPresenter;
+import org.swsd.stardust.util.LoadingUtil;
 import org.swsd.stardust.util.LoginActivityJudgment;
 import org.swsd.stardust.view.guideActivity.GuideActivity;
 
@@ -95,6 +96,8 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     // 若网络可用,进行格式检查
                     LoginPresenter login = new LoginPresenter();
+                    // 设置加载遮罩
+                    LoadingUtil.createLoadingDialog(LoginActivity.this,"登录中...");
                     login.checkBeforeLogin(getApplicationContext(), etUsername.getText(), etPassword.getText());
                 }
             }

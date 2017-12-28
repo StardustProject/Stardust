@@ -14,6 +14,7 @@ import org.swsd.stardust.base.ActivityCollector;
 import org.swsd.stardust.model.bean.MailBean;
 import org.swsd.stardust.model.bean.NoteBean;
 import org.swsd.stardust.model.bean.UserBean;
+import org.swsd.stardust.util.LoadingUtil;
 import org.swsd.stardust.util.UpdateTokenUtil;
 import org.swsd.stardust.view.activity.MainActivity;
 
@@ -110,6 +111,7 @@ public class UserPresenter{
                         // 登录结束后销毁登录页面
                         ActivityCollector.finishAll();
                         mContext.startActivity(goToMain);
+
                         break;
                     case 403:
                         Toast.makeText(mContext, "用户名不存在！", Toast.LENGTH_SHORT).show();
@@ -120,6 +122,8 @@ public class UserPresenter{
                         Toast.makeText(mContext, "登录失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                         break;
                 }
+                // 关闭加载遮罩
+                LoadingUtil.closeDialog();
             }
         };
 
