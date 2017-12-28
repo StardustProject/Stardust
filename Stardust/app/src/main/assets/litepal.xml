@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <litepal>
     <dbname value="StardustDB"></dbname>
-    <version value="1"></version>
+    <version value="4"></version>
     <list>
         <mapping class="org.swsd.stardust.model.bean.ArticleBean"></mapping>
         <mapping class="org.swsd.stardust.model.bean.MediaBean"></mapping>
