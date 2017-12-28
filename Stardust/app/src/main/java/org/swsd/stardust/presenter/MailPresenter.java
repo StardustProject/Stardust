@@ -131,6 +131,7 @@ public class MailPresenter {
                     mailBean.save();
                 }
             }
+            mContext.sendBroadcast(new Intent(MailActivity.ACTION_RELOAD));
         } catch (JSONException e) {
             e.printStackTrace();
         }
