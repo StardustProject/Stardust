@@ -1,7 +1,6 @@
 package org.swsd.stardust.view.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -47,7 +46,6 @@ public class MeteorDetail extends BaseActivity{
     TextView informTextView;
     MeteorBean meteor;
     String responseData;
-    Dialog mDialog;
     AlertDialog.Builder dialog;
     LikeButton likeButton;
     Boolean isLikeMeteor;
@@ -74,7 +72,7 @@ public class MeteorDetail extends BaseActivity{
         meteorDetail = (WebView) findViewById(R.id.wv_MeteorDetail_Message);
 
         //遮罩处理
-        mDialog = LoadingUtil.createLoadingDialog(this,"加载中...");
+        LoadingUtil.createLoadingDialog(this,"加载中...");
 
         //url解析
         Bundle bundle = new Bundle();
@@ -215,7 +213,7 @@ public class MeteorDetail extends BaseActivity{
                 meteorDetail.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
                 //加载遮罩消除
-                LoadingUtil.closeDialog(mDialog);
+                LoadingUtil.closeDialog();
             }
         });
     }

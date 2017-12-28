@@ -373,6 +373,7 @@ public class NoteActivity extends AppCompatActivity {
                         }
                         cancelShareNote(URL);
                         isShare = false;
+                        noteTemp.setShareStatus(isShare);
                         invalidateOptionsMenu();
                     }
                 });
@@ -998,8 +999,9 @@ public class NoteActivity extends AppCompatActivity {
                     // 更新服务器
                     updateNote(URL, dTime, false, content);
                     //更新本地数据
-                    noteTemp.setCreateTime(createTime);
+                    //noteTemp.setCreateTime(createTime);
                     noteTemp.setContent(htmlCode);
+                    noteTemp.setShareStatus(isShare);
                     String updateNoteId = String.valueOf(noteTemp.getNoteId());
                     noteTemp.updateAll("noteId = ?", updateNoteId);
                     Log.d(TAG, "note 修改成功");
@@ -1126,7 +1128,7 @@ public class NoteActivity extends AppCompatActivity {
                         shareNote(url, content);
                         noteTemp.setCreateTime(createTime);
                         noteTemp.setContent(htmlCode);
-                        noteTemp.setShareStatus(true);
+                        noteTemp.setShareStatus(isShare);
                         String updateNoteId = String.valueOf(noteTemp.getNoteId());
                         noteTemp.updateAll("noteId = ?", updateNoteId);
                     } else {
@@ -1147,6 +1149,7 @@ public class NoteActivity extends AppCompatActivity {
                         NoteBean note = new NoteBean();
                         note.setContent(htmlCode);
                         note.setNoteId(NoteId);
+                        note.setShareStatus(false);
                         note.setCreateTime(createTime);
                         note.setShareStatus(true);
                         note.setUserId(userBean.getUserId());
@@ -1266,11 +1269,16 @@ public class NoteActivity extends AppCompatActivity {
                 NoteId = getNoteId.getInt("id");
                 Log.d(TAG, "sendNote: Noteid " + NoteId);
                 // 之后保存数据库*/
+                        Log.d(TAG, "取消noteTemp id" + noteTemp.getId());
                         noteTemp.setShareStatus(false);
+                        Log.d(TAG, "取消noteTemp share" + noteTemp.isShareStatus());
+                        String updateNoteId = String.valueOf(noteTemp.getNoteId());
+                        //noteTemp.updateAll("noteId = ?", updateNoteId);
+                        DataSupport.delete(NoteBean.class,noteTemp.getId());
                         noteTemp.save();
-                        Message msg = new Message();
+/*                        Message msg = new Message();
                         msg.what = CANCEL_SHARE_NOTE;
-                        handler.sendMessage(msg);
+                        handler.sendMessage(msg);*/
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1310,6 +1318,8 @@ public class NoteActivity extends AppCompatActivity {
                         }
                         saveNote();
                     } else {
+                        //修改文章状态内容
+                        Log.d(TAG, "onBack 修改文章内容");
                         updateNote();
                     }
                     toolbar.setClickable(false);
