@@ -246,6 +246,12 @@ public class MeteorDetail extends BaseActivity{
             MeteorBean meteorBean = new MeteorBean();
             meteorBean.setIsLike(true);
             meteorBean.updateAll("meteorId = ?", String.valueOf(meteor.getMeteorId()));
+        }else if(!isLikeMeteor && isLike){
+            SetLikeMeteorPresenter setLikeMeteorPresenter = new SetLikeMeteorPresenter();
+            setLikeMeteorPresenter.cancelMeteor(meteor);
+            MeteorBean meteorBean = new MeteorBean();
+            meteorBean.setIsLike(false);
+            meteorBean.updateAll("meteorId = ?", String.valueOf(meteor.getMeteorId()));
         }
         super.onBackPressed();
     }
