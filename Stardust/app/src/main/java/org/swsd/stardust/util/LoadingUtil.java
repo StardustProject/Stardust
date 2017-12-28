@@ -21,8 +21,10 @@ import org.swsd.stardust.R;
 
 public class LoadingUtil {
 
+    public static Dialog loadingDialog;
+
     //返回一个会话，可以根据会话来判断当前是否处于加载状态
-    public static Dialog createLoadingDialog(Context context, String msg) {
+    public static void createLoadingDialog(Context context, String msg) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.activity_dialog_item, null);// 得到加载view
         LinearLayout layout = (LinearLayout) v
@@ -30,7 +32,7 @@ public class LoadingUtil {
         TextView tipTextView = (TextView) v.findViewById(R.id.tipTextView);// 提示文字
         tipTextView.setText(msg);// 设置加载信息
 
-        Dialog loadingDialog = new Dialog(context, R.style.MyDialogStyle);// 创建自定义样式dialog
+        loadingDialog = new Dialog(context, R.style.MyDialogStyle);// 创建自定义样式dialog
         loadingDialog.setCancelable(true); // 是否可以按“返回键”消失
         loadingDialog.setCanceledOnTouchOutside(false); // 点击加载框以外的区域
         loadingDialog.setContentView(layout, new LinearLayout.LayoutParams(
@@ -47,13 +49,12 @@ public class LoadingUtil {
         window.setWindowAnimations(R.style.PopWindowAnimStyle);
         loadingDialog.show();
 
-        return loadingDialog;
     }
 
     //关闭会话，需要传入会话用于判断
-    public static void closeDialog(Dialog mDialogUtils) {
-        if (mDialogUtils != null && mDialogUtils.isShowing()) {
-            mDialogUtils.dismiss();
+    public static void closeDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
         }
     }
 }
