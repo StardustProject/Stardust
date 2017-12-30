@@ -4,9 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.util.Log;
 
-import org.swsd.stardust.base.ActivityCollector;
 import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
-import org.swsd.stardust.util.LoadingUtil;
 
 /**
  * author  ： 胡俊钦
@@ -31,6 +29,9 @@ public class LoginPresenter {
             Log.d("LoginPresenter", "Begin to login");
             UserPresenter userPresenter = new UserPresenter();
             userPresenter.toLogin(mContext, strUsername, strPassword);
+            // 获取所有的站内信
+            MailPresenter mailPresenter = new MailPresenter();
+            mailPresenter.toGetMail(mContext, MailPresenter.ALL_MAIL);
         }
     }
 

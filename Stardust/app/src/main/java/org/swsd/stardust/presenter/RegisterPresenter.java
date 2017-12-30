@@ -10,7 +10,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
-import org.swsd.stardust.util.LoadingUtil;
 import org.swsd.stardust.view.activity.LoginActivity;
 
 import java.io.IOException;
@@ -60,8 +59,6 @@ public class RegisterPresenter {
                         Toast.makeText(mContext, "注册失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                     break;
             }
-            // 关闭加载遮罩
-            LoadingUtil.closeDialog();
         }
     };
 
