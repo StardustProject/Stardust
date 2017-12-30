@@ -1,9 +1,5 @@
 package org.swsd.stardust.view.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,20 +9,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
 import org.swsd.stardust.base.BaseActivity;
 import org.swsd.stardust.model.bean.MailBean;
 import org.swsd.stardust.presenter.MailPresenter;
 import org.swsd.stardust.presenter.adapter.MailAdapter;
-import org.swsd.stardust.util.LoadingUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * author  ： 林炜鸿
@@ -35,17 +26,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * version ： 1.0
  */
 public class MailActivity extends BaseActivity {
-    public static final String ACTION_RELOAD = "reload";
     private List<MailBean> mailBeanList = new ArrayList<>();
-    private BroadcastReceiver bcReload = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mailBeanList = DataSupport.findAll(MailBean.class);
-            recyclerView.setAdapter(new MailAdapter(mailBeanList));
-        }
-    };
-    private RecyclerView recyclerView;
-    
+
     @Override
     public int bindLayout() {
         // 加载布局
@@ -65,12 +47,6 @@ public class MailActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        unregisterReceiver(bcReload);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 初始化界面,实现沉浸式顶部栏
@@ -81,8 +57,6 @@ public class MailActivity extends BaseActivity {
         Resources resources = getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         int stateBarHeight = resources.getDimensionPixelSize(resourceId);
-        // 注册刷新页面的广播
-        registerReceiver(bcReload, new IntentFilter(ACTION_RELOAD));
 
         // 用空的TextView预留顶部状态栏高度
         TextView tvStateBar = (TextView) findViewById(R.id.tv_mail_statBar);
@@ -104,19 +78,18 @@ public class MailActivity extends BaseActivity {
         getData();
 
         // 初始化 RecyclerView
-        recyclerView = (RecyclerView) findViewById(R.id.mail_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.mail_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new MailAdapter(mailBeanList));
+        MailAdapter adapter = new MailAdapter(mailBeanList);
+        recyclerView.setAdapter(adapter);
     }
-
 
     private void getData() {
         MailPresenter mailPresenter = new MailPresenter();
         // 获取最新消息
-        // 设置加载遮罩
-        LoadingUtil.createLoadingDialog(this, "");
-        mailPresenter.toGetMail(this, MailPresenter.ALL_MAIL);
+        mailPresenter.toGetMail(this, MailPresenter.LATEST_MAIL);
+        mailBeanList = DataSupport.findAll(MailBean.class);
         return;
     }
 }
