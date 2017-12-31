@@ -1,72 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="4dp"
+    android:layout_margin="6dp"
     android:elevation="5dp"
-    android:layout_margin="6dp">
+    app:cardCornerRadius="4dp"
+    >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#182434"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/article_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="2"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
-            android:textSize="19sp"
-            android:text="title"/>
+            android:layout_marginTop="5dp"
+            android:maxLines="2"
+            android:textColor="#ffffff"
+            android:text="title"
+            android:textSize="19sp" />
 
         <!--作者&日期-->
         <LinearLayout
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/article_author"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:maxLines="1"
                 android:text="xiong"
-                android:textColor="@color/silver"
-                android:maxLines="1"/>
+                android:textColor="@color/silver" />
 
             <TextView
                 android:id="@+id/article_publish_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:gravity="right"
+                android:maxLines="1"
                 android:text="20170101"
-                android:textColor="@color/silver"
-                android:layout_marginRight="10dp"
-                />
+                android:textColor="@color/silver" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/article_cover"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:id="@+id/article_abstract"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="4"
-            android:textSize="15sp"
-            android:text="Hello"
-            android:textColor="@color/dimGray"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
             android:ellipsize="end"
-            />
+            android:maxLines="2"
+            android:text="Hello"
+            android:textColor="@color/whiteSmoke"
+            android:textSize="15sp" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

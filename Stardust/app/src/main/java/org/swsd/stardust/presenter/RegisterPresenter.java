@@ -10,6 +10,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.swsd.stardust.presenter.ButtonNavigationBarPresenter.tools.CommonFunctions;
+import org.swsd.stardust.util.LoadingUtil;
 import org.swsd.stardust.view.activity.LoginActivity;
 
 import java.io.IOException;
@@ -34,9 +35,10 @@ public class RegisterPresenter {
     // 存放密码输入框内容的变量
     private String mStrPassword = "";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    String responseData;
-    int errorCode = 0;
+    private String responseData;
+    private int mErrorCode = 0;
     private Context mContext;
+
 
     private Handler uiHandler = new Handler(){
         // 覆写这个方法，接收并处理消息。
@@ -58,6 +60,8 @@ public class RegisterPresenter {
                         Toast.makeText(mContext, "注册失败，请稍后重试！", Toast.LENGTH_SHORT).show();
                     break;
             }
+            // 关闭加载遮罩
+            LoadingUtil.closeDialog();
         }
     };
 
@@ -105,7 +109,7 @@ public class RegisterPresenter {
                             responseData = response.body().string();
                             parseJson(responseData);
                             Message msg = new Message();
-                            msg.what = errorCode;
+                            msg.what = mErrorCode;
                             uiHandler.sendMessage(msg);
                         }
                     });
@@ -132,7 +136,7 @@ public class RegisterPresenter {
     private void parseJson(String jsonData) {
         try {
             JSONObject jsonObject = new JSONObject(jsonData);
-            errorCode = jsonObject.getInt("error_code");
+            mErrorCode = jsonObject.getInt("error_code");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -9,7 +9,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#182434"
+        >
 
         <TextView
             android:id="@+id/tv_Meteor_content"
@@ -21,7 +23,8 @@
             android:layout_height="match_parent"
             android:maxEms="18"
             android:maxLines="10"
-            android:ellipsize="end"/>
+            android:ellipsize="end"
+            android:textColor="#C4C4C4"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,9 +45,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-
-
 
     </FrameLayout>
 

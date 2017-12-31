@@ -14,17 +14,19 @@ import java.io.Serializable;
 
 public class MeteorBean extends DataSupport implements Serializable {
 
-    private int noteId;
+    private int meteorId;
     private String URL;
     private String meteorContent;
     private boolean isPureMedia;
+    private int upvoteQuantity;
+    private Boolean isLike;
 
-    public int getNoteId() {
-        return noteId;
+    public int getMeteorId() {
+        return meteorId;
     }
 
-    public void setNoteId(int noteId) {
-        this.noteId = noteId;
+    public void setMeteorId(int meteorId) {
+        this.meteorId = meteorId;
     }
 
     public String getURL(){
@@ -51,4 +53,19 @@ public class MeteorBean extends DataSupport implements Serializable {
         this.isPureMedia = isPureMedia;
     }
 
+    public int getUpvoteQuantity(){
+        return upvoteQuantity;
+    }
+
+    public void setUpvoteQuantity(int upvoteQuantity){
+        this.upvoteQuantity = upvoteQuantity;
+    }
+
+    public Boolean getIsLike(){
+        return isLike;
+    }
+
+    public void setIsLike(Boolean isLike){
+        this.isLike = isLike;
+    }
 }

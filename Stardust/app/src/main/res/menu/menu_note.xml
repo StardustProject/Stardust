@@ -2,18 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/note_share"
-        android:title="@string/note_share"
+    <item
+        android:id="@+id/note_share"
         android:orderInCategory="80"
-        app:showAsAction="always"
-        ></item>
-    <item android:id="@+id/note_save"
-        android:title="@string/note_save"
+        android:title="@string/note_share"
+        android:visible="false"
+        app:showAsAction="always"></item>
+    <item
+        android:id="@+id/note_cancel_share"
+        android:orderInCategory="80"
+        android:title="@string/note_cancel_share"
+        android:visible="false"
+        app:showAsAction="always"></item>
+    <item
+        android:id="@+id/note_save"
         android:orderInCategory="90"
+        android:title="@string/note_save"
         app:showAsAction="always"></item>
     <item
         android:id="@+id/note_delete"
-        android:title="@string/note_delete"
         android:orderInCategory="70"
+        android:title="@string/note_delete"
         app:showAsAction="always"></item>
+    <item
+        android:id="@+id/note_image_share"
+        android:orderInCategory="70"
+        android:title="@string/note_image_share"
+        app:showAsAction="never"></item>
+
 </menu>

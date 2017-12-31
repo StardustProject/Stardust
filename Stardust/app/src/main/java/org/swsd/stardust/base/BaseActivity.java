@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import org.swsd.stardust.util.ErrorCodeJudgment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,6 +149,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 				//若当前无网络则提醒用户
 				Toast.makeText(context, "network is unavailable", Toast.LENGTH_SHORT).show();
+				ErrorCodeJudgment.networkJudgment("401");
+			} else {
+
+				//当前网络可用
+				ErrorCodeJudgment.networkJudgment("200");
 			}
 		}
 	}

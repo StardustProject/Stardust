@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0F1E33">
+
+    <TextView
+        android:id="@+id/tv_article_collection_statBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#0F1E33" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="收藏的文章"
+            android:textColor="#C4C4C4"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/iv_go_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="15dp"
+            android:src="@drawable/ic_setting_go_back" />
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/article_collection_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

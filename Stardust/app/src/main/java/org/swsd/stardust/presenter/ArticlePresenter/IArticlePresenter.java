@@ -16,4 +16,5 @@ import java.util.List;
 public interface IArticlePresenter {
     List<ArticleBean> getArticleList();
     void getArticle(UserBean userBean, final Activity mActivity);
+    void refreshToken();
 }

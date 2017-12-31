@@ -5,6 +5,12 @@
     android:orientation="vertical"
     android:background="#F5F5F5">
 
+    <TextView
+        android:id="@+id/tv_meteor_detail_stateBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toorbal"
         android:layout_width="match_parent"
@@ -30,6 +36,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_MeteorDetail_inform"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="right"
@@ -44,10 +51,28 @@
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
-    <WebView
-        android:id="@+id/wv_MeteorDetail_Message"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/wv_MeteorDetail_Message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.like.LikeButton
+            app:icon_type="star"
+            app:icon_size="25dp"
+            android:id="@+id/star_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="25dp"/>
+
+    </FrameLayout>
+
+
 
 
 </LinearLayout>

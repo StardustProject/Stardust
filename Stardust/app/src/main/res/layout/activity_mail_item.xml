@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="4dp"
+    android:elevation="5dp"
+    android:layout_margin="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#182434">
+
+        <TextView
+            android:id="@+id/tv_mail_sender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="7dp"
+            android:text="From: MailSender"
+            android:textColor="#C4C4C4"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:background="#0F1E33" />
+        <TextView
+            android:id="@+id/tv_mail_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="7dp"
+            android:text="This message is come from MailSender"
+            android:textColor="#C4C4C4"/>
+
+        <TextView
+            android:id="@+id/tv_mail_createTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="5dp"
+            android:text="2001.1.1"
+            android:textAlignment="textEnd"
+            android:textColor="#C4C4C4"/>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

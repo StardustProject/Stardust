@@ -1,10 +1,7 @@
 package org.swsd.stardust.presenter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,18 +9,15 @@ import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.model.bean.MeteorBean;
 import org.swsd.stardust.model.bean.UserBean;
-import org.swsd.stardust.presenter.adapter.MeteorAdapter;
 import org.swsd.stardust.util.ErrorCodeJudgment;
-import org.swsd.stardust.view.activity.MainActivity;
+import org.swsd.stardust.util.UpdateTokenUtil;
 import org.swsd.stardust.view.fragment.MeteorFragment;
 
 import java.util.List;
-import java.util.logging.Handler;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -44,6 +38,7 @@ public class MeteorPresenter implements IMeteorPresenter{
 
     @Override
     public void updataMeteor(final UserBean userBean, final Activity mActivity) {
+        UpdateTokenUtil.updateUserToken(userBean);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -98,10 +93,15 @@ public class MeteorPresenter implements IMeteorPresenter{
                 JSONObject Meteor = null;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     Meteor = jsonArray.getJSONObject(i);
+                    String meteorId = Meteor.getString("id");
                     String meteorContent = Meteor.getString("content");
                     String url = Meteor.getString("url");
+                    String meteorUpvoteQuantity = Meteor.getString("upvote_quantity");
                     MeteorBean meteorBean = new MeteorBean();
+                    meteorBean.setMeteorId(Integer.valueOf(meteorId));
                     meteorBean.setURL(url);
+                    meteorBean.setUpvoteQuantity(Integer.valueOf(meteorUpvoteQuantity));
+                    meteorBean.setIsLike(false);
                     if(meteorContent == null){
                         meteorBean.setIsPureMedia(true);
                     }else {

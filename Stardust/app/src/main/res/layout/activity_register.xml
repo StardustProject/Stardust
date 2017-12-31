@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/iv_register_appName"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="95dp"
         android:layout_gravity="center_vertical"
         android:layout_marginTop="100dp"
         android:src="@drawable/img_app_name" />
@@ -21,11 +21,11 @@
         android:layout_width="280dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/bg_edit"
         android:hint="用户名"
         android:singleLine="true"
-        android:textColor="@color/white"
+        android:textColor="#E1FAFD"
         android:textColorHint="@color/gray"
         android:textCursorDrawable="@drawable/cursor_color" />
 
@@ -49,7 +49,7 @@
         android:hint="输入密码"
         android:inputType="textPassword"
         android:singleLine="true"
-        android:textColor="@color/white"
+        android:textColor="#E1FAFD"
         android:textColorHint="@color/gray"
         android:textCursorDrawable="@drawable/cursor_color" />
 
@@ -85,13 +85,6 @@
         android:layout_marginTop="50dp"
         android:background="@drawable/btn_login"
         android:text="注册" />
-    <Button
-        android:id="@+id/btn_register_login"
-        android:layout_width="280dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/btn_login"
-        android:text="登录" />
+
 
 </LinearLayout>

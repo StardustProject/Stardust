@@ -28,9 +28,9 @@ import org.swsd.stardust.view.fragment.UserFragment;
  */
 public class MainActivity extends BaseActivity {
 
+
     private static int FRAGMENT_HOLDER = 0;
     BottomNavigationView navigation;
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -40,12 +40,14 @@ public class MainActivity extends BaseActivity {
                 case R.id.navigation_home:
                     replaceFragment(new HomeFragment());
                     FRAGMENT_HOLDER = 0;
-                    navigation.getBackground().setAlpha(0);
+                    //navigation.getBackground().setAlpha(0);
                     return true;
                 case R.id.navigation_article:
-                    navigation.getBackground().setAlpha(255);
+                    if (FRAGMENT_HOLDER != 1){
+                        replaceFragment(new ArticleFragment());
+                    }
                     FRAGMENT_HOLDER = 1;
-                    replaceFragment(new ArticleFragment());
+                    //navigation.getBackground().setAlpha(0);
                     return true;
                 case R.id.navigation_addtion:
                     Intent intent = new Intent(MainActivity.this, NoteActivity.class);
@@ -53,13 +55,13 @@ public class MainActivity extends BaseActivity {
                     return true;
                 case R.id.navigation_metor:
                     FRAGMENT_HOLDER = 2;
-                    navigation.getBackground().setAlpha(255);
                     replaceFragment(new MeteorFragment());
+                    //navigation.getBackground().setAlpha(0);
                     return true;
                 case R.id.navigation_user:
                     FRAGMENT_HOLDER = 3;
-                    navigation.getBackground().setAlpha(255);
                     replaceFragment(new UserFragment());
+                    //navigation.getBackground().setAlpha(0);
                     return true;
 
             }
@@ -78,7 +80,7 @@ public class MainActivity extends BaseActivity {
         bindLayout();
         initView();
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.getBackground().setAlpha(0);
+        //navigation.getBackground().setAlpha(0);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
@@ -90,12 +92,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        Log.d("熊立强", "initView: ");
+        Log.d(TAG, "initView: ");
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.hide();
         }
-        replaceFragment(new HomeFragment());
+        //replaceFragment(new HomeFragment());
     }
 
     @Override
@@ -119,7 +121,7 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         Log.d(TAG, "onResume: Main ");
         // 判断恢复逻辑
-        if(FRAGMENT_HOLDER == 0){
+        if(FRAGMENT_HOLDER == 0 ){
             navigation.setSelectedItemId(R.id.navigation_home);
         }
         else if (FRAGMENT_HOLDER == 1){
@@ -137,5 +139,6 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ZhugeSDK.getInstance().flush(getApplicationContext());
+
     }
 }

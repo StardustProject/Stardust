@@ -1,7 +1,9 @@
 package org.swsd.stardust.view.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.litepal.crud.DataSupport;
 import org.swsd.stardust.R;
@@ -36,15 +39,28 @@ public class MeteorFragment extends Fragment {
     public static List<MeteorBean> meteorList = new ArrayList<>();
     public static MeteorAdapter meteorAdapter;
     RecyclerView recyclerView;
+    Dialog mDialog;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_meteor, null);
+
+        // 获取顶部状态栏的高度
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen","android");
+        int stateBarHeight = resources.getDimensionPixelSize(resourceId);
+
+        // 用空的TextView预留顶部状态栏高度
+        TextView tvStateBar = view.findViewById(R.id.tv_meteor_stateBar);
+        android.view.ViewGroup.LayoutParams setHeight =tvStateBar.getLayoutParams();
+        setHeight.height =stateBarHeight;
+        tvStateBar.setLayoutParams(setHeight);
+
 //        initMetor();
         //假设为第一个用户，之后应传入当前登录的用户
-        UserBean userBean = DataSupport.findFirst(UserBean.class);
+        UserBean userBean = DataSupport.findLast(UserBean.class);
 
         meteorPresenter = new MeteorPresenter();
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -85,6 +101,7 @@ public class MeteorFragment extends Fragment {
         meteorAdapter = new MeteorAdapter(getContext(), meteorList);
         Log.d("luojingzhao","success");
         recyclerView.setAdapter(meteorAdapter);
+
         return view;
     }
 
